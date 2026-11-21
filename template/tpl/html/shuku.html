@@ -1,0 +1,62 @@
+{include file=header_inner.html}
+<?php
+$sh_sort = isset($_GET['sort']) ? $_GET['sort'] : 'update';
+$sh_sort_map = sh_category_sort();
+$sh_filters = sh_library_filter_query($_GET);
+if (!is_string($sh_sort) || !array_key_exists($sh_sort, $sh_sort_map)) {
+    $sh_sort = 'update';
+}
+$sh_pb = $this->getVar('pbarr');
+$sh_page = isset($_GET['page']) ? intval($_GET['page']) : intval($sh_pb['page']);
+if ($sh_page < 1) {
+    $sh_page = 1;
+}
+$sh_base = pbcode('shuku');
+$sh_list = sh_book_page($sh_filters['where'], $sh_sort, $sh_page, 24);
+?>
+<main class="sh-main">
+	<div class="sh-container">
+
+		<div class="sh-crumbs sh-page-crumb"><a href="./">首页</a><i>/</i><span>书城</span></div>
+		<section class="sh-category-index" id="categories">
+			<div class="sh-section__head">
+				<div class="sh-section__title"><h1>作品分类</h1><p><?php echo count(sh_cat_map());?> 个分类</p></div>
+				<div class="sh-category-index__links">
+					<a class="sh-more" href="<?php echo sh_e(pbcode('author'));?>">作者列表<i>›</i></a>
+					<a class="sh-more" href="<?php echo sh_e(pbcode('shuku'));?>#allbooks">全部作品<i>›</i></a>
+				</div>
+			</div>
+			<div class="sh-overview">
+				<?php echo sh_overview_cards();?>
+			</div>
+		</section>
+
+		<section class="sh-section" id="allbooks">
+			<div class="sh-section__head">
+				<div class="sh-section__title"><h2>全部作品</h2><p>共 <?php echo $sh_list['total'];?> 部</p></div>
+			</div>
+			<?php echo sh_library_nav($sh_base, $sh_sort, $sh_filters['values']);?>
+			<div class="sh-toolbar">
+				<div class="sh-toolbar__tabs">
+					<?php foreach ($sh_sort_map as $sh_k => $sh_v) { ?>
+					<a href="<?php echo sh_e(sh_library_url($sh_base, $sh_k, $sh_filters['values']));?>#allbooks" class="<?php echo $sh_sort === $sh_k ? 'is-active' : '';?>"><?php echo $sh_v['label'];?></a>
+					<?php } ?>
+				</div>
+				<span class="sh-toolbar__count">第 <?php echo $sh_list['page'];?> / <?php echo $sh_list['pages'];?> 页</span>
+			</div>
+			<div class="sh-books">
+				<?php
+				if (!$sh_list['rows']) {
+					echo sh_empty('没有符合筛选条件的作品');
+				}
+				foreach ($sh_list['rows'] as $sh_b) {
+					echo sh_book_card($sh_b);
+				}
+				?>
+			</div>
+			<?php echo sh_pagination(str_replace('%', '%%', sh_library_url($sh_base, $sh_sort, $sh_filters['values'])) . '&page=%d#allbooks', $sh_list['page'], $sh_list['pages'], $sh_list['total']);?>
+		</section>
+
+	</div>
+</main>
+{include file=footer_inner.html}

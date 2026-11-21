@@ -1,0 +1,24 @@
+<?php
+if(!isset($dsql)){
+	define('IS_INDEX',true);
+	define('URL_BIND','pbcode');
+	define('PB_FILE',$_SERVER['SCRIPT_FILENAME']);
+	require_once('../core/start.php');
+}
+$my=gpvar('my');
+$id=gpvar('id');
+if($my=='login'){
+	$x=gpvar('x');
+	$nickname=gpvar('nickname');
+	$headpic=gpvar('headpic');
+	$hash=gpvar('hash');
+	$username=gpvar('username');
+	$xxx=login($id,$x,$nickname,$headpic,$hash,$username);
+}
+if($my=='weibo'){
+	$wb=gpvar('wb');
+	$code=gpvar('code');
+	$xxx=weibo($id,$code,$wb);
+}
+echo $xxx;
+?>

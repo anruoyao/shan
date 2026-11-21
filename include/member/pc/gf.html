@@ -1,0 +1,25 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $gf_data;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Revenue</p>
+        <h1 class="aw-title">稿费收入</h1>
+        <p class="aw-subtitle">查看名下所有作品的稿费汇总与月度结算清单。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','ucenter');?>">返回作者中心</a>
+    </div>
+</div>
+
+<?php echo author_gf_summary_html($gf_data);?>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">结算清单</h2>
+        <span class="aw-card__hint">共 <?php echo count($gf_data['rows']);?> 条</span>
+    </div>
+    <?php echo author_gf_cards_html($gf_data,true);?>
+</section>
+<?php echo author_gf_rules_html();?>
+{include file=../../../include/member/pc/footer.html}

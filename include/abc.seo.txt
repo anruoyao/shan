@@ -1,0 +1,17 @@
+domain:all
+web_name:
+index_title:
+index_keywords:
+index_description:
+category_title:原创精品{栏目名}小说在线阅读,看原创热读小说就来-{网站名}
+category_keywords:{栏目名},最新{栏目名}小说,{栏目名}小说排行榜
+category_description:{网站名}提供原创{栏目名}小说在线阅读，好看的{栏目名}小说新书免费试读，最新{栏目名}小说排行榜。
+book_title:{书名}({作者})最新章节_{书名}原创精品作品_{栏目名}_{网站名}
+book_keywords:{书名}最新章节,{作者}作品
+book_description:{网站名}为{作者}书迷提供{栏目名}小说{书名}在线免费阅读,{书名}内容介绍
+chapter_title:{书名}({作者})最新章节_{书名_{栏目名}_{网站名}
+chapter_keywords:{书名}最新章节列表,{书名}
+chapter_description:{书名}原创最新章节由{网站名}({域名})提供，{作者}写的{栏目名}{书名}属于山海书盟原创作品，本站为正版可放心阅读。
+article_title:{章节名}_{书名}_{栏目名}_{网站名}({域名})
+article_keywords:{章节名},{书名},{作者}
+article_description:此小说是{作者}写的{栏目名}小说《{书名}》章节{章节名}，{网站名}提供的《{书名}》最新章节。

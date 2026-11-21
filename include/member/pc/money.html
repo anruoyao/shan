@@ -1,0 +1,249 @@
+<?php define('MEMBER_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $pay_,$jb,$jball,$tx,$js;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">个人中心</p>
+        <h1 class="aw-title">充值中心</h1>
+        <p class="aw-subtitle">金币充值、提现与消费记录。</p>
+    </div>
+</div>
+<section class="aw-card aw-section">
+    {if($pay_=='tx')}
+    <script type="text/javascript" src="{pboot:sitetplpath}/js/jquery-1.12.4.min.js"></script>
+    <form class="yccontent" onsubmit="return pay();">
+        <div class="bbox">
+            <div class="bnav">金币提现</div>
+            <div class="mbox">
+                <div class="dingyue">
+                    <p id="p1"><span>拥有金币：</span><img src="template/tpl/image/loading.gif"></p>
+                    <p id="p2"><span>可换提现：</span><img src="template/tpl/image/loading.gif"></p>
+                    <p id="p3"><span>规则：</span><img src="template/tpl/image/loading.gif"></p>
+                    <p class="p">提交提现申请后，三个工作日内管理员审核并处理！</p>
+                    <p id="p4">1、单笔提现金额：≥<img src="template/tpl/image/loading.gif">元（金币<img src="template/tpl/image/loading.gif">个）</p>
+                    <p id="p5">2、提现手续费：<img src="template/tpl/image/loading.gif">，非整数的手续费会向上取整，如：2.1元会收取3元</p>
+                    <p id="p6">3、温馨提示：提现的金币数量，为<img src="template/tpl/image/loading.gif">的整数倍时，手续费最少</p>
+                </div>
+            </div>
+        </div>
+        <div class="bbox">
+            <div class="bnav">提现数量</div>
+            <div class="mbox">
+                <ul class="payje je1" id="payje" jb="0" je="0">
+                    <li onclick="chtx_(1)" id="s1">金币：<img src="template/tpl/image/loading.gif"><span>(￥<img src="template/tpl/image/loading.gif">)</span></li>
+                    <li onclick="chtx_(2)">其它金币<input id="om" type="text" placeholder="输入数量" maxlength="5" onchange="chje__()" onkeyup="chje__()" onBlur="chje__(1)"><span>(￥<font id="je">0</font>)</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="bbox">
+            <div class="bnav">提现账户<font>（仅支持支付宝，务必填写正确）</font>
+            </div>
+            <div class="mbox">
+                <ul class="payje payxx">
+                    <li onclick="chpayxx(1)">支付宝账号：<input id="pay01" type="text" placeholder="如：邮箱、手机号" onchange="chpayxx(1)" onkeyup="chpayxx(1)" value=""></li>
+                    <li onclick="chpayxx(2)">支付宝户名：<input id="pay02" type="text" placeholder="如：张三" onchange="chpayxx(2)" onkeyup="chpayxx(2)" value=""></li>
+                </ul>
+            </div>
+        </div>
+        <div class="bbox">
+            <div class="bnav">提现密码<font id="pwdfont"></font>
+            </div>
+            <div class="mbox">
+                <ul class="payje payxx" id="paypwd">
+                    <img src="template/tpl/image/loading.gif">
+                </ul>
+                <div class="paybtn" id="paybtn" onclick="return pay();">立即提现</div>
+            </div>
+        </div>
+    </form>
+    <?php echo $js;?>
+    <script>
+    function pay() {
+        var l = $id('loading');
+        if (l) {
+            return false;
+        }
+        if ($id('om') == document.activeElement) {
+            chje__(1);
+        }
+        var p = $id('paybtn');
+        var i = p.innerHTML;
+        var img = '<img id="loading" src="template/tpl/image/loading.gif">';
+        p.innerHTML = img + '提交中';
+        var url = "<?php echo pbcode('member','money','tx');?>";
+        var payje = $id('payje');
+        var jb = payje.getAttribute('jb');
+        var je = payje.getAttribute('je');
+        if (!jb || !je || jb == '0' || jb == '0') {
+            alert('请选择提现数量！');
+            p.innerHTML = i;
+            return false;
+        }
+        var pay01 = $id('pay01');
+        var v01 = pay01.value;
+        v01 = v01.replace(/\s*/g, '');
+        var pay02 = $id('pay02');
+        var v02 = pay02.value;
+        v02 = v02.replace(/\s*/g, '');
+        if (!v01 || !v02) {
+            if (!v01) {
+                pay01.focus();
+            } else {
+                pay02.focus();
+            }
+            alert('请填写支付宝账号及姓名！');
+            p.innerHTML = i;
+            return false;
+        }
+        var pay03 = $id('pay03');
+        var v03 = pay03.value;
+        v03 = v03.replace(/\s*/g, '');
+        var pay04 = $id('pay04');
+        if (pay04) {
+            var v04 = pay04.value;
+            v04 = v04.replace(/\s*/g, '');
+            if (!v03 || !v04 || v03 != v04) {
+                if (v03 && !v04) {
+                    pay04.focus();
+                } else {
+                    pay03.focus();
+                }
+                alert('提现密码不可为空，并且两次输入要一致！');
+                p.innerHTML = i;
+                return false;
+            }
+        } else {
+            if (!v03) {
+                pay03.focus();
+                alert('提现密码不可为空！');
+                p.innerHTML = i;
+                return false;
+            }
+        }
+        var x = tipx(9);
+        if (!x) {
+            p.innerHTML = i;
+            return false;
+        }
+        $.ajax({
+            type: 'POST',
+            url: url,
+            dataType: 'json',
+            data: {
+                pay01: v01,
+                pay02: v02,
+                pay03: v03,
+                pay04: v04,
+                je: je,
+                jb: jb
+            },
+            success: function(response, status) {
+                if (response.code) {
+                    p.innerHTML = img + '提交成功<span style="font-size:12px">(<font id="st">3</font>)</span>';
+                    sectime(response.tourl);
+                } else {
+                    alert(response.data);
+                    p.innerHTML = i;
+                }
+            },
+            error: function(xhr, status, error) {
+                alert(error);
+                p.innerHTML = i;
+            }
+        });
+        return false;
+    }
+    </script>
+    {/if}
+    {if(!$pay_)}
+    <div class="bbox">
+        <div class="bzc czzx">
+            <ul>
+                <li>
+                    <p>金币</p>
+                    <p>
+                        <?php echo '<span>'.$jb.'</span>个';?>
+                        <font>
+                            <?php echo '(历史记录'.$jball.'个)';?>
+                        </font>
+                    </p>
+                    <a href="<?php echo pbcode('member','pay');?>" title="充值">充值</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {/if}
+    {if(!$pay_ || ($pay_ && $pay_==1))}
+    <div class="bbox">
+        <div class="bnav">充值记录</div>
+        <div class="mbox">
+            <ul class="czjl">
+                <li>
+                    <span>订单</span>
+                    <span>充值金额(元)</span>
+                    <span>购买:金币/卡</span>
+                    <span>类别</span>
+                    <span>操作</span>
+                    <span>时间</span>
+                </li>
+                <?php
+                $x=moneylist();
+                $arr=explode('{x}',$x);
+                $x01=$arr[0];
+                $x02=$arr[1];
+                echo $x01;
+                ?>
+            </ul>
+            <?php echo $x02;?>
+        </div>
+    </div>
+    {/if}
+    {if(!$pay_ || ($pay_ && $pay_==2))}
+    <div class="bbox">
+        <div class="bnav">金币消耗</div>
+        <div class="mbox">
+            <ul class="czjl buy">
+                <li>
+                    <span>消耗金币(个)</span>
+                    <span>购买内容</span>
+                    <span>时间</span>
+                </li>
+                <?php
+                $x=buylist();
+                $arr=explode('{x}',$x);
+                $x01=$arr[0];
+                $x02=$arr[1];
+                echo $x01;
+                ?>
+            </ul>
+            <?php echo $x02;?>
+        </div>
+    </div>
+    {/if}
+    {if($tx && (!$pay_ || ($pay_ && $pay_==3)))}
+    <div class="bbox">
+        <div class="bnav">提现记录</div>
+        <div class="mbox">
+            <ul class="czjl txlist">
+                <li>
+                    <span>订单</span>
+                    <span>金额(元)</span>
+                    <span>金币(个)</span>
+                    <span>账户</span>
+                    <span>操作</span>
+                    <span>时间</span>
+                </li>
+                <?php
+                $x=txlist();
+                $arr=explode('{x}',$x);
+                $x01=$arr[0];
+                $x02=$arr[1];
+                echo $x01;
+                ?>
+            </ul>
+            <?php echo $x02;?>
+        </div>
+    </div>
+    {/if}
+</section>
+{include file=../../../include/member/pc/footer.html}

@@ -1,0 +1,237 @@
+<?php require_once(dirname(__FILE__).'/header_inner.html');?>
+<?php
+$id=1;
+global $dsql;$x=$dsql->one("select value from ay_config where name='comment_check_code' limit 1",1);
+$x=$x[value];
+if($x==1){
+	$checkcode='
+	<style>
+	.CommentBox .c .ckc{ float: left; margin-top: 5px; width: calc(100% - 42px); margin-left: 47px; height: 26px; overflow: hidden; }
+	.CommentBox .c .ckc input{ float: left; padding: 0px; border: 1px solid #dedddd; height: calc(100% - 2px); overflow: hidden;text-indent:5px; }
+	.CommentBox .c .ckc img{ height: 100%; margin-left: 5px; cursor: pointer; }
+	</style>
+	<div class="ckc">
+		<input type="text" name="checkcode" required id="checkcode" placeholder="请输入验证码">
+		<img src="'.$pcbaseall.'core/code.php" onclick="this.src=\''.$pcbaseall.'core/code.php?t=\'+(new Date).getTime()" height="26" />
+	</div>';
+}
+?>
+<div class="novel novel_com">
+    <div class="ping_h">最新书评</div>
+    <div class="CommentBox" id="CommentBox">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">发表书评</h3>
+            </div>
+        </div>
+        <style>
+            textarea{padding: 5px;border-radius: 5px}
+            .CommentBox{padding-bottom: 0;}
+            .CommentBox .c .ckc input { width: 249px }
+			.CommentBox .c .txt .ny { display: none }
+			.CommentBox .c .txt .words_box { width: 100% }
+			.CommentBox .c .ckc, .CommentBox .c .btn .tj { margin-left: 0 !important }
+			.CommentBox .c .btn .div_r{margin-top: 7px;}
+		</style>
+        <div class="c mbl">
+            <div class="f">
+                <form name="formcomment" id="formcomment" method="post" action="<?php echo pbcode('comment','add','','all').'&contentid='.$id;?>" onsubmit="return cgSubmit();">
+                    <div class="txt">
+                        <div class="words_box">
+                            <textarea name="comment" id="comment" required rows="6" cols="58" tabindex="2" title="书评内容" onchange="cgCount(this)" onkeyup="cgCount(this)"></textarea>
+                        </div>
+                    </div>
+                    <?php echo $checkcode;?>
+                    <div class="btn">
+                        <div class="tj">
+                            <input type="submit" name="newcommu" tabindex="4" value="提交书评" title="提交书评" />
+                        </div>
+                        <div class="div_r">剩余字数：<b id="cgNum">360</b>/360</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="recomment" id="recomment"></div>
+        <div class="recomment_bg" id="recomment_bg" onclick="hf()"></div>
+        <div class="ccbox mbl" id="ccbox">
+            <?php
+			function commentslist($id=null,$page=null,$num=null){
+				global $dsql,$pcbaseall;
+				if(!$num){
+					$num='10';
+				}
+				$rei_d='rei'.'d';
+				$uidc=session('pboot_ucode');
+				if($uidc){
+					$x=$dsql->one("select id from ay_member where ucode=$uidc limit 1",1);
+					$uidc=$x[id];
+				}
+				$x=$dsql->one("select count(*) from ay_member_comment where status=1 and contentid=$id",1);
+				$total=$x['count(*)'];
+				!$page?$page=1:'';
+				$pagenum=ceil($total/$num);
+				$prepg=$page-1;
+				$nextpg=($page==$pagenum?0:$page+1);
+				$offset=($page-1)*$num;
+				$dd=$dsql->all("select id from ay_member_comment where status=1 and contentid=$id order by id desc limit $offset,$num",1);
+				foreach($dd as $xx)
+				{
+					$ii++;
+					$id_=$xx[id];
+					$xx=$dsql->one("select comment,name,create_time,uid from ay_member_comment where id=$id_ limit 1",1);
+					$name=$xx[name];
+					$comment=$xx[comment];
+					$create_time=$xx[create_time];
+					$uid=$xx[uid];
+					$nickname='';
+					if($uid){
+						$x=$dsql->one("select headpic,nickname,username from ay_member where id=$uid limit 1",1);
+						$headpic=$x[headpic];
+						$nickname=$x[nickname];
+						$headpic=ico($headpic,1);
+						if(!$nickname){
+							$nickname=$x[username];
+						}
+					}else{
+						$x=rand(1,100);
+						$headpic=$pcbaseall."uploads/empty/".$x.".gif";
+					}
+					if(!$nickname){
+						if(!$name){
+							$name='游客';
+						}
+						$nickname=$name;
+					}
+					$x=explode(' ',$create_time);
+					$create_time=$x[0];
+					$recom_='';
+					$x=$dsql->one("select count(*) from ay_member_comment_re where status=1 and id=$id_",1);
+					$count=$x['count(*)'];
+					if(!$count){
+						$count='';
+					}else{
+						$x=$dsql->one("select * from ay_member_comment_re where status=1 and id=$id_ and re_id=0 order by $rei_d desc limit 1",1);
+						$comment_=$x[comment];
+						$uid_=$x[uid];
+						if($uid_){
+							$x=$dsql->one("select username,nickname from ay_member where id=$uid_ limit 1",1);
+							$nickname_=$x[nickname];
+							if($nickname_){
+								$nickname_=$x[username];
+							}
+						}else{
+							$nickname_='游客';
+						}
+						if($count>1){
+							$ck='<font class="f2" onclick="hf('.$id_.')">查看全部'.$count.'条回复</font>';
+						}else{
+							$ck='';
+						}
+						$recom_='<span><font>'.$nickname_.'</font>：'.$comment_.$ck.'</span>';
+					}
+					if($uidc==$uid){
+						$del='<div class="redel" id="redel'.$id_.'" onclick="hf('.$id_.','.$id_.',\'del\')">x</div>';
+					}else{
+						$del='';
+					}
+					$xxx.='
+					<li>
+					  <div class="pic"><img src="'.$headpic.'" /></div>
+					  <div class="info">'.$nickname.'&nbsp;'.$create_time.'</div>
+					  <div class="words">
+						<p>'.$comment.'</p>
+					  </div>
+					  <div class="cbtn">
+						  <div class="hf" onclick="hf('.$id_.')">'.$count.'回复 &gt;</div>
+						  '.$del.'
+					  </div>
+					  <div class="words words2">
+						<p>'.$recom_.'</p>
+					  </div>
+					</li>';
+				}
+				if($ii<$num){
+					$pagenum=$page;
+					$nextpg=$page;
+				}
+				!$pagenum?$prepg="":"";
+				$px=commentpage($pagenum,$prepg,'ping','',$nextpg,$page,$num);
+				if(!$ii){
+					$xxx='
+					<br />
+					<br />
+					<center>暂无书评...快来抢占头条吧！-_-</center>
+					<br />
+					<br />';
+				}
+				$xxx.='{697}'.$px;
+				return $xxx;
+			}
+			function commentpage($pagenum=null,$prepg=null,$my=null,$scode=null,$nextpg=null,$page=null,$OnePAGE_NUM=null){
+				!$pagenum?$prepg='':'';
+				if($prepg){
+					$pre='<a id="pre_page" href="'.pbcode($my,$prepg).'" title="上一页">上一页</a>';
+					$first='<a href="'.pbcode($my).'" title="首页">首页</a>';
+				}else{
+					$pre='<a class="pn" title="上一页">上一页</a>';
+					$first='<a class="pn" title="首页">首页</a>';
+				}
+				if($nextpg){
+					if($nextpg>$pagenum){
+						$nextpg=$page;
+					}
+					$next='<a id="next_page" href="'.pbcode($my,$nextpg).'" title="下一页">下一页</a>';
+					$p10=$page+10;
+					if($p10>$pagenum){
+						$x=$p10-$pagenum;
+						if($x>10){
+							$p10=$page;
+						}else{
+							$p10=$pagenum;
+						}
+						$t='尾页';
+					}else{
+						$t='后10页';
+					}
+					$last='<a href="'.pbcode($my,$p10).'" title="后10页">'.$t.'</a>';
+				}else{
+					$next='<a class="pn" title="下一页">下一页</a>';
+					$last='<a class="pn" title="尾页">尾页</a>';
+				}
+				for($i=$page;$i<=$pagenum;$i++){
+					$ii++;
+					if($ii>5){
+						break;
+					}
+					$url=pbcode($my,$i);
+					if($i==$page){
+						$c=' class="cur"';
+					}else{
+						$c='';
+					}
+					$xxx.='<a'.$c.' href="'.$url.'">'.$i.'</a>';
+				}
+				$xxx=$first.$pre.$xxx.$next.$last;
+				return $xxx;
+			}
+        	?>
+            <ul class="ulc" id="ulc">
+                <?php
+                $x=commentslist(1,$page,10);
+                $x=explode('{697}',$x);
+                $list=$x[0];
+                $px=$x[1];
+                echo $list;
+	            ?>
+            </ul>
+        </div>
+    </div>
+    <div class="page">
+        <?php echo $px;?>
+    </div>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">
+fnav(3);
+$id('fnav').style.display = 'block';
+</script>

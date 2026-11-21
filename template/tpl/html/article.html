@@ -1,0 +1,221 @@
+{include file=header_article.html}
+<?php
+global $dsql;
+$sh_pb = $this->getVar('pbarr');
+$sh_xid = intval($sh_pb['xid']);
+$sh_book_id = intval($sh_pb['id']);
+$sh_title = $sh_pb['title'];
+$sh_xtitle = $sh_pb['xtitle'];
+$sh_author = $sh_pb['author'];
+$sh_update_time = $sh_pb['update_time'];
+$sh_scode = intval($sh_pb['scode']);
+$sh_ico = $sh_pb['ico'];
+$sh_content = $sh_pb['content'];
+$sh_say = sh_author_say($sh_xid);
+$sh_chapter_words = mb_strlen(trim(preg_replace('/\s+/u', '', strip_tags($sh_content))), 'UTF-8');
+$sh_book_url = sh_book_url($sh_book_id);
+$sh_tip = isset($sh_pb['tip_']) ? $sh_pb['tip_'] : '';
+$sh_ting_auto = isset($GLOBALS['TING_AUTO_PLAY']) ? $GLOBALS['TING_AUTO_PLAY'] : '';
+?>
+<script>
+var id = "<?php echo $sh_book_id;?>";
+var xid = "<?php echo $sh_xid;?>";
+</script>
+<main class="sh-read" id="shRead">
+	<div class="sh-progressbar"><span id="shReadProgress"></span></div>
+
+	<div class="sh-readbar">
+		<div class="sh-container sh-readbar__inner">
+			<a class="sh-readbar__book" href="<?php echo $sh_book_url;?>" title="<?php echo sh_e($sh_title);?>"><?php echo sh_e($sh_title);?></a>
+			<span class="sh-readbar__chapter"><?php echo sh_e($sh_xtitle);?></span>
+			<div class="sh-readbar__tools">
+				<button type="button" class="sh-iconbtn" id="shFontMinus" title="减小字号">A-</button>
+				<button type="button" class="sh-iconbtn" id="shFontPlus" title="增大字号">A+</button>
+				<button type="button" class="sh-iconbtn" id="shLineBtn" title="调整行距">行距</button>
+				<div class="sh-themes" aria-label="阅读主题">
+					<button type="button" data-read-theme="paper" class="is-active" title="纸白" aria-label="纸白" aria-pressed="true"></button>
+					<button type="button" data-read-theme="sepia" title="米黄" aria-label="米黄" aria-pressed="false"></button>
+					<button type="button" data-read-theme="night" title="夜间" aria-label="夜间" aria-pressed="false"></button>
+				</div>
+				<a class="sh-iconbtn" href="<?php echo $sh_book_url;?>#catalog" title="目录">目录</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="sh-container sh-readbody">
+	<div id="a_main">
+		<div class="sh-read__crumb">
+			<a href="./">首页</a><i> / </i>
+			<a href="<?php echo sh_cat_url($sh_scode);?>"><?php echo sh_e(sh_cat_name($sh_scode));?></a><i> / </i>
+			<a href="<?php echo $sh_book_url;?>"><?php echo sh_e($sh_title);?></a><i> / </i>
+			<span><?php echo sh_e($sh_xtitle);?></span>
+		</div>
+
+		<h1 class="sh-read__title"><?php echo sh_e($sh_xtitle);?></h1>
+		<div class="sh-read__meta">
+			<span>作者 <?php echo sh_e($sh_author);?></span>
+			<span>·</span>
+			<span>本章约 <?php echo sh_num($sh_chapter_words);?> 字</span>
+			<span>·</span>
+			<span>更新于 <?php echo sh_e($sh_update_time);?></span>
+		</div>
+
+		<div class="tingplaybox" id="tingplaybox">
+			<?php echo tingplaybox($sh_title, $sh_book_id, $sh_xid, ico($sh_ico));?>
+			<script>
+			if (!synth) {
+				$id('ting-control').style.display = 'none';
+				$id('ting-spd').style.display = 'none';
+			}
+			</script>
+		</div>
+
+		<div id="amain">
+			<article class="sh-read__content"><?php echo $sh_content;?></article>
+
+			<?php
+			$tip_out = $sh_tip;
+			$tip_out = str_replace('class="tip_"', 'class="tip_" id="tip_"', $tip_out);
+			echo $tip_out;
+			$uid = session('pboot_ucode');
+			$sutodychapter = '';
+			if ($uid) {
+				$x = $dsql->one("select sutodychapter from ay_member where ucode=$uid limit 1", 1);
+				$sutodychapter = $x['sutodychapter'];
+			}
+			if ($sutodychapter) {
+				$c = ' checked="checked"';
+				$k = '已开启';
+				if ($sh_tip) {
+					echo '<script>sutodychapter(' . $sh_xid . ');</script>';
+				}
+			} else {
+				$c = '';
+				$k = '已关闭';
+			}
+			echo '<div class="sutodychapter sh-read__auto">自动连续订阅章节：<label id="sutodychapter" for="ck1" onclick="sutodychapter()"><input id="ck1" type="checkbox" style="position:relative;top:2px"' . $c . '> ' . $k . '</label></div>';
+			?>
+
+			<div class="ccbox sh-paracomments" id="ccbox"></div>
+
+			<?php if (trim($sh_say)) { ?>
+			<aside class="sh-read__note">
+				<h4>作者有话说</h4>
+				<p><?php echo nl2br(sh_e($sh_say));?></p>
+			</aside>
+			<?php } ?>
+		</div>
+
+		<nav class="sh-read__pager" aria-label="章节导航">
+			<?php echo pglr('l', '上一章');?>
+			<a class="sh-read__pager-catalog" href="<?php echo $sh_book_url;?>#catalog">目录</a>
+			<?php echo pglr('r', '下一章');?>
+		</nav>
+
+		<div class="sh-read__aside">
+			<div class="sh-read__jindu">
+				<div class="jindu" id="jindu">
+					<div class="jd-t">全书进度<br>(共<img src="template/tpl/image/loading.gif" />章)</div>
+					<div class="jd-box">
+						<div class="jd-line">
+							<div class="jd-ico"><span>00.00%</span></div>
+						</div>
+						<div class="jd-pre p01"><font></font><a href="./">5.00%</a></div>
+						<div class="jd-pre p02"><font></font><a href="./">50.00%</a></div>
+						<div class="jd-pre p03"><font></font><a href="./">80.00%</a></div>
+						<div class="jd-pre p04"><font></font><a href="./">100.00%</a></div>
+					</div>
+				</div>
+				<script type="text/javascript">
+				jindu("<?php echo $sh_book_id;?>", "<?php echo $sh_xid;?>");
+				</script>
+			</div>
+		</div>
+
+		<section class="sh-read__comments">
+			<div class="CommentBox">
+				<div class="h">段落评论</div>
+				<div class="c mbl">
+					<div class="f">
+						<form name="formcomment" id="formcomment" method="post" action="ajax.php?my=idxcmt&xid=<?php echo $sh_xid;?>" onsubmit="return cgSubmit();">
+							<input type="hidden" name="idx" id="idx" value="">
+							<div class="txt">
+								<div class="words_box">
+									<textarea name="comment" id="comment" required rows="4" cols="58" tabindex="2" title="评论内容" placeholder="点击正文段落，即可对这一段发表看法" onchange="cgCount(this)" onkeyup="cgCount(this)"></textarea>
+								</div>
+							</div>
+							<div class="btn">
+								<div class="tj"><input type="submit" name="newcommu" tabindex="4" value="发表评论" title="发表评论"></div>
+								<div class="div_r">剩余字数：<b id="cgNum">360</b>/360</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="recomment" id="recomment"></div>
+				<div class="recomment_bg" id="recomment_bg" onclick="hf()"></div>
+			</div>
+			<script type="text/javascript">
+			function cgCount(message) {
+				var lenM = message.value.length;
+				$id("cgNum").innerHTML = 360 - lenM;
+				$id("cgNum").innerHTML < 0 ? message.value = message.value.substring(0, 360) : "";
+			}
+			function cgSubmit() {
+				if (uid == 0 || !uid) {
+					alert("抱歉，登录会员才能评论哦！");
+					location.href = "<?php echo pbcode('member','login');?>";
+					return false;
+				}
+				if (!$id("idx").value) {
+					alert("请先点击正文中的段落，再发表段落评论。");
+					return false;
+				}
+				if (!$id("comment").value) {
+					alert("请输入你要评论的内容！");
+					return false;
+				}
+				if ($id("cgNum").innerHTML < 0) {
+					alert("抱歉，超出字数限制了！");
+					return false;
+				}
+			}
+			if (hash.indexOf('xidcmt') > -1) {
+				document.getElementById("amain").scrollIntoView({ behavior: "smooth", block: "start" });
+				var arr = hash.split('_');
+				var xid0 = arr[1];
+				var idx0 = arr[2];
+				xidcmt('event', xid0, idx0);
+				var allP = document.querySelectorAll('#bodybox p');
+				var thirdP = allP[idx0 - 1];
+				if (thirdP) {
+					var x = thirdP.offsetTop - 100;
+					window.scrollTo(0, x);
+					setTimeout(function () { window.scrollBy({ top: 100, behavior: 'smooth' }); }, 500);
+				}
+			}
+			</script>
+		</section>
+	</div>
+	</div>
+</main>
+<div class="ting-flow" id="ting-flow" style="left:calc((100% - 1080px)/2);">
+	<div class="tf-btn i" onclick="tingflow('i')"><img id="ting-flow-img" src="template/tpl/image/loading.gif" /></div>
+	<div class="tf-btn f" onclick="tingflow('f')">next</div>
+	<div class="tf-btn p" onclick="tingflow('p')">play</div>
+	<div class="tf-btn n" onclick="tingflow('n')">next</div>
+	<div class="tf-btn c" onclick="tingflow('c')">close</div>
+	<div class="tf-cur" id="tf-cur"></div>
+	<script>
+	var TING_AUTO_PLAY = "<?php echo $sh_ting_auto;?>";
+	</script>
+</div>
+<div class="goto">
+	<div class="toup" onclick="go2loc('header')"></div>
+	<div class="todown" onclick="go2loc('footer')"></div>
+</div>
+<?php echo AutoReader($sh_book_id);?>
+{include file=footer_article.html}
+<script type="text/javascript">
+vlof('v', '<?php echo $sh_book_id;?>', '<?php echo $sh_xid;?>');
+url2disknext('<?php echo $sh_book_id;?>', '<?php echo $sh_xid;?>');
+</script>

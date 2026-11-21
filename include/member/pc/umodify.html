@@ -1,0 +1,120 @@
+<?php define('MEMBER_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $username,$nickname,$useremail,$headpic,$usermobile;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Account</p>
+        <h1 class="aw-title">修改资料</h1>
+        <p class="aw-subtitle">更新昵称、头像与登录密码。账号本身不可修改。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','info');?>">作者资料</a>
+        <a class="aw-btn" href="<?php echo pbcode('member','ucenter');?>">返回概览</a>
+    </div>
+</div>
+
+<form class="aw-form-card" method="post" action="{pboot:umodify}" enctype="multipart/form-data" onsubmit="return umo(this);">
+    <div class="aw-form-grid">
+        <div class="aw-field">
+            <label>账号</label>
+            <input class="aw-input" type="text" disabled="disabled" autocomplete="off" value="<?php echo $username;?>">
+            <p class="aw-help">账号是登录凭证，如需更换请联系管理员。</p>
+        </div>
+        <div class="aw-field">
+            <label for="nickname">昵称 <span class="req">*</span></label>
+            <input class="aw-input" type="text" name="nickname" id="nickname" placeholder="请输入昵称" size="30" value="<?php echo $nickname;?>">
+        </div>
+
+        <div class="aw-field aw-field--full">
+            <label>头像</label>
+            <div class="aw-upload">
+                <div class="aw-upload__preview aw-upload__preview--square">
+                    <img id="ycimg" src="<?php echo $headpic.'?'.time();?>" onerror="this.src='include/member/image/empty.jpg'">
+                </div>
+                <div class="aw-upload__control">
+                    <input class="aw-input" type="text" id="ycico2" value="<?php echo $headpic;?>" readonly="readonly">
+                    <div class="aw-upload__buttons">
+                        <label class="aw-btn aw-btn--ghost" for="ycico">更换头像</label>
+                        <span class="aw-upload__hint">建议使用正方形图片，清晰度不低于 200×200</span>
+                    </div>
+                    <div id="filebox" class="filebox">
+                        <input type="file" name="headpic" id="ycico" class="ycico" onchange="ycimgx(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="aw-field" style="display:none;">
+            <label>邮箱</label>
+            <input class="aw-input" type="text" name="useremail" id="useremail" placeholder="请输入邮箱（用于找回密码）" value="<?php echo $useremail;?>">
+        </div>
+        <div class="aw-field" style="display:none;">
+            <label>手机号码</label>
+            <input class="aw-input" type="text" name="usermobile" id="usermobile" placeholder="请输入手机号码" value="<?php echo $usermobile;?>">
+        </div>
+
+        <div class="aw-field aw-field--full">
+            <div class="aw-subcard">
+                <div class="aw-subcard__title"><?php echo aw_icon('lock');?>安全设置</div>
+                <div class="aw-form-grid">
+                    <div class="aw-field">
+                        <label for="password">新密码</label>
+                        <input class="aw-input" type="password" name="password" id="password" placeholder="不修改请留空" autocomplete="off" value="">
+                    </div>
+                    <div class="aw-field">
+                        <label for="rpassword">重复密码</label>
+                        <input class="aw-input" type="password" name="rpassword" id="rpassword" placeholder="请重复输入新密码" autocomplete="off" value="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="aw-form-actions">
+        <a class="aw-btn aw-btn--ghost" href="<?php echo pbcode('member','ucenter');?>">取消</a>
+        <button type="submit" class="aw-btn aw-btn--primary">保存修改</button>
+    </div>
+</form>
+
+<script>
+function umo(obj) {
+    var nickname = $id('nickname').value;
+    var useremail = $id('useremail').value;
+    var usermobile = $id('usermobile').value;
+    var password = $id('password').value;
+    var rpassword = $id('rpassword').value;
+    nickname = trim(nickname);
+    useremail = trim(useremail);
+    usermobile = trim(usermobile);
+    password = trim(password);
+    rpassword = trim(rpassword);
+    if (!nickname) {
+        $id('nickname').focus();
+        alert('请输入昵称！');
+        return false;
+    }
+    if (useremail) {
+        var x = cke(useremail);
+        if (!x) {
+            $id('useremail').focus();
+            alert('请输入正确的邮箱！');
+            return false;
+        }
+    }
+    if (usermobile) {
+        var x = ckp(usermobile);
+        if (!x) {
+            $id('usermobile').focus();
+            alert('请输入正确的手机号码！');
+            return false;
+        }
+    }
+    if (password || rpassword) {
+        if (password != rpassword) {
+            $id('password').focus();
+            alert('两次密码输入不一致！');
+            return false;
+        }
+    }
+}
+</script>
+{include file=../../../include/member/pc/footer.html}

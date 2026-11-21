@@ -1,0 +1,137 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div style="display:none"><?php echo htbb();?></div>
+    <fieldset class="layui-elem-field">
+        <legend>快捷操作</legend>
+        <div class="layui-field-box kj">
+            <a href="make/" target="_blank">更新页面</a>
+            <a href="?p=/Link/index">友情链接</a>
+            <a href="?p=/Ad/index">广告管理</a>
+            <a href="?p=/ContentSort/index">栏目管理</a>
+            <a href="?p=/Sort/index">内容管理</a>
+            <a href="?p=/Config/index">系统参数</a>
+            <a href="?p=/Site/index">网站信息</a>
+            <a href="?p=/Member/index">会员管理</a>
+            <a href="?p=/Database/index">数据库管理</a>
+            <a href="/kf/1/admin.php?my_u=kf&my_p=73fe81d7..." target="_blank">客服1</a>
+            <a href="/kf/2/admin.php?my_u=kf&my_p=73fe81d7..." target="_blank">客服2</a>
+        </div>
+    </fieldset>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-xs12">
+            <table class="layui-table table-two">
+                <thead>
+                    <tr>
+                        <th colspan="4" style="font-size:16px;color:#000">系统信息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>主机系统</th>
+                        <td>{$server->php_os}</td>
+                        <th>主机地址</th>
+                        <td>{$server->server_name}（{$server->server_addr}:{$server->server_port}）</td>
+                    </tr>
+                    <tr>
+                        <th>运行环境</th>
+                        <td>{$server->server_software}</td>
+                        <th>PHP版本</th>
+                        <td>{$server->php_version}</td>
+                    </tr>
+                    <tr>
+                        <th>文件上传限制</th>
+                        <td>{$server->upload_max_filesize}</td>
+                        <th>表单提交限制</th>
+                        <td>{$server->post_max_size}</td>
+                    </tr>
+                    <tr>
+                        <th>内容数量</th>
+                        <td>
+                            <?php
+                            global $dsql;
+                            $x=$dsql->one("select count(*) from ay_content",1);
+                            $x1=$x['count(*)'];
+                            $b=$dsql->amd("SHOW TABLES LIKE '%ay_article%'");
+                            if($b){
+                                $x=$dsql->one("select count(*) from ay_article",1);
+                                $x2=$x['count(*)'];
+                                $x2='&nbsp;&nbsp;/&nbsp;&nbsp;章节：'.$x2;
+                                $x1='小说：'.$x1;
+                            }
+                            $o=$dsql->amd("SHOW TABLES LIKE '%ay_member_code%'");
+                            if($o){
+                                $x=$dsql->one("select count(*) from ay_member_code",1);
+                                $x1=$x['count(*)'];
+                            }
+                            echo $x1.$x2;
+                            ?>
+                        </td>
+                        <th>会员数量</th>
+                        <td>
+                            <?php
+                            $x=$dsql->one("select count(*) from ay_member",1);
+                            $x=$x['count(*)'];
+                            echo $x;
+                            ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-xs12">
+            <table class="layui-table table-two" style="margin:0px">
+                <thead>
+                    <tr>
+                        <?php
+                        if($b){
+                        $x='<th colspan="4" style="font-size:16px;color:#000">最新更新</th>';
+                        }else{
+                        $x='<th colspan="3" style="font-size:16px;color:#000">最新更新</th>';
+                        }
+                        echo $x;
+                        ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php echo sbyou_NET_newList();?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}
+<script type="text/javascript">
+var h = 'h' + 't' + 'u' + 'p';
+var u = $id(h);
+var x = getcookie(h);
+if (x != 'no') {
+    if (!x) {
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function(response, status) {
+                var x = response.replace('-', '');
+                x = x.replace('-', '');
+                if (x) {
+                    var regPos = /^\d+$/;
+                    if (regPos.test(x)) {
+                        u.style.display = 'inline-block';
+                        u.innerHTML = response;
+                        setcookie(h, response);
+                    } else {
+                        setcookie(h, 'no');
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                setcookie(h, 'no');
+            }
+        });
+    } else {
+        u.style.display = 'inline-block';
+        u.innerHTML = x;
+    }
+}
+</script>

@@ -1,0 +1,120 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href="?p=/cj/index">采集管理</a></li>
+            {if([$pbarr.mcode]==18)}
+            <li><a href="?p=/cj/add/book/697" class="red">新增小说规则</a></li>
+            <li><a href="?p=/cj/add/chapter/697" class="red">新增章节规则</a></li>
+            {else}
+            <li><a href="?p=/cj/add/content/697" class="red">新增采集规则</a></li>
+            {/if}
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item"></div>
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/cj/mod" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" lay-ignore="" id="checkall" title="全选"></th>
+                                <th>ID</th>
+                                <th>名称</th>
+                                {if([$pbarr.mcode]==18)}
+                                <th>类型</th>
+                                {/if}
+                                <th>发布栏目</th>
+                                {if([$pbarr.mcode]==18)}
+                                <th>关联章节规则ID</th>
+                                {/if}
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>{$pbarr.list}</tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        <button type="button" onclick="selectall()" class="layui-btn layui-btn-sm">全选</button>
+                        <a href="cj/" class="layui-btn layui-btn-sm layui-bg-red" target="_blank">开始采集</a>
+                        {if([$pbarr.mcode]==18)}
+                        <button type="submit" name="submit" value="rule" class="layui-btn layui-btn-sm">保存关联ID</button>
+                        {/if}
+                        <button type="submit" name="submit" value="del" onclick="return tip(1);" class="layui-btn layui-btn-sm">批量删除</button>
+                        <button type="submit" name="submit" value="status_1" onclick="return tip(0);" class="layui-btn layui-btn-sm">开启规则</button>
+                        <button type="submit" name="submit" value="status_0" onclick="return tip(0);" class="layui-btn layui-btn-sm">关闭规则</button>
+                        <button type="submit" name="submit" value="copy" onclick="return tip(0);" class="layui-btn layui-btn-sm">复制规则</button>
+                        <button type="submit" name="submit" value="empty" onclick="return tip(2);" class="layui-btn layui-btn-sm">清空记录</button>
+                        <button type="submit" name="submit" value="out" onclick="return tip(0);" class="layui-btn layui-btn-sm">导出规则</button>
+                        <a href="?p=/cj/rule/in/697" class="layui-btn layui-btn-sm">导入规则</a>
+                    </div>
+                    <p style="padding:15px 0px">
+                        注：
+                        <br>
+                        1、点击“开始采集”，打开采集页面，不关闭，就会一直采集
+                        <br>
+                        2、若有宝塔面板，可用计划任务实现全自动采集，具体方法找客服了解
+                        <?php
+                        $x=ROOT_PATH.'/include/chapter_pbcode_xyz/index.php';
+                        if(file_exists($x)){
+                            echo '
+                            <br>
+                            另外：
+                            <br>
+                            若有需要，也可以直接导入txt文档，一个txt一本书，客服整理了一些：10G、20G、30G、80G，或更多
+                            <br>
+                            程序所有的问题都免费处理，QQ/微信：1981255858';
+                        }
+                        ?>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/ueditor.html'}
+{include file='common/foot.html'}
+<script type="text/javascript">
+function tip(id) {
+    if (id == 1) {
+        var xxx = '确定要删除选中的项目吗？';
+    } else if (id == 2) {
+        var xxx = '确定要清空选中项目的采集记录吗？';
+    } else {
+        var xxx = '';
+    }
+    if (id == null) {
+        xxx = '确定要删除吗？';
+        event.returnValue = confirm(xxx);
+    } else {
+        var list = document.getElementsByName('list[]');
+        for (var i = 0; i < list.length; i++) {
+            var c = list[i].checked;
+            if (c) {
+                break;
+            }
+        }
+        if (!c) {
+            alert('请选择要操作的项目！');
+            return false;
+        } else {
+            if (xxx) {
+                event.returnValue = confirm(xxx);
+            } else {
+                return true;
+            }
+        }
+    }
+}
+function selectall() {
+    var list = document.getElementsByName('list[]');
+    var c = list[0].checked;
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+</script>

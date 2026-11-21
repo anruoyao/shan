@@ -1,0 +1,87 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="t1">推广列表</li>
+            <li lay-id="t2">新增推广</li>
+            <li lay-id="t3"><a href="?p=/Tg/jinbi">佣金记录</a></li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Tg/mod}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" lay-ignore="" id="checkall" title="全选"></th>
+                                <th>编号</th>
+                                <th>链接（站内链接，站外链接，都行）</th>
+                                <th>状态</th>
+                                <th>推广次数</th>
+                                <th>更新时间</th>
+                                <th>相关操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>{$xxlist}</tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        <button type="button" onclick="selectall()" class="layui-btn layui-btn-sm">全选</button>
+                        <button type="submit" name="submit" value="del" onclick="return delxx();" class="layui-btn layui-btn-sm">批量删除</button>
+                        <button type="submit" name="submit" value="status_1" class="layui-btn layui-btn-sm">状态开</button>
+                        <button type="submit" name="submit" value="status_0" class="layui-btn layui-btn-sm">状态关</button>
+                    </div>
+                    <div class="page">{$pagebox}</div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form action="{url./admin/Tg/add}" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">推广编号</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" value="" readonly="readonly" style="background:#f0f0f0;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">推广链接</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="link" required lay-verify="required" class="layui-input" value="">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">推广状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="1" title="是" checked="checked">
+                            <input type="radio" name="status" value="0" title="否">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{APP_THEME_DIR}/js/jscolor.js"></script>
+{include file='common/ueditor.html'}
+{include file='common/foot.html'}
+<script>
+function selectall() {
+    var list = document.getElementsByName('list[]');
+    var c = list[0].checked;
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+
+function delxx() {
+    event.returnValue = confirm("确定要删除推广吗？");
+}
+</script>

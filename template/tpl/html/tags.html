@@ -1,0 +1,43 @@
+{include file=header_inner.html}
+<div class="box_con">
+    <div class="aaabox">
+        {if(is_numeric([$pbarr.ob]))}
+        <div class="loc">
+            <a href="./">首页</a>&gt;<a href="<?php echo pbcode('tags');?>">Tags</a>&gt;标签为“
+            <?php echo '<a href="'.pbcode('tags',[$pbarr.ob]).'">'.[$pbarr.tag].'</a>';?>”的相关内容
+        </div>
+        <ul class="aaalist">
+            <?php
+			$x=aaalist('tags',[$pbarr.ob],[$pbarr.tag],[$pbarr.page]);
+			$arr=explode('{x}',$x);
+			$x01=$arr[0];
+			$x02=$arr[1];
+			echo $x01;
+			?>
+        </ul>
+        <div class="aaapage">
+            <?php echo $x02;?>
+        </div>
+        {else}
+        <h1>Tags标签列表</h1>
+        <div class="aaaorder {$pbarr.ob}">
+            <a href="<?php echo pbcode('tags','','','','','');?>">按热门排序</a>
+            <a href="<?php echo pbcode('tags','','','','','p2');?>">按内容量排序</a>
+            <a href="<?php echo pbcode('tags','','','','','p3');?>">按时间排序</a>
+        </div>
+        <ul class="aaatags">
+            <?php
+			$x=aaatags('tags',[$pbarr.page],[$pbarr.ob],8,5);
+			$arr=explode('{x}',$x);
+			$x01=$arr[0];
+			$x02=$arr[1];
+			echo $x01;
+			?>
+        </ul>
+        <div class="aaapage">
+            <?php echo $x02;?>
+        </div>
+        {/if}
+    </div>
+</div>
+{include file=footer_inner.html}

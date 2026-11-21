@@ -1,0 +1,16 @@
+<?php define('MEMBER_LAYOUT',1); global $my; $my='fav';?>
+{include file=../../../include/member/pc/header.html}
+<div class="aw-page-head">
+    <h1 class="aw-title">我的书架</h1>
+    <a class="aw-btn" href="<?php echo pbcode('shuku');?>">逛书城</a>
+</div>
+<nav class="reader-shelf-tabs" aria-label="我的阅读">
+    <a href="<?php echo pbcode('member','fav');?>" aria-current="page">我的书架</a>
+    <a href="<?php echo pbcode('member','look');?>">阅读记录</a>
+</nav>
+<section class="aw-card reader-shelf">
+    <div id="biglist">
+        <?php echo biglist();?>
+    </div>
+</section>
+{include file=../../../include/member/pc/footer.html}

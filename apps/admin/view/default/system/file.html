@@ -1,0 +1,148 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">文件管理</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">{$loc}</div>
+            <div class="layui-tab-item layui-show">
+                {if([$template]=='index')}
+                <table class="layui-table f">
+                    <thead>
+                        <tr>
+                            <th>文件名</th>
+                            <th width="80">文件大小</th>
+                            <th width="150">最后修改时间</th>
+                            <th width="200">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>{$filelist}</tbody>
+                </table>
+                <div class="layui-btn-group">
+                    <a href="<?php echo url('/admin/File/index');?>" class="layui-btn layui-btn-sm">根目录</a>
+                    <a href="<?php echo url('/admin/File/newf/'.str_replace([$name],'',[$dir]));?>" class="layui-btn layui-btn-sm">新建文件</a>
+                    <a href="<?php echo url('/admin/File/newd/'.str_replace([$name],'',[$dir]));?>" class="layui-btn layui-btn-sm">新建目录</a>
+                    <botton id="upload" class="layui-btn layui-btn-sm">文件上传</botton>
+                    {$pclogo}
+                    {$waplogo}
+                </div>
+                <ul id="li-box" class="li-box"></ul>
+                <script type="text/javascript" src="{APP_THEME_DIR}/js/plupload.full.min.js"></script>
+                <script type="text/javascript">
+                var uploader = new plupload.Uploader({
+                    runtimes: "html5,html4",
+                    browse_button: "upload",
+                    url: "<?php echo url('/admin/File/index/'.[$dir]);?>",
+                    filters: {
+                        max_file_size: "1gb",
+                    },
+                    multi_selection: true,
+                    multipart_params: {
+                        formcheck: "{$formcheck}",
+                    },
+                    init: {
+                        FilesAdded: function(up, files) {
+                            var li = "";
+                            plupload.each(files, function(file) {
+                                li += "<li id='" + file["id"] + "'><div class='bar'>" + file.name + "<span class='ok' id='ok" + file["id"] + "'></span><span class='percent'>0%</span></div></li>";
+                            });
+                            $("#li-box").append(li);
+                            uploader.start();
+                        },
+                        UploadProgress: function(up, file) {
+                            var percent = file.percent;
+                            $("#" + file.id).find(".bar").css({
+                                "width": percent + "%"
+                            });
+                            $("#" + file.id).find(".percent").text(percent + "%");
+                        },
+                        FileUploaded: function(up, file, info) {
+                            var i = info.response;
+                            if (i == 'ok') {
+                                $("#ok" + file.id).html("...ok");
+                                location.reload();
+                            } else {
+                                $("#ok" + file.id).html("...fail");
+                                alert('上传失败，请刷新重试！');
+                            }
+                        },
+                        Error: function(up, err) {
+                            alert(err.message);
+                        }
+                    }
+                });
+                uploader.init();
+                </script>
+                {/if}
+                {if([$template]=='rename')}
+                <form class="rn" method="post">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="box">
+                        <div>旧名</div>
+                        <div>{$name}</div>
+                    </div>
+                    <div class="box">
+                        <div>新名</div>
+                        <div>
+                            <input type="text" name="name" required placeholder="请输入新名称" autofocus="autofocus">
+                        </div>
+                    </div>
+                    <input type="submit" class="button" value="确定">
+                    <a href="<?php echo url('/admin/File/index/'.str_replace([$name],'',[$dir]));?>" class="layui-btn layui-btn-primary">返回</a>
+                </form>
+                {/if}
+                {if([$template]=='edit')}
+                <form class="rn" method="post">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="box">
+                        <div>文件名</div>
+                        <div>{$name}</div>
+                    </div>
+                    <div class="box big">
+                        <div>内容</div>
+                        <div>
+                            <textarea name="content">{$content}</textarea>
+                        </div>
+                    </div>
+                    <input type="submit" class="button" value="保存">
+                    <a href="<?php echo url('/admin/File/index/'.str_replace([$name],'',[$dir]));?>" class="layui-btn layui-btn-primary">返回</a>
+                </form>
+                {/if}
+                {if([$template]=='newf')}
+                <form class="rn" method="post">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="box">
+                        <div>文件名</div>
+                        <div>
+                            <input type="text" name="name" required placeholder="请输入文件名，如：test.txt" autofocus="autofocus">
+                        </div>
+                    </div>
+                    <div class="box big">
+                        <div>内容</div>
+                        <div>
+                            <textarea name="content"></textarea>
+                        </div>
+                    </div>
+                    <input type="submit" class="button" value="保存">
+                    <a href="<?php echo url('/admin/File/index/'.[$dir]);?>" class="layui-btn layui-btn-primary">返回</a>
+                </form>
+                {/if}
+                {if([$template]=='newd')}
+                <form class="rn" method="post">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="box">
+                        <div>目录名</div>
+                        <div>
+                            <input type="text" name="name" required placeholder="请输入目录名" autofocus="autofocus">
+                        </div>
+                    </div>
+                    <input type="submit" class="button" value="确定">
+                    <a href="<?php echo url('/admin/File/index/'.[$dir]);?>" class="layui-btn layui-btn-primary">返回</a>
+                </form>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

@@ -1,0 +1,120 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li><a href="?p=/cj/index">采集管理</a></li>
+            {if([$pbarr.mcode]==18)}
+            {if([$dbarr.cj]==1)}
+            <li class="layui-this">测试 / 小说规则</li>
+            {else}
+            <li class="layui-this">测试 / 章节规则</li>
+            {/if}
+            {else}
+            <li class="layui-this">测试规则</li>
+            {/if}
+        </ul>
+        <div class="layui-tab-content">
+            {if([$pbarr.mcode]==18)}
+            {if([$dbarr.cj]==1)}
+            <div class="layui-tab-item layui-show">
+                <div class="layui-tab">
+                    <div>测试栏目：<a href="{$pbarr.url}" target="_blank">{$pbarr.url}</a></div>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">ID</th>
+                                <th>书名</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$pbarr.list01}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab">
+                    <div>测试书页：<a href="{$pbarr.testurl}" target="_blank">{$pbarr.testurl}</a></div>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">项目</th>
+                                <th>结果</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$pbarr.list02}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {else}
+            <div class="layui-tab-item layui-show">
+                <div class="layui-tab">
+                    <div>章节列表：<a href="{$pbarr.url}" target="_blank">{$pbarr.url}</a></div>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">ID</th>
+                                <th>标题</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$pbarr.list01}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab">
+                    <div>章节内容：<a href="{$pbarr.testurl}" target="_blank">{$pbarr.testurl}</a></div>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">项目</th>
+                                <th>结果</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$pbarr.list02}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {/if}
+            {else}
+            <div class="layui-tab-item layui-show">
+                <div class="layui-tab">
+                    <div>内容列表：<a href="{$pbarr.url}" target="_blank">{$pbarr.url}</a></div>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">ID</th>
+                                <th>标题</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$pbarr.list01}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab">
+                    <div>内容信息：<a href="{$pbarr.testurl}" target="_blank">{$pbarr.testurl}</a></div>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">项目</th>
+                                <th>结果</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$pbarr.list02}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {/if}
+            <div class="layui-form-item">
+                <a href="?p=/cj/index" class="layui-btn">确定</a>
+                <a href="?p=/cj/edit/cid/{$dbarr.cid}" class="layui-btn layui-btn-primary">继续修改</a>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

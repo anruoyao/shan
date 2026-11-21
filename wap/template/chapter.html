@@ -1,0 +1,25 @@
+<?php require_once(dirname(__FILE__).'/header_article.html');?>
+<style>.tip_{display:none}</style>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">《<a href="<?php echo pbcode('book',$id);?>"><?php echo $title;?></a>》目录</h3>
+			<span class="novel-title-desc">共<font id="total">X</font>章</span>
+		</div>
+		<div class="novel-header-r">
+			<a href="<?php echo $zdurl;?>"><?php echo $zd;?></a>
+		</div>
+	</div>
+    <?php
+    echo $tip_;
+    if($tip_){
+    $x='<style type="text/css">.box_{width:calc(100% - 32px);margin:15px}</style>';
+    echo $x;
+    }
+    ?>
+	<?php echo chapter4list($id,$page);?>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">
+vlof('v', '<?php echo [$pbarr.id];?>', 'no');
+</script>

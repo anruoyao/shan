@@ -1,0 +1,162 @@
+{include file=../../../include/member/wap/header.html}
+<?php
+$arr='article,scode,id';
+$arr=explode(',',$arr);
+foreach($arr as $v){
+    global $$v;
+}
+?>
+<dov class="main">
+    <div class="center">
+        <div class="bnav nfl">
+            <a href="<?php echo pbcode('member','ucenter');?>">会员中心</a>
+            &gt;&gt;
+            <a href="<?php echo pbcode('member','yc');?>">作者原创</a>
+        </div>
+        <div class="mbox">
+            <form class="yccontent" action="<?php echo pbcode('member','yc_add',$article);?>" method="post" enctype="multipart/form-data" onsubmit="return checkyc();">
+                <input type="hidden" name="ycadd" value="ycadd" />
+                <div class="box">
+                    <div class="t">
+                        <?php echo ycvar('yct',$article).'：';?>
+                    </div>
+                    <input type="text" name="yctitle" id="yctitle" value="">
+                </div>
+                {if(ycvar('ycbook'))}
+                {if(!$article)}
+                <div class="box">
+                    <div class="t">隶属栏目：</div>
+                    <select name="ycscode" id="ycscode">
+                        <option value="0">请选择栏目...</option>
+                        <?php echo catoption();?>
+                    </select>
+                </div>
+                <div class="box">
+                    <div class="t">作品状态：</div>
+                    <select name="ycsubtitle" id="ycsubtitle">
+                        <option value="0" selected="">连载</option>
+                        <option value="1">完结</option>
+                    </select>
+                </div>
+                <div class="box img">
+                    <div class="t">缩略图：</div>
+                    <input type="text" id="ycico2" class="ycico2" value="" readonly="readonly">
+                    <div id="filebox" class="filebox">
+                        <input type="file" name="ycico" id="ycico" class="ycico" onchange="ycimgx(this)">
+                    </div>
+                    <div class="ycimgbox">
+                        <img id="ycimg" src="<?php echo ycvar('ico');?>">
+                    </div>
+                </div>
+                {else}
+                <div class="box">
+                    <div class="t">定时发布：</div>
+                    <input type="text" name="ycupdate" id="ycupdate" value="" placeholder="请选择日期时间">
+                    <link rel="stylesheet" href="include/member/flatpickr/flatpickr.min.css">
+                    <script src="include/member/flatpickr/flatpickr.js"></script>
+                    <script src="include/member/flatpickr/zh.js"></script>
+                    <script>
+                    flatpickr("#ycupdate", {
+                        locale: "zh",
+                        enableTime: true,
+                        time_24hr: true,
+                        dateFormat: "Y-m-d H:i",
+                        minDate: "today",
+                        disableMobile: true,
+                        onOpen: function(selectedDates, dateStr, instance) {
+                            if (selectedDates.length === 0) {
+                                const now = new Date();
+                                instance.setDate(now, false);
+                                requestAnimationFrame(() => {
+                                    instance.reposition();
+                                });
+                            }
+                        },
+                        onReady: function(_, __, instance) {
+                            const clearBtn = document.createElement("button");
+                            clearBtn.type = "button";
+                            clearBtn.textContent = "清空";
+                            clearBtn.className = "clearBtn";
+                            clearBtn.onclick = () => {
+                                instance.clear();
+                                instance.close();
+                            };
+                            const okBtn = document.createElement("button");
+                            okBtn.type = "button";
+                            okBtn.textContent = "确定";
+                            okBtn.className = "okBtn";
+                            okBtn.onclick = () => {
+                                instance.close();
+                            };
+                            const btnBox = document.createElement("div");
+                            btnBox.style.display = "flex";
+                            btnBox.style.justifyContent = "space-between";
+                            btnBox.style.padding = "6px";
+                            btnBox.appendChild(clearBtn);
+                            btnBox.appendChild(okBtn);
+                            instance.calendarContainer.appendChild(btnBox);
+                        }
+                    });
+                    </script>
+                </div>
+                <div class="box bbb">
+                    <div class="t">隶属：</div>
+                    <select name="ycscode" id="ycscode">
+                        <?php echo catoption('article',$scode);?>
+                    </select>
+                    <div class="tt">&nbsp;&nbsp;=&gt;&nbsp;&nbsp;</div>
+                    <select name="ycid" id="ycid" class="max">
+                        <?php echo catoption('article','',$id);?>
+                    </select>
+                </div>
+                {/if}
+                {else}
+                <div class="box">
+                    <div class="t">隶属栏目：</div>
+                    <select name="ycscode" id="ycscode">
+                        <option value="0">请选择栏目...</option>
+                        <?php echo catoption();?>
+                    </select>
+                    <div class="tt">（如果有子分类，需要选择子分类）</div>
+                </div>
+                <div class="box img">
+                    <div class="t">缩略图：</div>
+                    <input type="text" id="ycico2" class="ycico2" value="" readonly="readonly">
+                    <div id="filebox" class="filebox">
+                        <input type="file" name="ycico" id="ycico" class="ycico" onchange="ycimgx(this)">
+                    </div>
+                    <div class="ycimgbox">
+                        <img id="ycimg" src="<?php echo ycvar('ico');?>">
+                    </div>
+                </div>
+                {/if}
+                <div class="box yctip">声明：提交后需要重新审核。维护网络环境人人有责；禁止发布任何违法违规内容，否则一切法律后果自行承担！</div>
+                <div class="bnav npl nmt">
+                    <?php echo ycvar('ycc',$article);?>
+                </div>
+                <div class="box">
+                    <textarea name="yccontent" id="yccontent" rows="8" cols="60"></textarea>
+                </div>
+                <div class="box">
+                    <button type="submit" class="button">提交</button>
+                </div>
+            </form>
+            <script type="text/javascript" src="include/ckeditor/ckeditor.js"></script>
+            <script type="text/javascript">
+            CKEDITOR.replace('yccontent', {
+                "toolbar": [
+                    ["Maximize"],
+                    ["Undo", "Redo"],
+                    ["JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock"],
+                    ["NumberedList", "BulletedList", "Outdent", "Indent", "Blockquote"],
+                    ["Find", "Replace", "SelectAll"],
+                    "\/", ["Styles", "Format", "FontSize"],
+                    ["TextColor", "BGColor", "Bold", "Italic", "Underline", "Strike", "RemoveFormat"]
+                ],
+                "height": 450
+            });
+            </script>
+        </div>
+    </div>
+</dov>
+{include file=../../../include/member/wap/footer.html}

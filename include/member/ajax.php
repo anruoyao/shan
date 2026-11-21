@@ -1,0 +1,31 @@
+<?php
+if(!isset($dsql)){
+	define('IS_INDEX',true);
+	define('URL_BIND','pbcode');
+	define('PB_FILE',$_SERVER['SCRIPT_FILENAME']);
+	require_once(dirname(__FILE__).'/../../core/start.php');
+}
+require_once('include/member.fun.php');
+$my=gpvar('my');
+if(strstr($my,'DEL')){
+	$id=gpvar('id');
+	$lc=gpvar('lc');
+	$xxx=memberdel($my,$id,$lc);
+}
+if($my=='wb'){
+	$sid=gpvar('sid');
+	$xxx=wb($sid);
+}
+if($my=='minlist'){
+	$Readed=gpvar('Readed');
+	$xxx=min_list($Readed);
+	$xxx.=nologbox();
+}
+if($my=='biglist'){
+	$xxx=nologbox();
+	$Readed=gpvar('Readed');
+	$page=gpvar('page');
+	$xxx.=big_list($Readed,'js');
+}
+echo $xxx;
+?>

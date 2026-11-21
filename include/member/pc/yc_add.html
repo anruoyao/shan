@@ -1,0 +1,190 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $scode,$id,$article;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Creation Center</p>
+        <h1 class="aw-title"><?php echo $article?'新增章节':'发布作品';?></h1>
+        <p class="aw-subtitle">提交后需要重新审核，审核通过后读者才可见。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','yc');?>">返回作品列表</a>
+    </div>
+</div>
+
+<form class="aw-form-card" action="<?php echo pbcode('member','yc_add',$article);?>" method="post" enctype="multipart/form-data" onsubmit="return checkyc();">
+    <input type="hidden" name="ycadd" value="ycadd" />
+    <div class="aw-form-grid">
+        <div class="aw-field aw-field--full">
+            <label for="yctitle"><?php echo ycvar('yct',$article);?> <span class="req">*</span></label>
+            <input class="aw-input" type="text" name="yctitle" id="yctitle" value="" placeholder="请输入<?php echo ycvar('yct',$article);?>" autocomplete="off">
+            <p class="aw-help">标题建议简洁清晰，避免使用特殊符号与敏感词。</p>
+        </div>
+
+        <?php if(ycvar('ycbook')):?>
+            <?php if(!$article):?>
+            <div class="aw-field">
+                <label for="ycscode">隶属栏目 <span class="req">*</span></label>
+                <select class="aw-select" name="ycscode" id="ycscode">
+                    <option value="0">请选择栏目...</option>
+                    <?php echo catoption();?>
+                </select>
+            </div>
+            <div class="aw-field">
+                <label for="ycsubtitle">作品状态</label>
+                <select class="aw-select" name="ycsubtitle" id="ycsubtitle">
+                    <option value="0" selected>连载</option>
+                    <option value="1">完结</option>
+                </select>
+            </div>
+            <div class="aw-field aw-field--full">
+                <label>作品封面</label>
+                <div class="aw-upload">
+                    <div class="aw-upload__preview">
+                        <img id="ycimg" src="<?php echo ycvar('ico');?>" onerror="this.src='include/member/image/empty.jpg'">
+                    </div>
+                    <div class="aw-upload__control">
+                        <input class="aw-input" type="text" id="ycico2" value="" readonly="readonly" placeholder="尚未选择图片">
+                        <div class="aw-upload__buttons">
+                            <label class="aw-btn aw-btn--ghost" for="ycico">选择图片</label>
+                            <span class="aw-upload__hint">建议竖版封面，尺寸比例 3:4</span>
+                        </div>
+                        <div id="filebox" class="filebox">
+                            <input type="file" name="ycico" id="ycico" class="ycico" onchange="ycimgx(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php else:?>
+            <div class="aw-field">
+                <label for="ycupdate">定时发布</label>
+                <input class="aw-input" type="text" name="ycupdate" id="ycupdate" value="" placeholder="请选择日期时间">
+                <link rel="stylesheet" href="include/member/flatpickr/flatpickr.min.css">
+                <script src="include/member/flatpickr/flatpickr.js"></script>
+                <script src="include/member/flatpickr/zh.js"></script>
+                <script>
+                flatpickr("#ycupdate", {
+                    locale: "zh",
+                    enableTime: true,
+                    time_24hr: true,
+                    dateFormat: "Y-m-d H:i",
+                    minDate: "today",
+                    disableMobile: true,
+                    onOpen: function(selectedDates, dateStr, instance) {
+                        if (selectedDates.length === 0) {
+                            const now = new Date();
+                            instance.setDate(now, false);
+                            requestAnimationFrame(() => {
+                                instance.reposition();
+                            });
+                        }
+                    },
+                    onReady: function(_, __, instance) {
+                        const clearBtn = document.createElement("button");
+                        clearBtn.type = "button";
+                        clearBtn.textContent = "清空";
+                        clearBtn.className = "clearBtn";
+                        clearBtn.onclick = () => {
+                            instance.clear();
+                            instance.close();
+                        };
+                        const okBtn = document.createElement("button");
+                        okBtn.type = "button";
+                        okBtn.textContent = "确定";
+                        okBtn.className = "okBtn";
+                        okBtn.onclick = () => {
+                            instance.close();
+                        };
+                        const btnBox = document.createElement("div");
+                        btnBox.style.display = "flex";
+                        btnBox.style.justifyContent = "space-between";
+                        btnBox.style.padding = "6px";
+                        btnBox.appendChild(clearBtn);
+                        btnBox.appendChild(okBtn);
+                        instance.calendarContainer.appendChild(btnBox);
+                    }
+                });
+                </script>
+                <p class="aw-help">留空则立即提交审核。</p>
+            </div>
+            <div class="aw-field">
+                <label for="ycscode">隶属作品</label>
+                <div class="aw-form-row">
+                    <select class="aw-select" name="ycscode" id="ycscode">
+                        <?php echo catoption('article',$scode);?>
+                    </select>
+                    <span class="aw-help">→</span>
+                    <select class="aw-select" name="ycid" id="ycid">
+                        <?php echo catoption('article','',$id);?>
+                    </select>
+                </div>
+            </div>
+            <?php endif;?>
+        <?php else:?>
+            <div class="aw-field">
+                <label for="ycscode">隶属栏目 <span class="req">*</span></label>
+                <select class="aw-select" name="ycscode" id="ycscode">
+                    <option value="0">请选择栏目...</option>
+                    <?php echo catoption();?>
+                </select>
+                <p class="aw-help">如果有子分类，需要选择子分类。</p>
+            </div>
+            <div class="aw-field aw-field--full">
+                <label>缩略图</label>
+                <div class="aw-upload">
+                    <div class="aw-upload__preview">
+                        <img id="ycimg" src="<?php echo ycvar('ico');?>" onerror="this.src='include/member/image/empty.jpg'">
+                    </div>
+                    <div class="aw-upload__control">
+                        <input class="aw-input" type="text" id="ycico2" value="" readonly="readonly" placeholder="尚未选择图片">
+                        <div class="aw-upload__buttons">
+                            <label class="aw-btn aw-btn--ghost" for="ycico">选择图片</label>
+                            <span class="aw-upload__hint">建议竖版封面，尺寸比例 3:4</span>
+                        </div>
+                        <div id="filebox" class="filebox">
+                            <input type="file" name="ycico" id="ycico" class="ycico" onchange="ycimgx(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif;?>
+
+        <div class="aw-field aw-field--full">
+            <p class="aw-form-note"><?php echo aw_icon('warning');?><span>声明：提交后需要重新审核。维护网络环境人人有责；禁止发布任何违法违规内容，否则一切法律后果自行承担。</span></p>
+        </div>
+
+        <div class="aw-field aw-field--full aw-editor">
+            <label for="yccontent"><?php echo ycvar('ycc',$article);?></label>
+            <textarea class="aw-textarea" name="yccontent" id="yccontent" rows="10" cols="60"></textarea>
+        </div>
+
+        <?php if($article):?>
+        <div class="aw-field aw-field--full">
+            <label for="author_say">作者有话说</label>
+            <textarea class="aw-textarea" name="author_say" id="author_say" rows="3" maxlength="500" placeholder="可选，展示在章节末尾"></textarea>
+            <p class="aw-help">最多 500 字，发布后会展示在章节正文之后。</p>
+        </div>
+        <?php endif;?>
+    </div>
+    <div class="aw-form-actions">
+        <a class="aw-btn aw-btn--ghost" href="<?php echo pbcode('member','yc');?>">取消</a>
+        <button type="submit" class="aw-btn aw-btn--primary"><?php echo $article?'提交章节':'提交审核';?></button>
+    </div>
+</form>
+
+<script type="text/javascript" src="include/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+CKEDITOR.replace('yccontent', {
+    "toolbar": [
+        ["Maximize"],
+        ["Undo", "Redo"],
+        ["JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock"],
+        ["NumberedList", "BulletedList", "Outdent", "Indent", "Blockquote"],
+        ["Find", "Replace", "SelectAll"],
+        "\/", ["Styles", "Format", "FontSize"],
+        ["TextColor", "BGColor", "Bold", "Italic", "Underline", "Strike", "RemoveFormat"]
+    ],
+    "height": 450
+});
+</script>
+{include file=../../../include/member/pc/footer.html}

@@ -1,0 +1,112 @@
+<?php
+require_once(ROOT_PATH . '/include/reader.fun.php');
+$sh_tpl = isset($GLOBALS['template']) ? $GLOBALS['template'] : '';
+$sh_is_home = (!$sh_tpl || strpos($sh_tpl, 'index') !== false);
+?>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="renderer" content="webkit" />
+	<meta name="force-rendering" content="webkit" />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge" />
+	<meta name="applicable-device" content="pc" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<?php echo head4pc($scode,$id,$page);?>
+	<base href="<?php echo $pcbase;?>" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<?php echo my4meta();?>
+	<link rel="stylesheet" type="text/css" href="template/tpl/css/common.css?v=20261119" />
+	<link rel="stylesheet" type="text/css" href="template/tpl/css/reader.css?v=20261119" />
+	<link rel="stylesheet" type="text/css" href="template/tpl/css/reader-pc.css?v=20261121a" />
+	<?php if ($sh_is_home) { ?><link rel="stylesheet" type="text/css" href="template/tpl/css/reader-home.css?v=20261121a" /><?php } ?>
+	<script type="text/javascript" src="template/tpl/js/common.js?v=20261119"></script>
+	<script type="text/javascript" src="template/tpl/js/ajax.js?v=20261119"></script>
+	<script type="text/javascript">
+	var hash=window.location.hash;
+	if(hash == "#pc"){
+		setcookie("KeepPC","1");
+	}
+	var pc2wap="<?php echo pc2wap('no');?>";
+	if(isMobile()){
+		var KeepPC=getcookie('KeepPC');
+		if(!KeepPC){
+			window.location.href=pc2wap;
+		} else{
+			pctip();
+		}
+	}
+	</script>
+	<script type="text/javascript" src="template/tpl/js/croll.js?v=20261119"></script>
+</head>
+<body id="Body" class="sh-body">
+	<header class="sh-header" id="header">
+		<?php
+		$sh_topad = axd(37);
+		if (trim($sh_topad)) {
+			echo '<div class="sh-topad"><center>' . $sh_topad . '</center></div>';
+		}
+		?>
+		<div class="sh-header__bar">
+			<a class="sh-logo pc-logo" href="./" title="<?php echo sh_e($sitetitle);?>">
+				<img src="template/tpl/image/<?php echo replogo();?>" alt="<?php echo sh_e($sitetitle);?>" />
+				<span class="sh-logo__tag">网文自留地</span>
+			</a>
+			<?php
+			$sh_nav_home = (!$sh_tpl || strpos($sh_tpl, 'index') !== false) ? ' class="is-active"' : '';
+			$sh_nav_shuku = (strpos($sh_tpl, 'shuku') !== false || strpos($sh_tpl, 'category') !== false) ? ' class="is-active"' : '';
+			$sh_nav_rank = strpos($sh_tpl, 'paihang') !== false ? ' class="is-active"' : '';
+			$sh_nav_over = strpos($sh_tpl, 'quanben') !== false ? ' class="is-active"' : '';
+			$sh_nav_tags = strpos($sh_tpl, 'tags') !== false ? ' class="is-active"' : '';
+			?>
+			<nav class="sh-nav" id="Nav">
+				<a href="./"<?php echo $sh_nav_home;?>>首页</a>
+				<a href="<?php echo pbcode('shuku');?>"<?php echo $sh_nav_shuku;?>>书城</a>
+				<a href="/paihang/"<?php echo $sh_nav_rank;?>>排行</a>
+				<div class="sh-cats">
+					<a class="sh-cats__btn" href="<?php echo sh_e(pbcode('shuku'));?>#categories">分类
+						<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+					</a>
+					<div class="sh-cats__panel">
+						<?php echo www_669977_NET_category();?>
+					</div>
+				</div>
+				<a href="<?php echo pbcode('quanben');?>"<?php echo $sh_nav_over;?>>完本</a>
+				<a href="<?php echo pbcode('tags');?>"<?php echo $sh_nav_tags;?>>标签</a>
+				<a class="sh-nav-app" href="app/" target="_blank">下载APP</a>
+			</nav>
+			<div class="sh-actions">
+				<div class="sh-search">
+					<input type="hidden" id="ToUrl" value="<?php echo pbcode(so,'697');?>">
+					<button type="button" class="sh-search__btn" id="s_btn" onclick="SoNow()" aria-label="搜索">
+						<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.4"/><path d="M10.6 10.6L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+					</button>
+					<input type="text" name="key" id="key" placeholder="搜索书名 / 作者" aria-label="搜索书名或作者" onclick="this.select()" autocomplete="off">
+				</div>
+				<a class="sh-top-link sh-top-link--pay" href="<?php echo sh_e(pbcode('member','pay'));?>">充值</a>
+				<a class="sh-top-link sh-top-link--author" href="<?php echo sh_e(pbcode('member','yc'));?>">作家专区</a>
+				<a class="sh-shelf-link" href="<?php echo sh_e(pbcode('member','fav'));?>">书架</a>
+				<div class="sh-user pc-login" id="loginInfo">
+					<img style="position:relative;top:1px;" src="template/tpl/image/loading.gif" />&nbsp;登录信息加载中...
+				</div>
+				<button type="button" class="sh-mobilebtn" id="shMenuBtn" aria-label="站点导航" aria-controls="shMobileNav" aria-expanded="false">
+					<svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M2 5h14M2 9h14M2 13h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+				</button>
+			</div>
+		</div>
+		<div class="sh-mobilenav" id="shMobileNav">
+			<a href="./">首页</a>
+			<a href="<?php echo pbcode('shuku');?>">书城</a>
+			<a href="/paihang/">排行</a>
+			<a href="<?php echo pbcode('quanben');?>">完本</a>
+			<a href="<?php echo pbcode('tags');?>">标签</a>
+			<a href="app/" target="_blank">下载APP</a>
+			<a href="<?php echo sh_e(pbcode('member','pay'));?>">充值中心</a>
+			<a href="<?php echo sh_e(pbcode('member','yc'));?>">作家专区</a>
+			<a href="<?php echo sh_e(pbcode('member','fav'));?>">书架</a>
+			<a href="<?php echo pbcode('so');?>">搜索</a>
+			<a href="wap/" target="_blank">手机版</a>
+			<?php echo www_669977_NET_category();?>
+		</div>
+		<?php echo langbtn();?>
+	</header>

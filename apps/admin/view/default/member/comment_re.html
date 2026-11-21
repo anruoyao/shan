@@ -1,0 +1,106 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    {if([$list])}
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li lay-id="t1"><a href="?p=/MemberComment/index">评论列表</a></li>
+            <li class="layui-this" lay-id="t2">评论回复</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/MemberComment/re" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" lay-ignore="" id="checkall" title="全选"></th>
+                                <th>评论</th>
+                                <th>回复</th>
+                                <th>状态</th>
+                                <th>回复人</th>
+                                <th>时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>{$list}</tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        <button type="button" onclick="selectall()" class="layui-btn layui-btn-sm">全选</button>
+                        <button type="submit" name="submit" value="del" class="layui-btn layui-btn-sm">批量删除</button>
+                    </div>
+                </form>
+                <div class="page">{$pagebox}</div>
+            </div>
+        </div>
+    </div>
+    {/if}
+    {if([$pbarr])}
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+      <ul class="layui-tab-title">
+        <li lay-id="t1"><a href="?p=/MemberComment/re">评论回复</a></li>
+        <li class="layui-this" lay-id="t2">评论详情</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <table class="layui-table table-two">
+
+                 <tr>
+                    <th width="100">内容</th>
+                    <td>{$pbarr.title}</td>
+                 </tr>
+                 <tr>
+                    <th width="100">评论</th>
+                    <td>{$pbarr.comment_}</td>
+                 </tr>
+                 <tr>
+                    <th width="100">回复</th>
+                    <td>{$pbarr.comment}</td>
+                 </tr>
+                 
+                 <tr>
+                    <th>状态</th>
+                    <td>
+                        {if([$pbarr.status]==1)}启用{/if}
+                        {if([$pbarr.status]==0)}禁用{/if}
+                    </td>
+                </tr>
+                
+                 <tr>
+                    <th>评论人</th>
+                    <td>{$pbarr.username}（{$pbarr.nickname}）</td>
+                 </tr>
+                 
+                  
+                 {if([$comment->pusername])}
+                 <tr>
+                    <th>被评论人</th>
+                    <td>{$comment->pusername}（{$comment->pnickname}）</td>
+                 </tr>
+                 {/if}
+                 
+                 <tr>
+                    <th>时间</th>
+                    <td>{$pbarr.update_time}</td>
+                 </tr>
+                 
+            </table>
+            {fun=get_btn_back()}
+        </div>
+      </div>
+     </div>
+    {/if}
+</div>
+{include file='common/foot.html'}
+<script>
+function selectall() {
+    var list = document.getElementsByName('list[]');
+    var c = list[0].checked;
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+</script>

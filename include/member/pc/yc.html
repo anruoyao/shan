@@ -1,0 +1,61 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $sqqy;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Creation Center</p>
+        <h1 class="aw-title">我的作品</h1>
+        <p class="aw-subtitle">管理连载作品、章节与运营数据，审核通过后可查看完整作品表现。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn aw-btn--primary" href="<?php echo pbcode('member','yc_add');?>"><?php echo aw_icon('plus');?>发布作品</a>
+    </div>
+</div>
+
+<section class="aw-card aw-notice aw-section">
+    <div class="aw-notice__main">
+        <p class="aw-eyebrow">2026 山海书盟作家福利</p>
+        <h2>网文自留地，作家避风港</h2>
+        <p>签约模式：非独家仅电子阅读、有声版权 5 年签约，在本站签约的同时可以签其他网站的非独家。分成比例：作者 80%，平台 20%。</p>
+        <div class="aw-tags">
+            <span>星光计划</span>
+            <span>逐梦计划</span>
+            <span>创作打卡计划</span>
+            <span>全勤激励</span>
+        </div>
+        <p class="aw-notice__warn"><?php echo aw_icon('warning');?><span>作者端申请签约后，请一定要在【联系编辑】中选择一个编辑并添加编辑 QQ，否则无法走合同流程。</span></p>
+        <details class="aw-details">
+            <summary>查看完整福利说明</summary>
+            <div class="aw-details__body">
+                <p>网文自留地，作家避风港！欢迎来到山海书盟，这个为理想而生的平台。在这里，你能与同好交流、与知己畅谈，写一写你喜欢的故事，读几本热血或是温情的好书。或许没有火爆的流量，或许没有喧嚣的浮华，但这里一定有的，是所有与作者读者不变的心。</p>
+                <p>本站以「网文自留地，作家避风港」为宗旨，旨在为广大作者打造一片自由的天地。</p>
+                <p>作者福利：平台设有「星光计划」「逐梦计划」两大作者扶持活动，所有签约作品皆可参与。另外，坚持日更一周及以上的作者可参与「创作打卡计划」，参与瓜分激励。</p>
+                <p>全勤激励：日更 1000，奖励本月总稿费的 5%；日更 2000，奖励本月总稿费的 10%；日更 4000，奖励本月总稿费的 15%；每月断更天数不能超过 5 天。</p>
+                <p>营收模式：以付费制为主，免费章节可上线广告；主做本站，同时多渠道分发，目前已开通番茄、七猫、百度、QQ 浏览器等渠道。</p>
+                <p>作者交流群：879403178，欢迎加入。</p>
+                <?php echo $sqqy;?>
+            </div>
+        </details>
+    </div>
+    <div class="aw-notice__aside">
+        <a class="aw-link-card" href="<?php echo $pcbase;?>jieshao.html">
+            <strong>作者福利</strong>
+            <span>扶持计划与奖励 <?php echo aw_icon('arrow');?></span>
+        </a>
+        <a class="aw-link-card" href="<?php echo $pcbase;?>connect.html">
+            <strong>联系编辑</strong>
+            <span>签约与作品咨询 <?php echo aw_icon('arrow');?></span>
+        </a>
+    </div>
+</section>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">作品列表</h2>
+        <span class="aw-card__hint">共 <strong id="ycnum">0</strong> 部作品</span>
+    </div>
+    <div id="biglist">
+        <?php echo biglist();?>
+    </div>
+</section>
+{include file=../../../include/member/pc/footer.html}

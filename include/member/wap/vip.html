@@ -1,0 +1,149 @@
+{include file=../../../include/member/wap/header.html}
+<?php
+$arr='pay_,js,score,scoreall';
+$arr=explode(',',$arr);
+foreach($arr as $v){
+    global $$v;
+}
+?>
+<dov class="main">
+    <div class="center">
+        <div class="bnav nfl">
+            <a href="<?php echo pbcode('member','ucenter');?>">会员中心</a>
+            &gt;&gt;
+            <a href="<?php echo pbcode('member','vip');?>">VIP专区</a>
+        </div>
+        {if($pay_=='jb2jf')}
+        <script type="text/javascript" src="{pboot:sitetplpath}/js/jquery-1.12.4.min.js"></script>
+        <form class="yccontent" onsubmit="return pay();">
+            <div class="bbox">
+                <div class="bnav">金币兑换积分</div>
+                <div class="mbox">
+                    <div class="dingyue">
+                        <p id="p1"><span>拥有金币：</span><img src="template/tpl/image/loading.gif"></p>
+                        <p id="p2"><span>可换积分：</span><img src="template/tpl/image/loading.gif"></p>
+                        <p id="p3"><span>规则：</span><img src="template/tpl/image/loading.gif"></p>
+                        <p class="p">金币可兑换成积分，但是积分无法兑换成金币，注意啦！</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bbox">
+                <div class="bnav">兑换数量</div>
+                <div class="mbox">
+                    <ul class="payje je1" id="payje" jb="0" jf="0">
+                        <li onclick="chpay_(1)" id="s1">金币：<img src="template/tpl/image/loading.gif"><span>(积分<img src="template/tpl/image/loading.gif">)</span></li>
+                        <li onclick="chpay_(2)">其它金币<input id="om" type="text" placeholder="输入数量" maxlength="5" onchange="chje_()" onkeyup="chje_()"><span>(积分<font id="jf">0</font>)</span></li>
+                    </ul>
+                    <div class="paybtn" id="paybtn" onclick="return pay();">立即兑换</div>
+                </div>
+            </div>
+        </form>
+        <?php echo $js;?>
+        <script>
+        function pay() {
+            var l = $id('loading');
+            if (l) {
+                return false;
+            }
+            if ($id('om') == document.activeElement) {
+                chje_();
+            }
+            var p = $id('paybtn');
+            var i = p.innerHTML;
+            var img = '<img id="loading" src="template/tpl/image/loading.gif">';
+            p.innerHTML = img + '兑换中';
+            var url = "<?php echo pbcode('member','vip','jb2jf');?>";
+            var payje = $id('payje');
+            var jb = payje.getAttribute('jb');
+            var jf = payje.getAttribute('jf');
+            if (!jb || !jf || jb == '0' || jb == '0') {
+                alert('请选择兑换数量！');
+                p.innerHTML = i;
+                return false;
+            }
+            var x = tipx(6);
+            if (!x) {
+                p.innerHTML = i;
+                return false;
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                data: {
+                    jb: jb,
+                    jf: jf
+                },
+                success: function(response, status) {
+                    if (response.code) {
+                        p.innerHTML = img + '兑换成功<span style="font-size:12px">(<font id="st">3</font>)</span>';
+                        sectime(response.tourl);
+                    } else {
+                        alert('数据有误，请稍后重试！');
+                        p.innerHTML = i;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                    p.innerHTML = i;
+                }
+            });
+            return false;
+        }
+        </script>
+        {/if}
+        {if(!$pay_)}
+        <div class="bbox">
+            <div class="bzc cjf">
+                <ul>
+                    <li>
+                        <p>积分</p>
+                        <p>
+                            <span>
+                                <?php echo $score;?></span>个
+                            <font>(历史记录
+                                <?php echo $scoreall;?>个)</font>
+                        </p>
+                        <a href="<?php echo pbcode('member','vip','jb2jf');?>" class="cjf_btn">金币换积分</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {/if}
+        {if(!$pay_ || ($pay_ && $pay_==1))}
+        <div class="bbox">
+            <div class="bnav">兑换记录</div>
+            <div class="mbox">
+                <ul class="czjl vip">
+                    <?php
+                    $x=moneylist();
+                    $arr=explode('{x}',$x);
+                    $x01=$arr[0];
+                    $x02=$arr[1];
+                    echo $x01;
+                    ?>
+                </ul>
+                <?php echo $x02;?>
+            </div>
+        </div>
+        {/if}
+        {if(!$pay_ || ($pay_ && $pay_==2))}
+        <div class="bbox">
+            <div class="bnav">积分消耗</div>
+            <div class="mbox">
+                <ul class="czjl buy">
+                    <?php
+                    $x=buylist();
+                    $arr=explode('{x}',$x);
+                    $x01=$arr[0];
+                    $x02=$arr[1];
+                    echo $x01;
+                    ?>
+                </ul>
+                <?php echo $x02;?>
+            </div>
+        </div>
+        {/if}
+    </div>
+</dov>
+{include file=../../../include/member/wap/footer.html}

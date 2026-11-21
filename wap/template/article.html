@@ -1,0 +1,319 @@
+<?php require_once(dirname(__FILE__).'/header_article.html');?>
+<script type="text/javascript">
+pgbg('');
+var id = "<?php echo $id;?>";
+var xid = "<?php echo $xid;?>";
+var issafariBrowser = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+if (issafariBrowser) {
+    window.onload = function() {
+        var lastTouchEnd = 0;
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        });
+        document.addEventListener('touchend', function(event) {
+            var now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 438) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        document.addEventListener('gesturestart', function(event) {
+            event.preventDefault();
+        });
+    }
+}
+</script>
+<style>html{max-width: 100%}content{max-width: 100%;overflow: hidden;}content{ background: #f7f0e5;}.header,.footer,.fnav,.search-container{display: none}.box_{width:calc(100% - 12px);margin-left:5px}</style>
+<div class="content-box" id="content-box">
+    <div class="pgl" id="pgl" onclick="pg('back')">
+        <p>上一页</p>
+    </div>
+    <div class="pgc" id="pgc" onclick="pg('c')">
+        <p>点击功能呼出</p>
+    </div>
+    <div class="pgr" id="pgr" onclick="pg('go')">
+        <p>下一页</p>
+    </div>
+    <div class="pgchapter" id="pgchapter">
+        <div class="cbox" id="cbox">
+            <ul id="cboxul"><img id="cboximg" src="style/image/loading.gif" /></ul>
+        </div>
+        <div class="cbtn">
+            <span onclick="pg('pgchapter')"></span>
+            <div class="cbg" onclick="pg('pgchapter')"></div>
+        </div>
+    </div>
+    <div class="pgnavtop">
+        <div class="tl"><a href="javascript:history.go(-1)">返回</a></div>
+        <div class="tr">
+            <ul>
+                <li class="wapapp app<?php echo $appdown;?>">
+                    <a style="color:red" href="<?php echo $pcbaseall;?>app/">APP客户端</a>
+                </li>
+                <li class="LoginBox" id="LoginBoxPg"></li>
+                <li class="sj"><a href="<?php echo pbcode('member','look','','all');?>">书架</a></li>
+                <li><a href="./">首页</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="pgsq mb<?php echo $login_status.$register_status;?>" onclick="pgsq()">
+        <font id="pgsq">添加书签</font><span>(永久书签)</span>
+    </div>
+    <a class="pgsq pgsq2" id="pgsq2" href="#">
+        <font class="red">自动赚金币</font><span>(点击查看)</span>
+    </a>
+    <div class="pgnavbot">
+        <div class="pgsx">
+            <a href="javascript:" class="pgs" id="pgs">上一章</a>
+            <div class="jindu" id="jindu"></div>
+            <a href="javascript:" class="pgx" id="pgx">下一章</a>
+        </div>
+        <ul>
+            <li class="ts">
+                <a href="javascript:pgmark('ting')">
+                    <span></span>
+                    <font>听书</font>
+                </a>
+            </li>
+            <li class="deng">
+                <a href="javascript:pgbg('yj','auto')">
+                    <span></span>
+                    <font>关灯</font>
+                </a>
+            </li>
+            <li class="set">
+                <a href="javascript:pgmark('set')">
+                    <span></span>
+                    <font>设置</font>
+                </a>
+            </li>
+            <li class="sc">
+                <a href="<?php echo pbcode('member','look','','all');?>">
+                    <span></span>
+                    <font>足迹</font>
+                </a>
+            </li>
+            <li class="sy">
+                <a href="<?php echo pbcode('book',$id);?>">
+                    <span></span>
+                    <font>回书页</font>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="pgmark" id="pgmark">
+        <div class="pgmarkting">
+            <div class="tingplaybox" id="tingplaybox">
+                <?php echo tingplaybox($title,$id,$xid,$ico);?>
+                <script type="text/javascript">
+                if (!synth) {
+                    $id('ting-control').style.display = 'none';
+                    $id('ting-spd').style.display = 'none';
+                }
+                $id('tingtip').remove();
+                $id('tingmark').remove();
+                </script>
+            </div>
+        </div>
+        <div class="pgmarkset">
+            <div class="pgzt">
+                <div class="btn" onclick="pgzt('jian')">A-</div>
+                <div class="jindu" id="jindu">
+                    <font id="jd-mr" onclick="pgzt('mr')">默认<i></i></font>
+                    <div class="jd-line" id="jd-font" style="width:50%"></div>
+                </div>
+                <div class="btn" onclick="pgzt('jia')">A+</div>
+            </div>
+            <div class="pgbg">
+                <div class="hy" onclick="pgbg('hy')"><span></span>护眼</div>
+                <div class="mr" onclick="pgbg('mr')"><span></span>默认</div>
+                <div class="rj" onclick="pgbg('rj')"><span></span>日间</div>
+                <div class="yj" onclick="pgbg('yj')"><span></span>夜间</div>
+            </div>
+            <div class="pgfy">
+                <div class="n" id="fy-normal" onclick="pgfy('normal')">上下滑动<span></span></div>
+                <div class="l" id="fy-lr" onclick="pgfy('lr')">左右翻页<span></span></div>
+                <div class="u" id="fy-ud" onclick="pgfy('ud')">上下翻页<span></span></div>
+            </div>
+        </div>
+        <div class="jt"></div>
+    </div>
+    <script type="text/javascript">
+    pgshow(1);
+    </script>
+    <div class="tbwrap">
+        <span class="l">
+            <?php echo '《'.$title.'》'.$xtitle;?></span>
+        <span class="r">
+            <font id="pg01">1</font>/<font id="pg02">1</font>
+        </span>
+    </div>
+    <div class="pagebtn dis">
+        <?php echo str_replace('id="pre_page"','',pglr('l'));?>
+        <a class="pagebtnset" href="javascript:normalpgnav(1)">设置</a>
+        <?php echo str_replace('id="next_page"','id="next_page2"',pglr('r'));?>
+    </div>
+    <?php
+    $uid=session('pboot_ucode');
+    if($uid){
+        $x=$dsql->one("select sutodychapter from ay_member where ucode=$uid limit 1",1);
+        $sutodychapter=$x[sutodychapter];
+    }
+    if($sutodychapter){
+        $c=' checked="checked"';
+        $k='已开启';
+        if($tip_){
+            $sutodychapter_js='<script>sutodychapter('.$xid.');</script>';
+        }
+    }else{
+        $c='';
+        $k='已关闭';
+    }
+    $sutodychapter_xxx='
+    <p class="sutodychapter">
+        自动连续订阅章节：
+        <label id="sutodychapter" for="ck1" onclick="sutodychapter()"><input id="ck1" type="checkbox" style="position:relative;top:1px"'.$c.'> '.$k.'</label>
+    </p>';
+    ?>
+    <div class="content-body" id="content-body">
+        <?php
+        $x=axd(106);
+        $x=trim($x);
+        if($tip_){
+            $arr=explode('<'.'div class="axd_free',$tip_);
+            $tip_=$arr[0];
+            $ad_=$arr[1];
+            if($ad_){
+                $ad_='<'.'div class="axd_free'.$ad_;
+            }
+            $tip_=str_replace(array('<div class="tip_">','<div class="box_">','</div>'),'',$tip_);
+            $tip_=str_replace('<p>','<p><font>',$tip_);
+            $tip_=str_replace('</p>','</font></p>',$tip_);
+            $tip_=str_replace('target="_blank"','target="_blank" class="tip___"',$tip_);
+
+            $tip_.=$sutodychapter_xxx.$sutodychapter_js;
+            
+            $content.='<style>#bodybox p a{position:relative;z-index:999;color:blue;text-decoration:underline;padding-right:15px}#bodybox p font{color:red}</style>';
+            $content=str_replace('</'.'div>',$tip_.'</'.'div>',$content);
+            $content.=$ad_;
+        }
+        if($x){
+            $x='
+            <p>
+                <div id="arcaxd">
+                    <div class="arcaxd">
+                        <div class="arcaxdt">广告是为了网站能更好的持续运营</div>
+                        <div class="arcaxdm">'.$x.'</div>
+                        <div class="arcaxdb">滑动可继续阅读 <span>&gt;&gt;</span></div>
+                    </div>
+                </div>
+            </p>';
+            if(strstr($content,'axd_free')){
+                $arr=explode('<'.'div class="axd_free',$content);
+                $content1=$arr[0];
+                $content1=str_replace('</'.'div>',$x.'</'.'div>',$content1);
+                $content2='<'.'div class="axd_free'.$arr[1];
+                $content=$content1.$content2;
+            }else{
+                $content=str_replace('</'.'div>',$x.'</'.'div>',$content);
+            }
+        }
+        echo $content;
+        ?>
+    </div>
+    <div class="tbwrap db">
+        <span class="l" id="pgtime">
+            <script type="text/javascript">
+            pgtime();
+            </script>
+        </span>
+        <span class="r" id="pgtip"></span>
+    </div>
+    <div class="pagebtn">
+        <?php echo pglr('l');?>
+        <a class="pagebtnset" href="javascript:normalpgnav(1)">设置</a>
+        <?php echo pglr('r');?>
+    </div>
+    <?php
+    $x=axd(107);
+    $x=trim($x);
+    if($x){
+        $x107='<'.'div id="axd107" class="axd107">'.$x.'</'.'div>';
+        echo $x107;
+    }
+    ?>
+    <script type="text/javascript">
+    bodybox();
+    </script>
+    <div class="normalbg" id="normalbg" onclick="normalpgnav(0)"></div>
+    <div class="tingtip" id="tingtip">
+        <div class="tingh">温馨提示：</div>
+        <div class="tingc" id="tingc01">是否自动播放到下一章节？</div>
+        <div class="tingc" id="tingc02">立即播放当前章节？</div>
+        <div class="tingb">
+            <div class="tingyes" id="tingyes01" onclick="tingtip('go!')">确定</div>
+            <div class="tingyes" id="tingyes02" onclick="tingtip('play!')">确定</div>
+            <div class="tingno" onclick="tingtip(0)">取消</div>
+        </div>
+    </div>
+    <div class="tingmark" id="tingmark"></div>
+</div>
+<div class="ting-flow" id="ting-flow" style="left:10px;">
+    <div class="tf-btn i" onclick="tingflow('i')"><img id="ting-flow-img" src="style/image/loading.gif" /></div>
+    <div class="tf-btn f" onclick="tingflow('f')">pre</div>
+    <div class="tf-btn p" onclick="tingflow('p')">play</div>
+    <div class="tf-btn n" onclick="tingflow('n')">next</div>
+    <div class="tf-btn c" onclick="tingflow('c')">close</div>
+    <div class="tf-cur" id="tf-cur"></div>
+    <script>
+    var TING_AUTO_PLAY = "<?php echo $TING_AUTO_PLAY;?>";
+    </script>
+</div>
+<?php echo AutoReader($id);?>
+<?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">
+pglog();
+vlof('v','<?php echo $id;?>', '<?php echo $xid;?>');
+url2disknext(id, xid);
+</script>
+<div class="CommentBox" style="padding:0">
+    <div class="recomment" id="recomment">
+        <div class="reh">
+            <div class="rex" onclick="hf()">x</div>
+            <div id="ret">评论列表</div>
+        </div>
+        <ul class="ulc" id="ulrec"></ul>
+        <div class="ulc_bg" id="ulc_bg" onclick="hf()"></div>
+        <form name="formcomment" id="formcomment" method="post" action="ajax.php?my=idxcmt&xid=<?php echo $xid;?>" onsubmit="return cgSubmit();">
+            <div class="recbox" id="recbox">
+                <input type="hidden" name="idx" id="idx" value="">
+                <textarea class="recom" id="comment" name="comment" placeholder="填写评论"></textarea>
+                <input type="submit" class="recombtn" id="recombtn" value="提交评论">
+            </div>
+        </form>
+    </div>
+    <div class="recomment_bg" id="recomment_bg" onclick="hf()"></div>
+</div>
+<script type="text/javascript">
+function cgSubmit(){
+    if(uid == 0 || !uid){
+        alert("抱歉，登录会员才能评论哦！");
+        var href="<?php echo pbcode('member','login');?>";
+        location.href=href;
+        return false;
+    }
+    if(!$id("comment").value){
+        alert("请输入你要评论的内容！");
+        return false;
+    }
+}
+
+if(hash.indexOf('xidcmt')>-1){
+    var arr=hash.split('_');
+    var xid=arr[1];
+    var idx=arr[2];
+    xidcmt('event',xid,idx);
+}
+</script>

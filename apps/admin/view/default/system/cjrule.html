@@ -1,0 +1,55 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li><a href="?p=/cj/index">采集管理</a></li>
+            {if([$pbarr.xxx])}
+            <li class="layui-this">导出规则</li>
+            {else}
+            <li class="layui-this">导入规则</li>
+            {/if}
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                {if([$pbarr.xxx])}
+                <form action="?p=/cj/rule/down/697" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-tab">
+                        <textarea id="rule" name="rule" required lay-verify="required" class="layui-textarea" style="min-height:calc(100vh - 350px)">{$pbarr.xxx}</textarea>
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn" lay-submit>下载</button>
+                        <button type="button" onclick="copy()" class="layui-btn layui-btn-primary">复制</button>
+                        {fun=get_btn_back()}
+                    </div>
+                </form>
+                {else}
+                <form action="?p=/cj/rule/in/697" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-tab">
+                        <textarea id="rule" name="rule" required lay-verify="required" class="layui-textarea" style="min-height:calc(100vh - 350px)"></textarea>
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn" lay-submit>导入</button>
+                        {fun=get_btn_back()}
+                    </div>
+                </form>
+                <script type="text/javascript">
+                document.getElementById('rule').focus();
+                </script>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function copy() {
+    var x = document.getElementById('rule');
+    x.select();
+    x = document.execCommand("Copy");
+    if (!x) {
+        alert('抱歉，复制失败...');
+    }
+}
+</script>
+{include file='common/foot.html'}

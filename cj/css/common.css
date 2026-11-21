@@ -1,0 +1,19 @@
+body, p { margin: 0; font-size: 14px; font-family: '微软雅黑'; }
+div { float: left; width: 100%; overflow: hidden; }
+.c { width: calc(100% - 20px); padding: 10px }
+.c010 { padding: 0px 10px; }
+.c510 { padding: 5px 10px; }
+.h { font-size: 24px; color: #fff; text-align: center; }
+.j { font-size: 16px; color: #fff; }
+.bs { background: slategrey; }
+.bg { background: gainsboro; }
+.d { max-height: calc(100vh - 218px); overflow-y: auto; }
+.d::-webkit-scrollbar { width: 3px; }
+.d::-webkit-scrollbar-thumb { background: #000 }
+.d::-webkit-scrollbar-track { background: #ccc }
+.d p { padding: 10px; border-bottom: 1px dashed gainsboro; }
+.d p:first-child { border-top: 1px dashed gainsboro; }
+.d span { color: red; }
+.d .bs { color: #fff; padding: 5px 10px; font-size: 16px; }
+.x { color: gray; }
+.l { color: green; }

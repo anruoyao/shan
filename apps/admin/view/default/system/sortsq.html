@@ -1,0 +1,42 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">小说授权</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">
+                <a href="?p=/Sort/index"><i class="fa fa-home"></i>内容管理</a>
+                &nbsp;&gt;&nbsp;
+                授权&nbsp;“<a href="?p=/Sort/sq/id/<?php echo [$dbarr.id];?>"><?php echo [$dbarr.title];?></a>”
+            </div>
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/Sort/sq/id/<?php echo [$dbarr.id];?>" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <input type="hidden" name="backurl" value="<?php echo $_SERVER['HTTP_REFERER'];?>">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">基本内容</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">授权渠道</label>
+                                    <div class="layui-input-block">
+                                        <?php echo [$sq__];?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit>立即提交</button>
+                                {fun=get_btn_back()}
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

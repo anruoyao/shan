@@ -1,0 +1,86 @@
+{include file=header_inner.html}
+<?php
+$sh_types = sh_rank_types();
+$sh_periods = sh_rank_periods();
+$sh_type = isset($_GET['type']) ? $_GET['type'] : 'sale';
+$sh_period = isset($_GET['period']) ? $_GET['period'] : 'week';
+if (!is_string($sh_type) || !array_key_exists($sh_type, $sh_types)) {
+    $sh_type = 'sale';
+}
+if (!is_string($sh_period) || !array_key_exists($sh_period, $sh_periods)) {
+    $sh_period = 'week';
+}
+$sh_type_info = sh_rank_type_info($sh_type);
+$sh_rows = sh_rank_rows($sh_type, $sh_period, 50);
+?>
+<main class="sh-main">
+	<div class="sh-container">
+		<div class="sh-crumbs" style="margin-top:24px">
+			<a href="./">首页</a><i>/</i><span>排行榜</span>
+		</div>
+
+		<div class="sh-rankbody">
+			<aside class="sh-rankrail">
+				<h1>排行榜</h1>
+				<nav class="sh-ranktabs" aria-label="榜单类型">
+					<?php foreach ($sh_types as $sh_tk => $sh_tv) { ?>
+					<a href="/paihang/?type=<?php echo sh_e($sh_tk);?>&amp;period=<?php echo sh_e($sh_period);?>" <?php if ($sh_type === $sh_tk) echo 'class="is-active" aria-current="page"';?>><?php echo sh_e($sh_tv['label']);?></a>
+					<?php } ?>
+				</nav>
+				<a class="sh-rankrail__more" href="<?php echo sh_e(pbcode('shuku'));?>#categories">按分类找书 ›</a>
+			</aside>
+
+			<section class="sh-ranklayout" aria-labelledby="shRankTitle">
+				<div class="sh-rankhead">
+					<div>
+						<h2 id="shRankTitle"><?php echo sh_e($sh_type_info['label']);?></h2>
+						<p><?php echo sh_e($sh_type_info['desc']);?></p>
+					</div>
+					<nav class="sh-rankperiod" aria-label="榜单周期">
+						<?php foreach ($sh_periods as $sh_pk => $sh_pv) { ?>
+						<a href="/paihang/?type=<?php echo sh_e($sh_type);?>&amp;period=<?php echo sh_e($sh_pk);?>" <?php if ($sh_period === $sh_pk) echo 'class="is-active" aria-current="page"';?>><?php echo sh_e($sh_pv['label']);?></a>
+						<?php } ?>
+					</nav>
+				</div>
+				<?php if ($sh_period !== 'all' && $sh_type_info['order'] !== '') { ?>
+				<p class="sh-rankhint"><?php echo $sh_type === 'new' ? '按上架时间筛选' : '按作品更新时间筛选';?>，近期作品较少时会扩大范围。</p>
+				<?php } elseif ($sh_period !== 'all' && $sh_type === 'fav') { ?>
+				<p class="sh-rankhint">按收藏记录的时间筛选。</p>
+				<?php } ?>
+				<?php if (!$sh_rows) { echo sh_empty($sh_type === 'month' || $sh_type === 'urge' ? $sh_type_info['desc'] : '本周期暂无上榜作品'); } ?>
+				<?php
+				$sh_rank_no = 0;
+				foreach ($sh_rows as $sh_b) {
+					$sh_rank_no++;
+					$sh_metric_val = sh_rank_metric_text($sh_b, $sh_type);
+					$sh_metric_unit = sh_rank_metric_unit($sh_type);
+				?>
+				<article class="sh-rankrow">
+					<span class="sh-rankrow__no"><?php echo $sh_rank_no;?></span>
+					<a class="sh-rankrow__cover" href="<?php echo sh_book_url($sh_b['id']);?>">
+						<?php echo sh_cover_img($sh_b['ico'], $sh_b['title']);?>
+					</a>
+					<div class="sh-rankrow__info">
+						<a class="sh-rankrow__title" href="<?php echo sh_book_url($sh_b['id']);?>"><?php echo sh_e($sh_b['title']);?></a>
+						<p class="sh-rankrow__desc"><?php echo sh_e(sh_short($sh_b['description'], 70));?></p>
+						<div class="sh-rankrow__meta">
+							<span><?php echo sh_e($sh_b['author']);?></span>
+							<span>·</span>
+							<a href="<?php echo sh_cat_url($sh_b['scode']);?>"><?php echo sh_e(sh_cat_name($sh_b['scode']));?></a>
+							<span>·</span>
+							<span><?php echo sh_status_text($sh_b);?></span>
+							<span>·</span>
+							<span><?php echo sh_words($sh_b['subscode']);?></span>
+						</div>
+					</div>
+					<div class="sh-rankrow__metric">
+						<b><?php echo sh_e($sh_metric_val);?></b>
+						<span><?php echo sh_e($sh_metric_unit);?></span>
+					</div>
+				</article>
+				<?php } ?>
+			</section>
+		</div>
+	</div>
+</main>
+{include file=footer_inner.html}

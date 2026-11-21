@@ -1,0 +1,52 @@
+<?php $isAuthorLayout=defined('AUTHOR_LAYOUT');?>
+<?php $isMemberLayout=defined('MEMBER_LAYOUT');?>
+<?php $isFlatLayout=$isAuthorLayout || $isMemberLayout;?>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php echo head4pc($scode,$id,$page);?>
+    <base href="<?php echo $pcbase;?>" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="include/member/css/pc.css?v=20261117" />
+    <?php if($isFlatLayout):?>
+    <link rel="stylesheet" type="text/css" href="include/member/css/author.css?v=20261119" />
+    <?php endif;?>
+    <?php if($isMemberLayout || defined('READER_SUBSCRIPTION_LAYOUT')):?>
+    <link rel="stylesheet" type="text/css" href="include/member/css/reader-pc.css?v=20261119f" />
+    <?php endif;?>
+    <script type="text/javascript" src="include/member/js/common.js?v=20261117"></script>
+    <script type="text/javascript" src="include/member/js/ajax.js?v=20261117"></script>
+</head>
+
+<body class="<?php echo $isFlatLayout?'author-v2':'';?> <?php echo $isMemberLayout?'member-v2':'';?>">
+<?php if($isFlatLayout):?>
+    <?php echo author_topbar($isMemberLayout?'member':'author');?>
+    <div class="aw-layout">
+        <aside class="aw-sidebar" id="awSidebar">
+            <?php echo $isMemberLayout?member_lnav():lnav();?>
+        </aside>
+        <main class="aw-main" id="awMain">
+<?php else:?>
+    <div class="header">
+        <div class="center">
+            <div class="logo">
+                <a href="javascript:window.history.go(-1);">
+                    <img src="include/member/image/back.png">
+                </a>
+            </div>
+            <div class="w">
+                <a href="<?php echo pbcode('member','index');?>" title="会员中心">会员中心</a>
+            </div>
+            <div class="navlist">
+                <ul>
+                    <?php echo memnav();?>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="center">
+<?php endif;?>

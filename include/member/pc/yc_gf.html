@@ -1,0 +1,27 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $title,$gf_data,$page;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Revenue</p>
+        <h1 class="aw-title">稿费明细</h1>
+        <p class="aw-subtitle"><?php echo $title;?> 的月度结算记录。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','yc_info',$page);?>"><?php echo aw_icon('chart');?>运营数据</a>
+        <a class="aw-btn" href="<?php echo pbcode('member','gf');?>">汇总查看</a>
+        <a class="aw-btn" href="<?php echo pbcode('member','yc');?>">返回作品列表</a>
+    </div>
+</div>
+
+<?php echo author_gf_summary_html($gf_data);?>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">结算清单</h2>
+        <span class="aw-card__hint">按月结算</span>
+    </div>
+    <?php echo author_gf_cards_html($gf_data,false);?>
+</section>
+<?php echo author_gf_rules_html();?>
+{include file=../../../include/member/pc/footer.html}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+    <title>TXT或ZIP-小说下载-<?php echo $sitetitle;?></title>
+    <base href="<?php echo $pcbase;?>" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="template/tpl/css/common.css" />
+    <script type="text/javascript">
+    var hash = window.location.hash;
+    var jslang = "<?php if(defined('LANG')){echo LANG;};?>";
+    </script>
+    <script type="text/javascript" src="template/tpl/js/common.js"></script>
+    <script type="text/javascript" src="template/tpl/js/ajax.js"></script>
+</head>
+
+<body id="Body">
+    <script type="text/javascript">
+    var w = document.documentElement.clientWidth;
+    if (w < 697) {
+        $id('Body').className = 'mini';
+    }
+    </script>
+    <div class="txtbox">
+        <div class="txth">
+            <img src="template/tpl/image/logo.png">
+            <span>正在生成TXT文件，完成后会自动下载</span>
+        </div>
+        <div class="txtc">
+            <div class="text" id="text">
+                <p class="green">
+                    <img src="template/tpl/image/loading.gif" style="position:relative;top:1px">
+                    正在生成TXT文件，请稍后...
+                </p>
+                <script type="text/javascript">
+                maketxt('<?php echo [$pbarr.scode];?>', '<?php echo [$pbarr.id];?>');
+                </script>
+            </div>
+        </div>
+        <div class="txttp" id="txttp"></div>
+        <div class="txtb">
+            <a class="txtbtn" id="txtbtn" href="<?php echo pbcode('txt',[$pbarr.scode],[$pbarr.id]);?>" onclick="return go()">
+                <img id="loading" src="template/tpl/image/loading.gif">
+                生成TXT
+            </a>
+            <a class="txtbtn back" href="<?php echo pbcode('book',[$pbarr.id]);?>">返回书页</a>
+        </div>
+    </div>
+    <div class="txtbg"></div>
+</body>
+
+</html>

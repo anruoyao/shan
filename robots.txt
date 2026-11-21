@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /include*
+Disallow: /templets*
+Disallow: /make*
+Disallow: /ajax*
+Disallow: /hi.login*
+Disallow: /axd*

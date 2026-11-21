@@ -1,0 +1,16 @@
+{include file=../../../include/member/wap/header.html}
+<div class="main">
+    <div class="center">
+        <div class="bnav nfl">
+            <a href="<?php echo pbcode('member','ucenter');?>">会员中心</a>
+            &gt;&gt;
+            <a href="<?php echo pbcode('member','cmt');?>" style="color:red">我的评论</a>
+            &nbsp;/&nbsp;
+            <a href="<?php echo pbcode('member','re');?>">评论回复</a>
+        </div>
+        <div class="mbox mbox_re" id="biglist">
+            <?php echo biglist();?>
+        </div>
+    </div>
+</div>
+{include file=../../../include/member/wap/footer.html}

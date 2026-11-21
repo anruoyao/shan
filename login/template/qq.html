@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="App-Config" content="fullscreen=yes,useHistoryState=yes,transition=yes" />
+	<meta name=apple-mobile-web-app-capable content=yes />
+	<meta name=apple-touch-fullscreen content=yes />
+	<meta name=format-detection content="telephone=no,email=no" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<title>使用 QQ 登录-<?php echo $sitetitle;?></title>
+	<link rel="stylesheet" type="text/css" href="style/css/common.css" />
+	<script type="text/javascript">
+	var LOGIN_URL="<?php echo $pcbaseall;?>";
+	</script>
+	<script type="text/javascript" src="style/js/ajax.js?<?php echo time().rand(1,100);?>"></script>
+</head>
+<body>
+	<div>
+		<center id="login"><img src="style/image/loading.gif">&nbsp;Login...</center>
+		<center id="xTime">5</center>
+	</div>
+	<script type="text/javascript" src="//connect.qq.com/qc_jssdk.js" data-appid="<?php global $Appid;echo $Appid;?>" charset="utf-8"></script>
+	<script type="text/javascript">
+	var i="<?php echo $id;?>";
+	var u="<?php echo $username;?>";
+	var n="<?php echo $nickname;?>";
+	if(u && n){
+		var hash="<?php echo gpvar('hash');?>";
+		login(i,'qq',n,'',hash,u);
+	} else{
+		var paras={};
+		QC.api("get_user_info",paras)
+			.success(function(s){
+				var n=s.data.nickname;
+				var h=s.data.figureurl_qq_2;
+				if(!h){
+					h=s.data.figureurl_qq_1;
+				}
+				if(QC.Login.check()){
+					QC.Login.getMe(function(openId,accessToken){
+						var u=openId;
+						login(i,'qq',n,h,'',u);
+					});
+				}
+			})
+			.error(function(f){
+				$id('login').innerHTML='(<span id="NextTime">2</span>) Sorry Login Fail...';
+				NextTime('NextTime');
+			})
+			.complete(function(c){});
+	}
+	</script>
+</body>
+</html>

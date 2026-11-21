@@ -1,0 +1,112 @@
+<?php define('MEMBER_LAYOUT',1); global $my; $my='index';?>
+{include file=../../../include/member/pc/header.html}
+<?php
+$home=member_home_data();
+$recent=minlist();
+$recentScript='';
+if(preg_match('/<script[^>]*>.*?<\/script>/is',$recent,$recentMatch)){
+    $recentScript=$recentMatch[0];
+}
+?>
+<div class="aw-page-head">
+    <div>
+        <h1 class="aw-title">个人中心</h1>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','ucenter');?>"><?php echo aw_icon('book');?>作者中心</a>
+    </div>
+</div>
+
+<section class="aw-card aw-hero aw-section">
+    <div class="aw-hero__avatar">
+        <img crs="<?php echo htmlspecialchars((string) $home['headpic'], ENT_QUOTES, 'UTF-8');?>" src="template/tpl/image/blank.gif" onerror="this.src=&#39;uploads/empty.jpg&#39;" alt="<?php echo $home['nickname'];?>">
+    </div>
+    <div class="aw-hero__info">
+        <div class="aw-hero__name">
+            <?php echo $home['nickname'];?>
+            <span class="aw-badge is-plain"><?php echo $home['gname'] ?: '书友';?></span>
+        </div>
+        <div class="aw-hero__actions">
+            <a class="aw-btn aw-btn--sm aw-btn--primary" href="<?php echo pbcode('member','money');?>"><?php echo aw_icon('wallet');?>充值中心</a>
+            <a class="aw-btn aw-btn--sm" href="<?php echo pbcode('member','vip');?>"><?php echo aw_icon('spark');?>VIP专区</a>
+        </div>
+    </div>
+    <div class="aw-hero__metrics">
+        <div class="aw-metric">
+            <strong id="jbnum"><?php echo htmlspecialchars((string) $home['jinbi'], ENT_QUOTES, 'UTF-8');?></strong>
+            <span>金币</span>
+        </div>
+        <div class="aw-metric">
+            <strong id="jfnum"><?php echo htmlspecialchars((string) $home['score'], ENT_QUOTES, 'UTF-8');?></strong>
+            <span>积分</span>
+        </div>
+    </div>
+</section>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">最近阅读</h2>
+        <a class="aw-card__link" href="<?php echo pbcode('member','look');?>">查看全部</a>
+    </div>
+    <?php if(strpos($recent,'<li')!==false):?>
+    <ul class="minlist" id="minlist">
+        <?php echo $recent;?>
+    </ul>
+    <?php else:?>
+    <div class="aw-empty" id="minlist">
+        <?php echo aw_icon('clock');?>
+        <span>暂无浏览记录，去书城发现一本好书吧。</span>
+    </div>
+    <?php echo $recentScript;?>
+    <?php endif;?>
+</section>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">阅读与互动</h2>
+    </div>
+    <div class="aw-quick aw-quick--wide">
+        <a href="<?php echo pbcode('member','look');?>">
+            <?php echo aw_icon('clock');?>
+            <strong>阅读记录</strong>
+            <span>找回最近阅读过的书籍</span>
+        </a>
+        <a href="<?php echo pbcode('member','fav');?>">
+            <?php echo aw_icon('star');?>
+            <strong>我的书架</strong>
+            <span>已收藏的作品</span>
+        </a>
+        <a href="<?php echo pbcode('member','good');?>">
+            <?php echo aw_icon('thumbup');?>
+            <strong>赞赏记录</strong>
+            <span>支持过的作品</span>
+        </a>
+        <a href="<?php echo pbcode('member','bad');?>">
+            <?php echo aw_icon('thumbdown');?>
+            <strong>不太喜欢</strong>
+            <span>不感兴趣的作品</span>
+        </a>
+        <a href="<?php echo pbcode('member','cmt');?>">
+            <?php echo aw_icon('comment');?>
+            <strong>评论互动</strong>
+            <span>我的评论与回复</span>
+        </a>
+        <a href="<?php echo pbcode('member','money');?>">
+            <?php echo aw_icon('wallet');?>
+            <strong>充值中心</strong>
+            <span>金币充值与提现</span>
+        </a>
+        <a href="<?php echo pbcode('member','vip');?>">
+            <?php echo aw_icon('spark');?>
+            <strong>VIP专区</strong>
+            <span>会员权益与积分</span>
+        </a>
+        <a href="<?php echo pbcode('member','umodify');?>">
+            <?php echo aw_icon('edit');?>
+            <strong>修改资料</strong>
+            <span>头像、昵称与密码</span>
+        </a>
+    </div>
+</section>
+
+{include file=../../../include/member/pc/footer.html}

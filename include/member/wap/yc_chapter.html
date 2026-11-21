@@ -1,0 +1,26 @@
+{include file=../../../include/member/wap/header.html}
+<dov class="main">
+    <div class="center">
+        <div class="bnav nfl">
+            <a href="<?php echo pbcode('member','ucenter');?>">会员中心</a>
+            &gt;&gt;
+            <a href="<?php echo pbcode('member','yc');?>">作者原创</a>
+        </div>
+        <div class="mbox chap">
+            <?php echo ycbook();?>
+        </div>
+        <div class="bnav">
+            章节列表：<span>(点章节编辑)</span>
+            <div class="bnr">
+                操作:
+                <a href="javascript:selectall('');">全选</a>
+                <a href="javascript:selectall('fan');">反选</a>
+                <a href="javascript:selectall('yclist');" onclick="return tipx(2);">删除</a>
+            </div>
+        </div>
+        <div class="mbox">
+            <?php echo chalist();?>
+        </div>
+    </div>
+</dov>
+{include file=../../../include/member/wap/footer.html}

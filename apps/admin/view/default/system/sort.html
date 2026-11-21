@@ -1,0 +1,165 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href="?p=/Sort/index">内容管理</a></li>
+            {if([$pbarr.mcode]==18 && ![$pbarr.xid])}
+            <li><a href="?p=/Sort/add/book/{$pbarr.scode}">新增小说</a></li>
+            {/if}
+            {if([$pbarr.xid])}
+            <li><a href="?p=/Sort/add/chapter/{$pbarr.id}">新增章节</a></li>
+            {/if}
+            {if([$pbarr.mcode]!=18 && [$pbarr.mcode]!=20 && ![$pbarr.xid])}
+            <li><a href="?p=/Sort/add/content/{$pbarr.scode}">新增内容</a></li>
+            {/if}
+            {if([$pbarr.mode]==6 || ([$pbarr.mcode]!=20 && ![$pbarr.xid]))}
+            <li><a href="?p=/Sort/index/mode/2"{if([$pbarr.mode]==2)}class="red"{/if}>畅销精品</a></li>
+            <li><a href="?p=/Sort/index/mode/3"{if([$pbarr.mode]==3)}class="red"{/if}>人气风向</a></li>
+
+            <li><a href="?p=/Sort/index/mode/7"{if([$pbarr.mode]==7)}class="red"{/if}>编辑力荐</a></li>
+            <li><a href="?p=/Sort/index/mode/8"{if([$pbarr.mode]==8)}class="red"{/if}>热读精选</a></li>
+            <li><a href="?p=/Sort/index/mode/9"{if([$pbarr.mode]==9)}class="red"{/if}>火热连载</a></li>
+            <li><a href="?p=/Sort/index/mode/10"{if([$pbarr.mode]==10)}class="red"{/if}>潜力佳作</a></li>
+
+            <li><a href="?p=/Sort/index/mode/4"{if([$pbarr.mode]==4)}class="red"{/if}>原创作品</a></li>
+            <li><a href="?p=/Sort/index/mode/5"{if([$pbarr.mode]==5)}class="red"{/if}>原创待审</a></li>
+            {if([$pbarr.mcode]==18 || [$pbarr.mode]==6)}
+            <li><a href="?p=/Sort/index/mode/6"{if([$pbarr.mode]==6)}class="red"{/if}>章节待审</a></li>
+            {/if}
+            {/if}
+            {if([$pbarr.pan])}
+            <li><a href="?p=/Sort/index/mode/1"{if([$pbarr.mode]==1)}class="red"{/if}>好评</a></li>
+            <li><a href="?p=/Sort/index/mode/2"{if([$pbarr.mode]==2)}class="red"{/if}>差评</a></li>
+            <li><a href="?p=/Sort/index/mode/3"{if([$pbarr.mode]==3)}class="red"{/if}>禁用</a></li>
+            {/if}
+        </ul>
+        <div class="layui-tab-content">
+            <form action="?p=/Sort/index" method="post" class="layui-form so">
+                <input type="hidden" name="formcheck" value="{$formcheck}">
+                <input type="text" name="key" value="" placeholder="请输入搜索关键字" class="layui-input">
+                <button class="layui-btn" lay-submit>搜索</button>
+            </form>
+            <div class="loc">{$pbarr.loc}</div>
+            <div class="layui-tab-item"></div>
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Sort/mod}/xid/{$pbarr.xid}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <input type="hidden" name="go2url" value="<?php echo get_btn_qs();?>">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" lay-ignore="" id="checkall" title="全选"></th>
+                                {if([$pbarr.pan])}
+                                <th>ID</th>
+                                <th>标题</th>
+                                <th>入驻时间</th>
+                                <th>访问时间</th>
+                                <th>有效期</th>
+                                <th>好评</th>
+                                <th>差评</th>
+                                <th>禁用</th>
+                                <th>操作</th>
+                                {else}
+                                {if([$pbarr.xid])}
+                                <th>ID</th>
+                                <th>章节</th>
+                                <th>书名</th>
+                                <th>栏目</th>
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                                {else}
+                                <th>ID</th>
+                                {if([$pbarr.mcode]==18)}
+                                <th>书名</th>
+                                {else}
+                                <th>标题</th>
+                                {/if}
+                                <th>责编</th>
+                                <th>栏目</th>
+                                <th>更新时间</th>
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>畅销精品</th>
+                                <th>人气风向</th>
+                                <th>编辑力荐</th>
+                                <th>热读精选</th>
+                                <th>火热连载</th>
+                                <th>潜力佳作</th>
+                                <th>访问量</th>
+                                <th>操作</th>
+                                {/if}
+                                {/if}
+                            </tr>
+                        </thead>
+                        <tbody>{$pbarr.sortlist}</tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        {if(![$pbarr.pan])}
+                        <button type="button" onclick="selectall()" class="layui-btn layui-btn-sm">全选</button>
+                        <button type="submit" name="submit" value="sorting" class="layui-btn layui-btn-sm">保存排序</button>
+                        <button type="submit" name="submit" value="del" onclick="return del();" class="layui-btn layui-btn-sm">批量删除</button>
+                        <button type="submit" name="submit" value="status_1" class="layui-btn layui-btn-sm">状态开</button>
+                        <button type="submit" name="submit" value="status_0" class="layui-btn layui-btn-sm">状态关</button>
+                        {if(![$pbarr.xid])}
+                        <button type="submit" name="submit" value="isrecommend_1" class="layui-btn layui-btn-sm">畅销开</button>
+                        <button type="submit" name="submit" value="isrecommend_0" class="layui-btn layui-btn-sm">畅销关</button>
+                        <button type="submit" name="submit" value="isheadline_1" class="layui-btn layui-btn-sm">人气开</button>
+                        <button type="submit" name="submit" value="isheadline_0" class="layui-btn layui-btn-sm">人气关</button>
+
+                        <button type="submit" name="submit" value="bjlj_1" class="layui-btn layui-btn-sm">力荐开</button>
+                        <button type="submit" name="submit" value="bjlj_0" class="layui-btn layui-btn-sm">力荐关</button>
+                        <button type="submit" name="submit" value="rdjx_1" class="layui-btn layui-btn-sm">热读开</button>
+                        <button type="submit" name="submit" value="rdjx_0" class="layui-btn layui-btn-sm">热读关</button>
+                        <button type="submit" name="submit" value="hrlz_1" class="layui-btn layui-btn-sm">火热开</button>
+                        <button type="submit" name="submit" value="hrlz_0" class="layui-btn layui-btn-sm">火热关</button>
+                        <button type="submit" name="submit" value="qljz_1" class="layui-btn layui-btn-sm">潜力开</button>
+                        <button type="submit" name="submit" value="qljz_0" class="layui-btn layui-btn-sm">潜力关</button>
+
+                        <button type="submit" name="submit" value="zt" class="layui-btn layui-btn-sm" style="display:none;">设置专题</button>
+
+                        <button type="submit" name="submit" value="duo" class="layui-btn layui-btn-sm">批量授权</button>
+                        {/if}
+                        {/if}
+                    </div>
+                    <div class="page">{$pbarr.pagebox}</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/ueditor.html'}
+{include file='common/foot.html'}
+<script type="text/javascript">
+function del(tip) {
+    if (tip != 1) {
+        var list = document.getElementsByName('list[]');
+        for (var i = 0; i < list.length; i++) {
+            var c = list[i].checked;
+            if (c) {
+                break;
+            }
+        }
+        if (!c) {
+            alert('请选择要删除的项目！');
+            return false;
+        }
+        tip = '确定要删除选中的项目吗？';
+    } else {
+        tip = '确定要删除这条内容吗？';
+    }
+    event.returnValue = confirm(tip);
+}
+
+function selectall() {
+    var list = document.getElementsByName('list[]');
+    var c = list[0].checked;
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+</script>

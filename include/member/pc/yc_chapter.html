@@ -1,0 +1,34 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $page;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Chapters</p>
+        <h1 class="aw-title">章节管理</h1>
+        <p class="aw-subtitle">点击章节可直接编辑，支持全选、反选与批量删除。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','yc_info',$page);?>"><?php echo aw_icon('chart');?>运营数据</a>
+        <a class="aw-btn" href="<?php echo pbcode('member','yc');?>">返回作品列表</a>
+    </div>
+</div>
+
+<section class="aw-card aw-section">
+    <?php echo ycbook();?>
+</section>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">章节列表</h2>
+        <div class="aw-chapter-tools">
+            <span>批量操作：</span>
+            <a href="javascript:selectall('');">全选</a>
+            <a href="javascript:selectall('fan');">反选</a>
+            <a href="javascript:selectall('yclist');" onclick="return tipx(2);">删除</a>
+        </div>
+    </div>
+    <div class="mbox">
+        <?php echo chalist();?>
+    </div>
+</section>
+{include file=../../../include/member/pc/footer.html}

@@ -1,0 +1,54 @@
+<?php $isFlatLayout=defined('AUTHOR_LAYOUT') || defined('MEMBER_LAYOUT');?>
+<?php if($isFlatLayout):?>
+        </main>
+    </div>
+    <footer class="aw-footer">
+        <div class="aw-footer__inner">
+            <p>{pboot:sitecopyright}</p>
+            <p>
+                {pboot:siteicp}
+                {pboot:sitestatistical}
+                <?php
+                if($appdown){
+                    echo '<a href="app/" title="APP客户端下载" target="_blank">APP客户端下载</a>';
+                }
+                ?>
+            </p>
+        </div>
+    </footer>
+    <script type="text/javascript" src="include/member/js/author.js?v=20261118b"></script>
+<?php else:?>
+</div>
+</div>
+<div class="footer">
+    <div class="center">
+        <p>{pboot:sitecopyright}</p>
+        <p>
+            {pboot:siteicp}
+            {pboot:sitestatistical}
+            <?php
+            if($appdown){
+                echo '<a style="color:red" href="app/" title="APP客户端下载" target="_blank">APP客户端下载</a>';
+            }
+            ?>
+        </p>
+    </div>
+</div>
+<?php endif;?>
+<script type="text/javascript">
+var imgs = document.querySelectorAll('img');
+if (typeof(IntersectionObserver) == 'function') {
+    var observer = new IntersectionObserver(imgsrc);
+    for (var i of imgs) {
+        observer.observe(i);
+    }
+} else {
+    for (var i = 0; i < imgs.length; i++) {
+        var crs = imgs[i].getAttribute('crs');
+        if (!crs) {
+            continue;
+        }
+        imgs[i].src = crs;
+    }
+}
+</script>

@@ -1,0 +1,252 @@
+{include file=../../../include/member/wap/header.html}
+<?php
+$arr='pay_,js,dingyue,dy,id,rmb2jinbi,pay_btn';
+$arr=explode(',',$arr);
+foreach($arr as $v){
+    global $$v;
+}
+?>
+<div class="main">
+    <div class="center">
+        <div class="bnav nfl">
+            <a href="<?php echo pbcode('member','ucenter');?>">会员中心</a>
+            &gt;&gt;
+            <a href="<?php echo pbcode('member','money');?>">充值中心</a>
+        </div>
+        <script type="text/javascript" src="{pboot:sitetplpath}/js/jquery-1.12.4.min.js"></script>
+        {if($pay_=='ok')}
+        <div class="bbox">
+            <div class="mbox" id="okbox">
+                <?php echo $js;?>
+            </div>
+            {if(strstr($js,'ding'))}
+            <script>
+            var url1 = "<?php echo pbcode('member','money');?>";
+            var url2 = "<?php echo pbcode('member','query');?>";
+            $.ajax({
+                type: 'POST',
+                url: url2,
+                dataType: 'json',
+                data: {
+                    ding: ding
+                },
+                success: function(response, status) {
+                    if (response == 1) {
+                        if (url3) {
+                            url1 = url3;
+                        }
+                        var x1 = '<p>恭喜您，充值成功啦！</p><p>即将返回充值中心（<span id="st">3</span>）</p>';
+                        var x2 = '成功';
+                    } else if (response == 2) {
+                        var x1 = '<p>抱歉，您还未付款，或者付款失败了...</p><p>请前往充值中心查看详情，或者联系客服了解情况！</p><p>即将返回充值中心（<span id="st">3</span>）</p>';
+                        var x2 = '失败';
+                    } else {
+                        var x1 = '<p>抱歉，充值异常！</p><p>请前往充值中心查看详情，或者联系客服了解情况！</p><p>即将返回充值中心（<span id="st">3</span>）</p>';
+                        var x2 = '异常';
+                    }
+                    $id('pot').innerHTML = x1;
+                    $id('zt').innerHTML = x2;
+                    sectime(url1);
+                },
+                error: function(xhr, status, error) {
+                    var x1 = '<p>抱歉，系统异常！</p><p>即将返回充值中心（<span id="st">3</span>）</p>';
+                    var x2 = '系统异常';
+                    $id('pot').innerHTML = x1;
+                    $id('zt').innerHTML = x2;
+                    sectime(url1);
+                }
+            });
+            </script>
+            {/if}
+        </div>
+        {else}
+        {if($dingyue)}
+        <div class="bbox">
+            <div class="mbox">
+                <?php echo $dingyue;?>
+            </div>
+            {if($dy=='jf' || $dy=='jb' || $dy=='all')}
+            <div class="mbox dybtn">
+                {if($dy=='jf' || $dy=='all')}
+                <a href="<?php echo pbcode('member','pay/ok','jf_'.$id);?>" onclick="tipx(4)">用积分订阅</a>
+                {if($dy!='all')}
+                <a href="<?php echo pbcode('member','pay');?>" class="czjb">充值金币</a>
+                {/if}
+                {/if}
+                {if($dy=='jb' || $dy=='all')}
+
+
+
+                <?php
+                    global $xid;
+                    if($xid){
+                        echo '
+                        <a href="'.pbcode('member','pay/ok','jb_'.$id).'" onclick="tipx(5)">全本订阅</a>
+                        <a href="'.pbcode('member','pay/ok','jb_'.$id.'_'.$xid).'" onclick="tipx(5)">订阅一个章节</a>';
+                    }else{
+                        echo '<a href="'.pbcode('member','pay/ok','jb_'.$id).'" onclick="tipx(5)">全本订阅</a>';
+                    }
+                ?>
+
+
+
+                {/if}
+            </div>
+            {/if}
+        </div>
+        {/if}
+        {if(!$dy || $dy=='je')}
+        <form class="yccontent" onsubmit="return pay();">
+            <div class="bbox">
+                <div class="bnav">充值方式</div>
+                <div class="mbox pay_btn_<?php echo $pay_btn;?>">
+                    <?php
+                    if($pay_btn==3){
+                        $pay_btn_=2;
+                    }else if($pay_btn==5){
+                        $pay_btn_=5;
+                    }else{
+                        $pay_btn_=1;
+                    }
+                    ?>
+                    <ul class="paylx lx<?php echo $pay_btn_;?>" id="paylx" lx="<?php echo $pay_btn_;?>">
+                        <li onclick="chpay(1,1)">微信支付</li>
+                        <li onclick="chpay(1,2)">支付宝</li>
+                        <li onclick="chpay(1,5)">PayPal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bbox" style="margin-top:15px">
+                <div class="bnav" id="bnav1">开通VIP会员</div>
+                <div class="mbox" id="mbox1">
+                    <ul class="payje" id="payje_" je="" jb=""></ul>
+                </div>
+            </div>
+            <div class="bbox">
+                <div class="bnav" id="bnavjb">充值金币</div>
+                <div class="mbox" id="mboxjb">
+                    <ul class="payje je1" id="payje" je="" jb=""></ul>
+                </div>
+            </div>
+            <div class="paybtn" id="paybtn" onclick="return pay();">立即支付</div>
+        </form>
+        <script>
+        var rmb2jinbi = "<?php echo $rmb2jinbi;?>";
+
+        var xxx = '';
+        var i = 0;
+        var pay_ka = '<?php echo $pay_ka;?>';
+        if (pay_ka) {
+            pay_ka = pay_ka.split(',');
+            for (let v of pay_ka) {
+                i++;
+                var arr = v.split('-');
+                var v1 = arr[0];
+                var v2 = arr[1];
+                var v3 = arr[2];
+                xxx += '<li onclick="chpay(3,' + i + ')">￥' + v3 + '元<span>(' + v1 + '，' + v2 + '天)</span></li>';
+            }
+            $id('payje_').innerHTML = xxx;
+            if (i > 1) {
+                chpay(3, 2);
+            } else {
+                chpay(3, 1);
+            }
+        } else {
+            $id('bnav1').style.display = 'none';
+            $id('mbox1').style.display = 'none';
+        }
+
+        xxx = '';
+        i = 0;
+        var pay_je = '<?php echo $pay_je;?>';
+        if (pay_je) {
+            pay_je = pay_je.split(',');
+            for (let v of pay_je) {
+                i++;
+                v = parseFloat(v);
+                xxx += '<li onclick="chpay(2,' + i + ')">￥' + v + '元<span id="s1">(' + (rmb2jinbi * v) + '金币)</span></li>';
+            }
+        }else{
+            $id('bnavjb').style.display='none';
+            $id('mboxjb').style.display='none';
+        }
+        xxx += '<li onclick="chpay(2,' + (i + 1) + ')">其它金额￥<input id="om" type="text" placeholder="输入金额" maxlength="5" onchange="chje()" onkeyup="chje()"><span>(<font id="jb">0</font>金币)</span></li>';
+        $id('payje').innerHTML = xxx;
+        if (!pay_ka) {
+            chpay(2, 1);
+        }
+
+        var id = '<?php echo $id;?>';
+        var idx = '<?php echo $pay_;?>';
+        if(id){
+            $id('bnavjb').style.display='block';
+            $id('mboxjb').style.display='block';
+        }
+
+        function pay() {
+            var l = $id('loading');
+            if (l) {
+                return false;
+            }
+            if ($id('om') == document.activeElement) {
+                chje();
+            }
+            var p = $id('paybtn');
+            var i = p.innerHTML;
+            var img = '<img id="loading" src="template/tpl/image/loading.gif">';
+            p.innerHTML = img + '提交订单';
+            var url = "<?php echo pbcode('member','pay');?>";
+            var lx = $id('paylx').getAttribute('lx');
+            var payje = $id('payje');
+            var je = payje.getAttribute('je');
+            var jb = payje.getAttribute('jb');
+            if (!lx) {
+                alert('请选择付款方式！');
+                p.innerHTML = i;
+                return false;
+            }
+            if (!je || !jb || je == '0' || jb == '0') {
+                var payje = $id('payje_');
+                var je = payje.getAttribute('je');
+                var jb = payje.getAttribute('jb');
+                if (!je || !jb || je == '0' || jb == '0') {
+                    alert('请选择会员卡类型或充值金额！');
+                    p.innerHTML = i;
+                    return false;
+                }
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                data: {
+                    lx: lx,
+                    je: je,
+                    jb: jb,
+                    id: id,
+                    idx: idx
+                },
+                success: function(response, status) {
+                    if (response.code) {
+                        p.innerHTML = img + '前往支付';
+                        location.href = response.tourl;
+                    } else {
+                        alert('数据有误，请稍后重试！');
+                        p.innerHTML = i;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                    p.innerHTML = i;
+                }
+            });
+            return false;
+        }
+        </script>
+        <?php echo $js;?>
+        {/if}
+        {/if}
+    </div>
+</div>
+{include file=../../../include/member/wap/footer.html}

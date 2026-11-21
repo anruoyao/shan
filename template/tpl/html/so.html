@@ -1,0 +1,91 @@
+{include file=header_inner.html}
+<?php
+$sh_pb = $this->getVar('pbarr');
+$sh_key = isset($sh_pb['key']) ? $sh_pb['key'] : '';
+$sh_page = isset($sh_pb['page']) ? intval($sh_pb['page']) : 1;
+if ($sh_page < 1) {
+    $sh_page = 1;
+}
+$sh_search = sh_search_page($sh_key, $sh_page, 20);
+$sh_url_base = rtrim(sh_search_url($sh_search['key'], 1), '/');
+?>
+<main class="sh-main">
+	<div class="sh-container">
+
+		<div class="sh-searchhead">
+			<h1>搜索</h1>
+
+			<form class="sh-bigsearch" onsubmit="return shSearchGo();">
+				<input type="text" id="shSoKey" aria-label="搜索书名或作者" value="<?php echo sh_e($sh_search['key']);?>" placeholder="搜索书名 / 作者" autocomplete="off">
+				<button type="submit">搜索</button>
+			</form>
+		</div>
+
+		<?php if ($sh_search['key'] !== '') { ?>
+		<div class="sh-search-summary">“<?php echo sh_e($sh_search['key']);?>” 的搜索结果 <span>共 <?php echo $sh_search['total'];?> 部作品</span></div>
+		<?php } ?>
+
+		<div class="sh-layout sh-search-layout">
+			<div>
+				<?php if ($sh_search['key'] === '') { ?>
+					<?php echo sh_empty('输入关键词开始搜索');?>
+				<?php } elseif (!$sh_search['rows']) { ?>
+					<?php echo sh_empty('没有找到相关作品，换个关键词试试');?>
+				<?php } else { ?>
+				<div class="sh-searchlist">
+					<?php foreach ($sh_search['rows'] as $sh_b) { ?>
+					<article class="sh-searchitem">
+						<a class="sh-searchitem__cover" href="<?php echo sh_book_url($sh_b['id']);?>">
+							<?php echo sh_cover_img($sh_b['ico'], $sh_b['title']);?>
+						</a>
+						<div class="sh-searchitem__body">
+							<h3><a href="<?php echo sh_book_url($sh_b['id']);?>" data-sh-key="<?php echo sh_e($sh_search['key']);?>"><?php echo sh_e($sh_b['title']);?></a></h3>
+							<div class="sh-searchitem__meta">
+								<a href="<?php echo sh_author_url($sh_b['author']);?>" data-sh-key="<?php echo sh_e($sh_search['key']);?>"><?php echo sh_e($sh_b['author']);?></a>
+								<span>·</span>
+								<a href="<?php echo sh_cat_url($sh_b['scode']);?>"><?php echo sh_e(sh_cat_name($sh_b['scode']));?></a>
+								<span>·</span>
+								<span><?php echo sh_status_text($sh_b);?></span>
+								<span>·</span>
+								<span><?php echo sh_words($sh_b['subscode']);?></span>
+							</div>
+							<p class="sh-searchitem__desc"><?php echo sh_e(sh_short($sh_b['description'], 120));?></p>
+							<div class="sh-searchitem__foot">
+								<span><?php echo sh_num($sh_b['visits']);?> 人气</span>
+								<span><?php echo sh_num($sh_b['likes']);?> 点赞热度</span>
+								<span><?php echo sh_time_ago($sh_b['update_time']);?>更新</span>
+							</div>
+						</div>
+					</article>
+					<?php } ?>
+				</div>
+				<?php echo sh_pagination($sh_url_base . '/%d/', $sh_search['page'], $sh_search['pages'], $sh_search['total']);?>
+				<?php } ?>
+			</div>
+
+			<aside class="sh-side">
+				<div class="sh-sidecard">
+					<div class="sh-sidecard__head"><h3>大家都在读</h3><a class="sh-more" href="/paihang/">更多<i>›</i></a></div>
+					<div style="padding-top:2px">
+						<?php
+						$sh_hot = sh_books('', 'visits desc', 6);
+						foreach ($sh_hot as $sh_b) {
+							echo '<a class="sh-minibook" href="' . sh_book_url($sh_b['id']) . '"><span class="sh-minibook__cover">' . sh_cover_img($sh_b['ico'], $sh_b['title']) . '</span><span class="sh-minibook__body"><strong>' . sh_e($sh_b['title']) . '</strong><em>' . sh_e($sh_b['author']) . '</em></span></a>';
+						}
+						?>
+					</div>
+				</div>
+				</aside>
+		</div>
+
+	</div>
+</main>
+<script type="text/javascript">
+function shSearchGo(){
+	var k = document.getElementById('shSoKey').value.replace(/^\s+|\s+$/g, '');
+	if (!k) { return false; }
+	window.location.href = '/so/' + encodeURIComponent(k) + '/';
+	return false;
+}
+</script>
+{include file=footer_inner.html}

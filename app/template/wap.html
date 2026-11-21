@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="App-Config" content="fullscreen=yes,useHistoryState=yes,transition=yes" />
+	<meta name=apple-mobile-web-app-capable content=yes />
+	<meta name=apple-touch-fullscreen content=yes />
+	<meta name=format-detection content="telephone=no,email=no" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<title>app下载-<?php echo $sitetitle;?></title>
+	<meta name="keywords" content="app,app下载,app免费下载,<?php echo $sitetitle;?>app" />
+	<meta name="description" content="<?php echo $sitetitle;?>免费提供app下载！" />
+	<base href="<?php echo $pcbase;?>" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="app/css/wap.css" />
+</head>
+<body>
+	<?php echo $noapp;?>
+	<img src="app/image/bg_1.png" class="pos-img" />
+	<header class="header box">
+		<img src="app/image/wap.png">
+		<div class="logoword">
+			<p><?php echo $sitetitle;?></p>
+			<p><?php echo $HTTP_HOST;?></p>
+		</div>
+		<div class="flex" style="line-height: 31px;text-align: right;">
+			<a href="wap/" class="index">&nbsp;</a>
+		</div>
+	</header>
+	<div class="fs-29 fc-43 fm-sun fw-b" style="font-size:34px;">
+		海量小说 想读就读
+	</div>
+	<div class="fs-15 fc-66 mg19-t">
+		全网热门小说，全自动采集更新
+	</div>
+	<div class="fs-19 fc-33 mg35-t fm-sun fw-b">
+		定制书架 专享首发
+	</div>
+	<div class="fs-15 fc-66 mg14-t">
+		自定义书架，秒速同步，轻松追好书
+	</div>
+	<div class="mg20-t">
+		<img src="app/image/bg_2.png" class="con-img" />
+	</div>
+	<div class="download d0">
+		<a href="wap/">在线阅读</a>
+	</div>
+	<div class="download">
+		<a href="app/?my=down" target="_blank">安卓版下载</a>
+	</div>
+	<div class="ps box" style="margin:0px 0px 70px 0px">
+		<div class="icon">
+			<img src="app/image/zs1.png" />
+		</div>
+		<div class="mg20-l" style="width:calc(100% - 98px)">
+			<div class="fc-33 fm-sun fw-b" style="margin-top:30px;text-align:left;">
+				海量书籍，各种类型
+			</div>
+			<div class="fc-66 fs-12 navbox">
+				<?php
+				global $dsql;$dd=$dsql->all("select scode,name from ay_content_sort where status=1 and pcode=0 order by sorting asc,id asc",1);
+				foreach($dd as $xx)
+			{
+				$id=$xx[scode];
+				$name=$xx[name];
+				$url=pbcode('category',$id);
+				$xxx.='<a href="'.$url.'" title="'.$name.'">'.$name.'</a>';
+				}
+				echo $xxx;
+				$xxx='';
+				?>
+			</div>
+		</div>
+		<div class="flex"></div>
+	</div>
+	<div class="ps box">
+		<div class="flex"></div>
+		<div class="mg50-r">
+			<div class="fc-33 fm-sun mg10-t fw-b">
+				用户福利 全站免费
+			</div>
+			<div class="fc-66 fs-12 mg24-t">
+				无广告全绿色免费阅读
+			</div>
+			<div class="fc-66 fs-12 mg7-t text-right">
+				可在线阅读，也可听书，还可下载txt
+			</div>
+		</div>
+		<div class="icon mg24-r">
+			<img src="app/image/ico_1.png" />
+		</div>
+	</div>
+	<div class="ps box mg70-t">
+		<div class="icon mg24-l">
+			<img src="app/image/ico_2.png" />
+		</div>
+		<div class="mg50-l">
+			<div class="fc-33 fm-sun mg10-t fw-b">
+				智能推荐 看您所想
+			</div>
+			<div class="fc-66 fs-12 mg24-t">
+				时尚设计，个性导航，精准推书
+			</div>
+			<div class="fc-66 fs-12 mg7-t text-left">
+				实现个性化阅读体验
+			</div>
+		</div>
+		<div class="flex"></div>
+	</div>
+	<div class="ps box mg70-t mg50-b">
+		<div class="flex"></div>
+		<div class="mg50-r">
+			<div class="fc-33 fm-sun mg10-t fw-b">
+				种类齐全 全网热门
+			</div>
+			<div class="fc-66 fs-12 mg24-t">
+				全自动采集，时时更新
+			</div>
+			<div class="fc-66 fs-12 mg7-t text-right">
+				电脑站、手机站、app，多种阅读体验
+			</div>
+		</div>
+		<div class="icon mg24-r">
+			<img src="app/image/ico_3.png" />
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{include file=header_inner.html}
+<?php
+$sh_sort = isset($_GET['sort']) ? $_GET['sort'] : 'update';
+$sh_sort_map = sh_category_sort();
+if (!array_key_exists($sh_sort, $sh_sort_map)) {
+    $sh_sort = 'update';
+}
+$sh_pb = $this->getVar('pbarr');
+$sh_page = isset($_GET['page']) ? intval($_GET['page']) : intval($sh_pb['page']);
+if ($sh_page < 1) {
+    $sh_page = 1;
+}
+$sh_scode = intval($sh_pb['scode']);
+$sh_where = " and subtitle='1'";
+if ($sh_scode > 0) {
+    $sh_where .= ' and scode=' . $sh_scode;
+}
+$sh_list = sh_book_page($sh_where, $sh_sort, $sh_page, 24);
+$sh_base = pbcode('quanben');
+if ($sh_scode > 0) {
+    $sh_base = pbcode('quanben', $sh_scode);
+}
+?>
+<main class="sh-main">
+	<div class="sh-container">
+
+		<section class="sh-pagehead">
+			<div class="sh-pagehead__inner">
+				<div class="sh-crumbs">
+					<a href="./">首页</a><i>/</i><a href="<?php echo pbcode('shuku');?>">书城</a><i>/</i><span>完本小说</span>
+				</div>
+				<h1>完本精选</h1>
+				<p class="sh-desc">已经写完的故事，不必等更新。挑一本，从第一页读到最后一页。</p>
+				<div class="sh-pagehead__stats">
+					<span><b><?php echo sh_num($sh_list['total']);?></b>完本作品</span>
+					<span><b><?php echo count(sh_cat_map());?></b>作品分类</span>
+				</div>
+			</div>
+		</section>
+
+		<div class="sh-toolbar" style="margin-top:26px">
+			<div class="sh-toolbar__tabs">
+				<?php foreach ($sh_sort_map as $sh_k => $sh_v) { ?>
+				<a href="<?php echo $sh_base;?>?sort=<?php echo $sh_k;?>" class="<?php echo $sh_sort === $sh_k ? 'is-active' : '';?>"><?php echo $sh_v['label'];?></a>
+				<?php } ?>
+			</div>
+			<span class="sh-toolbar__count">第 <?php echo $sh_list['page'];?> / <?php echo $sh_list['pages'];?> 页</span>
+		</div>
+
+		<div class="sh-books">
+			<?php
+			if (!$sh_list['rows']) {
+				echo sh_empty('暂时没有完本作品');
+			}
+			foreach ($sh_list['rows'] as $sh_b) {
+				echo sh_book_card($sh_b);
+			}
+			?>
+		</div>
+
+		<?php echo sh_pagination($sh_base . '?sort=' . $sh_sort . '&page=%d', $sh_list['page'], $sh_list['pages'], $sh_list['total']);?>
+
+	</div>
+</main>
+{include file=footer_inner.html}

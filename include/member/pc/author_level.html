@@ -1,0 +1,98 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $author_level,$author_year_points;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">作者成长</p>
+        <h1 class="aw-title">作家等级</h1>
+        <p class="aw-subtitle">签约作者从 Lv1 开始，等级随累计积分自动提升；荣誉称号由编辑评定。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','ucenter');?>">返回作者中心</a>
+    </div>
+</div>
+
+<section class="aw-card aw-level-card aw-section">
+    <div class="aw-level-head">
+        <div class="aw-level-title">
+            <span class="aw-level-badge">Lv<?php echo $author_level['level'];?></span>
+            <div>
+                <h2><?php echo $author_level['label'];?></h2>
+                <p><?php echo $author_level['level']==0?'完成签约后开启等级体系':'等级随稿费结算积分自动提升';?></p>
+            </div>
+        </div>
+        <div class="aw-level-total">
+            <span>累计积分</span>
+            <strong><?php echo $author_level['score'];?></strong>
+        </div>
+    </div>
+
+    <?php if($author_level['level']>0 && $author_level['next']):?>
+    <div class="aw-level-progress">
+        <span style="width:<?php echo $author_level['progress'];?>%"></span>
+    </div>
+    <div class="aw-level-progress-meta">
+        <span>距升级还需 <b><?php echo $author_level['need'];?></b> 积分</span>
+        <span><?php echo $author_level['score'];?>/<?php echo $author_level['next'];?></span>
+    </div>
+    <?php elseif($author_level['level']>0):?>
+    <div class="aw-level-progress"><span style="width:100%"></span></div>
+    <div class="aw-level-progress-meta">
+        <span>已达到当前最高等级</span>
+        <span><?php echo $author_level['score'];?></span>
+    </div>
+    <?php else:?>
+    <div class="aw-level-tip">
+        <?php echo aw_icon('lock');?>
+        <span>当前为 Lv0 未签约。签约后从 Lv1 开始，并按累计积分逐级提升。</span>
+    </div>
+    <?php endif;?>
+
+    <div class="aw-level-stats">
+        <div>
+            <strong><?php echo $author_year_points;?></strong>
+            <span>当年积分</span>
+        </div>
+        <div>
+            <strong><?php echo $author_level['score'];?></strong>
+            <span>累计积分</span>
+        </div>
+    </div>
+</section>
+
+<div class="aw-level-grid aw-section">
+    <section class="aw-card">
+        <div class="aw-card__head">
+            <h2 class="aw-card__title">等级规则</h2>
+            <span class="aw-card__hint">1 元稿费 = 1 积分</span>
+        </div>
+        <ul class="aw-rules">
+            <li><span>Lv0</span><em>未签约</em></li>
+            <li><span>Lv1</span><em>签约作者</em></li>
+            <li><span>Lv2</span><em>积分 ≥ 5000</em></li>
+            <li><span>Lv3</span><em>积分 ≥ 10000</em></li>
+            <li><span>Lv4</span><em>积分 ≥ 30000</em></li>
+            <li><span>Lv5</span><em>积分 ≥ 50000</em></li>
+        </ul>
+        <p class="aw-help">帝君作家、至尊作家由编辑在后台手动设置，与等级共存。</p>
+    </section>
+    <section class="aw-card">
+        <div class="aw-card__head">
+            <h2 class="aw-card__title">荣誉称号</h2>
+            <span class="aw-card__hint">编辑评定</span>
+        </div>
+        <?php if($author_level['title'] || $author_level['honors']):?>
+        <div class="aw-honor-list">
+            <?php if($author_level['title']):?><span class="aw-honor is-title"><?php echo $author_level['title'];?></span><?php endif;?>
+            <?php foreach($author_level['honors'] as $honor):?><span class="aw-honor"><?php echo $honor;?></span><?php endforeach;?>
+        </div>
+        <?php else:?>
+        <div class="aw-empty">
+            <?php echo aw_icon('star');?>
+            <span>暂无荣誉称号，由编辑评定后展示。</span>
+        </div>
+        <?php endif;?>
+        <p class="aw-help">年度品牌作家、年度榜样作家、年度新锐作家等称号由编辑后台设置。</p>
+    </section>
+</div>
+{include file=../../../include/member/pc/footer.html}

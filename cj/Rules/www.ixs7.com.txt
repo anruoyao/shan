@@ -1,0 +1,13 @@
+#匹配规则(697code.com)
+id="content">[内容]<div class="bottem"
+#过滤规则
+<script((.|\n)+?)</script>
+<div.+?>
+</div>
+<a.+?</a>
+&nbsp;
+www.ixs7.com
+m.ixs7.com
+ixs7.com
+http.+?//
+小说旗

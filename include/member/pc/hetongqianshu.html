@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合同签署系统 - 双向签署 & 三方合同</title>
+    <style>
+        /* ===== 全局重置 & 基础 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f7fb;
+            color: #1a2332;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        a {
+            color: #2b6cff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 100%;
+            max-width: 540px;
+            padding: 20px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 36px 32px 28px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.25s;
+        }
+        .card:hover {
+            box-shadow: 0 20px 56px rgba(0, 0, 0, 0.12);
+        }
+        .card-title {
+            font-size: 26px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #0b1a33;
+        }
+        .card-sub {
+            text-align: center;
+            color: #6b7a8f;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: #2d3a4f;
+            margin-bottom: 5px;
+        }
+        .form-group .required {
+            color: #e74c3c;
+            margin-left: 2px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafbfc;
+            transition: border 0.2s, box-shadow 0.2s;
+            outline: none;
+            color: #1a2332;
+        }
+        .form-control:focus {
+            border-color: #2b6cff;
+            box-shadow: 0 0 0 4px rgba(43, 108, 255, 0.12);
+            background: #fff;
+        }
+        .form-control::placeholder {
+            color: #a0b0c4;
+        }
+        .form-control-file {
+            padding: 10px 0;
+        }
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 13px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #2b6cff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #1a5ae0;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(43, 108, 255, 0.3);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .btn-success {
+            background: #0ecb7a;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #0ab56a;
+            box-shadow: 0 6px 20px rgba(14, 203, 122, 0.3);
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-outline {
+            background: transparent;
+            color: #2b6cff;
+            border: 1.5px solid #2b6cff;
+        }
+        .btn-outline:hover {
+            background: #f0f5ff;
+        }
+        .btn-warning {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            width: auto;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+        .btn-block {
+            width: 100%;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .footer-links {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #6b7a8f;
+        }
+        .footer-links a {
+            color: #2b6cff;
+            font-weight: 500;
+        }
+        .footer-links .divider {
+            margin: 0 8px;
+            color: #d0d7e3;
+        }
+        .admin-login-link {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 13px;
+            color: #a0b0c4;
+            border-top: 1px solid #edf2f7;
+            padding-top: 18px;
+        }
+        .admin-login-link a {
+            color: #8899b0;
+            font-weight: 400;
+        }
+        .admin-login-link a:hover {
+            color: #2b6cff;
+        }
+        .msg {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .msg.error {
+            display: block;
+            background: #fee9e9;
+            color: #b91c1c;
+            border: 1px solid #fccccc;
+        }
+        .msg.success {
+            display: block;
+            background: #e3f9ee;
+            color: #0a7d4e;
+            border: 1px solid #b8e6d0;
+        }
+        .msg.info {
+            display: block;
+            background: #e8efff;
+            color: #1a4cbf;
+            border: 1px solid #c5d8ff;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-blue {
+            background: #dbe6ff;
+            color: #1a4cbf;
+        }
+        .badge-green {
+            background: #d1fae5;
+            color: #0a7d4e;
+        }
+        .badge-yellow {
+            background: #fef3c7;
+            color: #a7670a;
+        }
+        .badge-red {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .badge-gray {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+        .badge-verified {
+            background: #2b6cff;
+            color: #fff;
+            margin-left: 6px;
+            font-size: 11px;
+            padding: 1px 10px;
+        }
+        .badge-purple {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+        @media (max-width: 520px) {
+            .card {
+                padding: 24px 18px;
+            }
+            .card-title {
+                font-size: 22px;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        .admin-login-link .admin-icon {
+            display: inline-block;
+            margin-right: 4px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.3);
+            border-top: 2.5px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .topbar-user .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #2b6cff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .topbar-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .topbar-actions .btn-sm {
+            padding: 6px 16px;
+        }
+        .tabs {
+            display: flex;
+            gap: 4px;
+            border-bottom: 2px solid #edf2f7;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+        .tabs .tab {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7a8f;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+        .tabs .tab:hover {
+            color: #1a2332;
+        }
+        .tabs .tab.active {
+            color: #2b6cff;
+            border-bottom-color: #2b6cff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .contract-item {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            border: 1px solid #edf2f7;
+            transition: border 0.2s;
+        }
+        .contract-item:hover {
+            border-color: #d0d7e3;
+        }
+        .contract-item .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .contract-item .title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .contract-item .meta {
+            font-size: 13px;
+            color: #6b7a8f;
+            margin-top: 4px;
+        }
+        .contract-item .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .contract-item .actions .btn-sm {
+            padding: 5px 14px;
+            font-size: 12px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #8899b0;
+            font-size: 15px;
+        }
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .admin-stats .stat {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 14px;
+            text-align: center;
+            border: 1px solid #edf2f7;
+        }
+        .admin-stats .stat .num {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b1a33;
+        }
+        .admin-stats .stat .label {
+            font-size: 13px;
+            color: #6b7a8f;
+            margin-top: 2px;
+        }
+        .admin-table-wrap {
+            overflow-x: auto;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .admin-table th {
+            background: #f1f4f9;
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 600;
+            color: #2d3a4f;
+        }
+        .admin-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
+        }
+        .admin-table tr:hover td {
+            background: #fafbfc;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 20px;
+            max-width: 480px;
+            width: 100%;
+            padding: 32px 28px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+        }
+        .modal .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .modal .modal-close {
+            float: right;
+            font-size: 24px;
+            font-weight: 300;
+            color: #8899b0;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .modal .modal-close:hover {
+            color: #1a2332;
+        }
+        .text-muted {
+            color: #6b7a8f;
+            font-size: 13px;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .contract-detail .field {
+            margin-bottom: 10px;
+        }
+        .contract-detail .field .label {
+            font-weight: 500;
+            color: #2d3a4f;
+            display: inline-block;
+            min-width: 80px;
+        }
+        .contract-detail .field .value {
+            color: #1a2332;
+        }
+        .signature-area {
+            border: 2px dashed #d0d7e3;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 12px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: #fafbfc;
+        }
+        .signature-area .sig-placeholder {
+            color: #a0b0c4;
+            font-size: 14px;
+        }
+        .signature-area .sig-text {
+            font-size: 28px;
+            font-family: 'Brush Script MT', cursive;
+            color: #1a2332;
+        }
+        .signer-list {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border: 1px solid #edf2f7;
+        }
+        .signer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+        .signer-item:last-child {
+            border-bottom: none;
+        }
+        .signer-item .badge {
+            font-size: 11px;
+        }
+        .add-signer-btn {
+            background: none;
+            border: 1px dashed #2b6cff;
+            color: #2b6cff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .add-signer-btn:hover {
+            background: #f0f5ff;
+        }
+        .remove-signer-btn {
+            color: #ef4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 6px;
+        }
+        .remove-signer-btn:hover {
+            color: #dc2626;
+        }
+        .profile-field {
+            margin-bottom: 16px;
+        }
+        .profile-field label {
+            font-weight: 500;
+            display: block;
+            color: #2d3a4f;
+            margin-bottom: 4px;
+        }
+        .profile-field .value {
+            color: #1a2332;
+            padding: 8px 0;
+        }
+        .profile-field .edit-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="container"></div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  模拟数据库 (localStorage) 并支持数据迁移
+        // ================================================================
+        const DB = {
+            getUsers() {
+                return JSON.parse(localStorage.getItem('users') || '[]');
+            },
+            setUsers(users) {
+                localStorage.setItem('users', JSON.stringify(users));
+            },
+            getContracts() {
+                let contracts = JSON.parse(localStorage.getItem('contracts') || '[]');
+                // 数据迁移：确保每个合同都有 signers 数组
+                contracts = contracts.map(c => this.migrateContract(c));
+                return contracts;
+            },
+            setContracts(contracts) {
+                localStorage.setItem('contracts', JSON.stringify(contracts));
+            },
+            getNextId(key) {
+                const id = parseInt(localStorage.getItem(key + '_id') || '0') + 1;
+                localStorage.setItem(key + '_id', String(id));
+                return id;
+            },
+            // 迁移旧合同数据到新结构
+            migrateContract(c) {
+                if (c.signers && Array.isArray(c.signers) && c.signers.length > 0) {
+                    // 已有 signers，但可能缺少发起人，补充确保发起人存在
+                    const creatorExists = c.signers.some(s => s.userId === c.creatorId);
+                    if (!creatorExists && c.creatorId) {
+                        const users = DB.getUsers();
+                        const creator = users.find(u => u.id === c.creatorId);
+                        c.signers.push({
+                            userId: c.creatorId,
+                            phone: creator ? creator.phone : '未知',
+                            name: creator ? (creator.realName || creator.username) : c.creatorName || '发起人',
+                            status: 'signed', // 发起人默认已签
+                            signature: creator ? (creator.realName || creator.username) : c.creatorName || '发起人',
+                            signedAt: c.createdAt || new Date().toISOString()
+                        });
+                    }
+                    return c;
+                }
+
+                // 旧版合同：只有单个签署人字段
+                const users = DB.getUsers();
+                // 构建签署人列表
+                const signers = [];
+                // 1. 发起人
+                const creator = users.find(u => u.id === c.creatorId);
+                signers.push({
+                    userId: c.creatorId,
+                    phone: creator ? creator.phone : '未知',
+                    name: creator ? (creator.realName || creator.username) : c.creatorName || '发起人',
+                    status: 'signed', // 发起人视为已签
+                    signature: creator ? (creator.realName || creator.username) : c.creatorName || '发起人',
+                    signedAt: c.createdAt || new Date().toISOString()
+                });
+
+                // 2. 原签署人
+                const signerUser = users.find(u => u.id === c.signerId);
+                const signerStatus = c.status === 'signed' ? 'signed' : 'pending';
+                signers.push({
+                    userId: c.signerId,
+                    phone: c.signerPhone || (signerUser ? signerUser.phone : '未知'),
+                    name: c.signerName || (signerUser ? (signerUser.realName || signerUser.username) : '签署人'),
+                    status: signerStatus,
+                    signature: c.signature || '',
+                    signedAt: c.signedAt || null
+                });
+
+                // 更新合同状态
+                const allSigned = signers.every(s => s.status === 'signed');
+                const newStatus = c.status === 'withdrawn' ? 'withdrawn' : (allSigned ? 'completed' : (signers.some(s => s
+                    .status === 'signed') ? 'partial' : 'sent'));
+
+                return {
+                    ...c,
+                    signers: signers,
+                    status: newStatus,
+                    updatedAt: c.updatedAt || c.createdAt || new Date().toISOString()
+                };
+            }
+        };
+
+        // 初始化管理员
+        function initAdmin() {
+            const users = DB.getUsers();
+            if (!users.some(u => u.phone === 'admin')) {
+                users.push({
+                    id: DB.getNextId('users'),
+                    username: 'admin',
+                    phone: 'admin',
+                    password: 'admin',
+                    realName: '管理员',
+                    role: 'admin',
+                    verified: true,
+                    orgName: '',
+                    orgCode: '',
+                    idCard: ''
+                });
+                DB.setUsers(users);
+            }
+        }
+        initAdmin();
+
+        // ================================================================
+        //  工具函数
+        // ================================================================
+        function getToken() { return localStorage.getItem('token') || ''; }
+
+        function setToken(t) { if (t) localStorage.setItem('token', t);
+            else localStorage.removeItem('token'); }
+
+        function getUser() {
+            try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
+        }
+
+        function setUser(u) { if (u) localStorage.setItem('user', JSON.stringify(u));
+            else localStorage.removeItem('user'); }
+
+        function isLoggedIn() { return !!getToken() && !!getUser(); }
+
+        function isAdmin() { const u = getUser(); return u && u.role === 'admin'; }
+
+        function showMsg(msg, type = 'error') {
+            const el = document.getElementById('globalMsg');
+            if (!el) return;
+            el.className = 'msg ' + type;
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+
+        function showModal(html) {
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+        }
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ================================================================
+        //  路由
+        // ================================================================
+        function getPageFromHash() {
+            const hash = window.location.hash.slice(1);
+            if (!hash) return 'login';
+            return hash.split('?')[0];
+        }
+
+        function renderPage() {
+            const page = getPageFromHash();
+            if (isLoggedIn() && (page === 'login' || page === 'register' || page === 'org-register')) {
+                window.location.hash = 'dashboard';
+                return;
+            }
+            if (!isLoggedIn() && (page === 'dashboard' || page === 'admin')) {
+                window.location.hash = 'login';
+                return;
+            }
+            if (isLoggedIn() && isAdmin() && page !== 'admin' && page !== 'login') {
+                window.location.hash = 'admin';
+                return;
+            }
+            if (isLoggedIn() && !isAdmin() && page === 'admin') {
+                window.location.hash = 'dashboard';
+                return;
+            }
+            switch (page) {
+                case 'login':
+                    renderLogin();
+                    break;
+                case 'register':
+                    renderRegister();
+                    break;
+                case 'org-register':
+                    renderOrgRegister();
+                    break;
+                case 'dashboard':
+                    renderDashboard();
+                    break;
+                case 'admin':
+                    renderAdmin();
+                    break;
+                default:
+                    renderLogin();
+            }
+        }
+        window.addEventListener('hashchange', renderPage);
+        window.addEventListener('load', renderPage);
+
+        // ================================================================
+        //  登录页面
+        // ================================================================
+        function renderLogin() {
+            app.innerHTML = `
+                <div class="card">
+                    <div class="card-title">📄 合同签署</div>
+                    <div class="card-sub">登录您的账户</div>
+                    <div id="globalMsg" class="msg"></div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>手机号码 <span class="required">*</span></label>
+                            <input type="tel" class="form-control" id="loginPhone" placeholder="请输入手机号" required>
+                        </div>
+                        <div class="form-group">
+                            <label>密码 <span class="required">*</span></label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="请输入密码" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="loginBtn">登 录</button>
+                    </form>
+                    <div class="footer-links">
+                        <a href="#register">注册新账号</a>
+                        <span class="divider">|</span>
+                        <a href="#org-register">机构注册</a>
+                    </div>
+                    <div class="admin-login-link">
+                        🔐 <a href="#" id="adminLoginLink">管理员登录</a>
+                    </div>
+                </div>
+            `;
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('adminLoginLink').addEventListener('click', handleAdminLogin);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById('loginPhone').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if (!phone || !password) { showMsg('请填写完整信息'); return; }
+            const users = DB.getUsers();
+            const user = users.find(u => u.phone === phone && u.password === password);
+            if (user) {
+                setToken('mock-token-' + Date.now());
+                setUser({ ...user, password: undefined });
+                showMsg('登录成功！', 'success');
+                setTimeout(() => {
+                    if (user.role === 'admin') window.location.hash = 'admin';
+                    else window.location.hash = 'dashboard';
+                }, 300);
+            } else {
+                showMsg('手机号或密码错误');
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            document.getElementById('loginPhone').value = 'admin';
+            document.getElementById('loginPassword').value = 'admin';
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        }
+
+        // ================================================================
+        //  注册页面（个人）
+        // ================================================================
+        function renderRegister() {
+            app.innerHTML = `
+                <div class="card">
+                    <div class="card-title">📝 注册账号</div>
+                    <div class="card-sub">创建个人账户</div>
+                    <div id="globalMsg" class="msg"></div>
+                    <form id="registerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>用户名 <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="regUsername" placeholder="用户名" required>
+                            </div>
+                            <div class="form-group">
+                                <label>手机号码 <span class="required">*</span></label>
+                                <input type="tel" class="form-control" id="regPhone" placeholder="手机号" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>密码 <span class="required">*</span></label>
+                            <input type="password" class="form-control" id="regPassword" placeholder="密码（至少6位）" required minlength="6">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>真实姓名 <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="regRealName" placeholder="真实姓名" required>
+                            </div>
+                            <div class="form-group">
+                                <label>身份证号 <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="regIdCard" placeholder="身份证号" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="regBtn">注 册</button>
+                    </form>
+                    <div class="footer-links">
+                        已有账号？<a href="#login">立即登录</a>
+                        <span class="divider">|</span>
+                        <a href="#org-register">机构注册</a>
+                    </div>
+                </div>
+            `;
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const realName = document.getElementById('regRealName').value.trim();
+            const idCard = document.getElementById('regIdCard').value.trim();
+            if (!username || !phone || !password || !realName || !idCard) { showMsg('请填写完整信息'); return; }
+            if (password.length < 6) { showMsg('密码至少6位'); return; }
+            const users = DB.getUsers();
+            if (users.some(u => u.phone === phone)) { showMsg('该手机号已注册'); return; }
+            users.push({
+                id: DB.getNextId('users'),
+                username,
+                phone,
+                password,
+                realName,
+                idCard,
+                role: 'user',
+                verified: false,
+                orgName: '',
+                orgCode: ''
+            });
+            DB.setUsers(users);
+            showMsg('注册成功！请登录', 'success');
+            setTimeout(() => window.location.hash = 'login', 600);
+        }
+
+        // ================================================================
+        //  机构注册
+        // ================================================================
+        function renderOrgRegister() {
+            app.innerHTML = `
+                <div class="card">
+                    <div class="card-title">🏢 机构注册</div>
+                    <div class="card-sub">注册企业/机构账号 <span class="badge badge-blue">蓝V认证</span></div>
+                    <div id="globalMsg" class="msg"></div>
+                    <form id="orgRegisterForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>机构名称 <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="orgName" placeholder="机构全称" required>
+                        </div>
+                        <div class="form-group">
+                            <label>手机号码 <span class="required">*</span></label>
+                            <input type="tel" class="form-control" id="orgPhone" placeholder="机构联系电话" required>
+                        </div>
+                        <div class="form-group">
+                            <label>社会统一信用代码 <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="orgCode" placeholder="统一信用代码" required>
+                        </div>
+                        <div class="form-group">
+                            <label>营业执照 <span class="required">*</span></label>
+                            <input type="file" class="form-control form-control-file" id="orgLicense" accept="image/*,.pdf" required>
+                            <div class="text-muted mt-8">模拟上传</div>
+                        </div>
+                        <div class="form-group">
+                            <label>设置密码 <span class="required">*</span></label>
+                            <input type="password" class="form-control" id="orgPassword" placeholder="密码（至少6位）" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-success" id="orgRegBtn">注册机构</button>
+                    </form>
+                    <div class="footer-links">
+                        已有账号？<a href="#login">立即登录</a>
+                        <span class="divider">|</span>
+                        <a href="#register">个人注册</a>
+                    </div>
+                </div>
+            `;
+            document.getElementById('orgRegisterForm').addEventListener('submit', handleOrgRegister);
+        }
+
+        function handleOrgRegister(e) {
+            e.preventDefault();
+            const orgName = document.getElementById('orgName').value.trim();
+            const phone = document.getElementById('orgPhone').value.trim();
+            const orgCode = document.getElementById('orgCode').value.trim();
+            const password = document.getElementById('orgPassword').value.trim();
+            const file = document.getElementById('orgLicense').files[0];
+            if (!orgName || !phone || !orgCode || !password || !file) { showMsg('请填写完整信息并上传营业执照'); return; }
+            if (password.length < 6) { showMsg('密码至少6位'); return; }
+            const users = DB.getUsers();
+            if (users.some(u => u.phone === phone)) { showMsg('该手机号已注册'); return; }
+            users.push({
+                id: DB.getNextId('users'),
+                username: orgName,
+                phone,
+                password,
+                realName: orgName,
+                role: 'org',
+                verified: true,
+                orgName,
+                orgCode,
+                orgLicense: 'license_' + Date.now() + '_' + file.name,
+                idCard: ''
+            });
+            DB.setUsers(users);
+            showMsg('机构注册成功！已获得蓝V认证，请登录', 'success');
+            setTimeout(() => window.location.hash = 'login', 600);
+        }
+
+        // ================================================================
+        //  用户仪表盘 (包含个人信息、发起合同、签署等)
+        // ================================================================
+        function renderDashboard() {
+            const user = getUser();
+            if (!user) { window.location.hash = 'login'; return; }
+
+            app.innerHTML = `
+                <div class="card" style="max-width: 760px;">
+                    <div class="topbar">
+                        <div class="topbar-user">
+                            <div class="avatar">${(user.realName || user.username || 'U')[0]}</div>
+                            <span>${user.realName || user.username}</span>
+                            ${user.role === 'org' ? '<span class="badge badge-blue">🏢 机构</span>' : ''}
+                            ${user.verified ? '<span class="badge badge-verified">✓ 蓝V认证</span>' : ''}
+                        </div>
+                        <div class="topbar-actions">
+                            <button class="btn btn-sm btn-outline" id="logoutBtn">退出</button>
+                        </div>
+                    </div>
+
+                    <div id="globalMsg" class="msg"></div>
+
+                    <div class="tabs" id="dashTabs">
+                        <button class="tab active" data-tab="profile">👤 个人信息</button>
+                        <button class="tab" data-tab="initiate">📤 发起合同</button>
+                        <button class="tab" data-tab="sent">📨 我发起的</button>
+                        <button class="tab" data-tab="sign">✍️ 待签署</button>
+                        <button class="tab" data-tab="signed">✅ 已签署</button>
+                    </div>
+
+                    <div id="tabProfile" class="tab-content active">
+                        <div id="profileContent"></div>
+                    </div>
+                    <div id="tabInitiate" class="tab-content">
+                        <form id="initiateForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label>合同标题 <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="contractTitle" placeholder="请输入合同标题" required>
+                            </div>
+                            <div class="form-group">
+                                <label>签署人列表（至少一位） <span class="required">*</span></label>
+                                <div id="signerListContainer">
+                                    <div class="signer-item" style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                                        <input type="tel" class="form-control signer-phone" placeholder="签署人手机号" style="flex:1;" required>
+                                        <button type="button" class="remove-signer-btn" style="display:none;">✕</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="add-signer-btn" id="addSignerBtn">+ 添加签署人</button>
+                            </div>
+                            <div class="form-group">
+                                <label>您的签名（发起人签署） <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="creatorSignature" placeholder="输入您的签名（如姓名）" value="${user.realName || user.username}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>上传合同文件 <span class="required">*</span></label>
+                                <input type="file" class="form-control form-control-file" id="contractFile" accept=".pdf,.doc,.docx,.txt" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="initiateBtn">发起合同</button>
+                        </form>
+                    </div>
+                    <div id="tabSent" class="tab-content"><div id="sentList"><div class="empty-state">加载中...</div></div></div>
+                    <div id="tabSign" class="tab-content"><div id="signList"><div class="empty-state">加载中...</div></div></div>
+                    <div id="tabSigned" class="tab-content"><div id="signedList"><div class="empty-state">加载中...</div></div></div>
+                </div>
+            `;
+
+            // 标签切换
+            document.querySelectorAll('#dashTabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('#dashTabs .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const target = this.dataset.tab;
+                    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                    const map = {
+                        'profile': 'tabProfile',
+                        'initiate': 'tabInitiate',
+                        'sent': 'tabSent',
+                        'sign': 'tabSign',
+                        'signed': 'tabSigned'
+                    };
+                    document.getElementById(map[target]).classList.add('active');
+                    if (target === 'profile') renderProfile();
+                    if (target === 'sent') loadSentContracts();
+                    if (target === 'sign') loadSignContracts();
+                    if (target === 'signed') loadSignedContracts();
+                });
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                setToken(null);
+                setUser(null);
+                window.location.hash = 'login';
+            });
+
+            // 发起合同
+            document.getElementById('initiateForm').addEventListener('submit', handleInitiate);
+            // 添加签署人
+            document.getElementById('addSignerBtn').addEventListener('click', function() {
+                const container = document.getElementById('signerListContainer');
+                const div = document.createElement('div');
+                div.className = 'signer-item';
+                div.style.display = 'flex';
+                div.style.gap = '8px';
+                div.style.alignItems = 'center';
+                div.style.marginBottom = '8px';
+                div.innerHTML = `
+                    <input type="tel" class="form-control signer-phone" placeholder="签署人手机号" style="flex:1;" required>
+                    <button type="button" class="remove-signer-btn">✕</button>
+                `;
+                container.appendChild(div);
+                container.querySelectorAll('.remove-signer-btn').forEach(btn => btn.style.display = 'inline-block');
+                div.querySelector('.remove-signer-btn').addEventListener('click', function() {
+                    if (container.querySelectorAll('.signer-item').length <= 1) {
+                        showMsg('至少保留一位签署人', 'error');
+                        return;
+                    }
+                    div.remove();
+                });
+            });
+
+            // 初始渲染个人信息
+            renderProfile();
+            // 加载合同列表
+            loadSentContracts();
+            loadSignContracts();
+            loadSignedContracts();
+        }
+
+        // ---------- 个人信息 ----------
+        function renderProfile() {
+            const user = getUser();
+            if (!user) return;
+            const container = document.getElementById('profileContent');
+            let extraFields = '';
+            if (user.role === 'org') {
+                extraFields = `
+                    <div class="profile-field">
+                        <label>机构名称</label>
+                        <div class="value" id="profileOrgName">${user.orgName || '-'}</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>统一信用代码</label>
+                        <div class="value" id="profileOrgCode">${user.orgCode || '-'}</div>
+                    </div>
+                `;
+            } else {
+                extraFields = `
+                    <div class="profile-field">
+                        <label>身份证号</label>
+                        <div class="value" id="profileIdCard">${user.idCard || '-'}</div>
+                    </div>
+                `;
+            }
+            container.innerHTML = `
+                <div style="padding:4px 0;">
+                    <h3 style="margin-bottom:16px;">我的信息</h3>
+                    <div class="profile-field">
+                        <label>用户名</label>
+                        <div class="value" id="profileUsername">${user.username}</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>手机号码</label>
+                        <div class="value" id="profilePhone">${user.phone}</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>真实姓名</label>
+                        <div class="value" id="profileRealName">${user.realName || '-'}</div>
+                    </div>
+                    ${extraFields}
+                    <div class="profile-field">
+                        <label>角色</label>
+                        <div class="value">${user.role === 'org' ? '机构' : '个人'}</div>
+                    </div>
+                    <div class="profile-field">
+                        <label>认证状态</label>
+                        <div class="value">${user.verified ? '✅ 已认证' : '❌ 未认证'}</div>
+                    </div>
+                    <button class="btn btn-primary" id="editProfileBtn">修改个人信息</button>
+                </div>
+            `;
+            document.getElementById('editProfileBtn').addEventListener('click', showEditProfileModal);
+        }
+
+        function showEditProfileModal() {
+            const user = getUser();
+            if (!user) return;
+            let extraHtml = '';
+            if (user.role === 'org') {
+                extraHtml = `
+                    <div class="form-group">
+                        <label>机构名称</label>
+                        <input type="text" class="form-control" id="editOrgName" value="${user.orgName || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>统一信用代码</label>
+                        <input type="text" class="form-control" id="editOrgCode" value="${user.orgCode || ''}">
+                    </div>
+                `;
+            } else {
+                extraHtml = `
+                    <div class="form-group">
+                        <label>身份证号</label>
+                        <input type="text" class="form-control" id="editIdCard" value="${user.idCard || ''}">
+                    </div>
+                `;
+            }
+            showModal(`
+                <div style="padding:4px 0;">
+                    <h3 style="margin-bottom:12px;">修改个人信息</h3>
+                    <form id="editProfileForm">
+                        <div class="form-group">
+                            <label>用户名</label>
+                            <input type="text" class="form-control" id="editUsername" value="${user.username}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>手机号码</label>
+                            <input type="tel" class="form-control" id="editPhone" value="${user.phone}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>真实姓名</label>
+                            <input type="text" class="form-control" id="editRealName" value="${user.realName || ''}">
+                        </div>
+                        ${extraHtml}
+                        <div class="form-group">
+                            <label>新密码（留空不修改）</label>
+                            <input type="password" class="form-control" id="editPassword" placeholder="留空则保留原密码">
+                        </div>
+                        <div style="display:flex; gap:10px; margin-top:16px;">
+                            <button type="submit" class="btn btn-primary" style="flex:1;">保存</button>
+                            <button type="button" class="btn btn-outline" onclick="closeModal()" style="flex:1;">取消</button>
+                        </div>
+                    </form>
+                </div>
+            `);
+            document.getElementById('editProfileForm').addEventListener('submit', handleEditProfile);
+        }
+
+        function handleEditProfile(e) {
+            e.preventDefault();
+            const user = getUser();
+            if (!user) return;
+            const username = document.getElementById('editUsername').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const realName = document.getElementById('editRealName').value.trim();
+            const password = document.getElementById('editPassword').value.trim();
+            if (!username || !phone) { showMsg('用户名和手机号不能为空'); return; }
+            const users = DB.getUsers();
+            const idx = users.findIndex(u => u.id === user.id);
+            if (idx === -1) { showMsg('用户不存在'); return; }
+            const u = users[idx];
+            if (phone !== u.phone && users.some(other => other.phone === phone && other.id !== u.id)) {
+                showMsg('手机号已被其他用户使用');
+                return;
+            }
+            u.username = username;
+            u.phone = phone;
+            u.realName = realName || username;
+            if (password) u.password = password;
+            if (u.role === 'org') {
+                u.orgName = document.getElementById('editOrgName').value.trim();
+                u.orgCode = document.getElementById('editOrgCode').value.trim();
+            } else {
+                u.idCard = document.getElementById('editIdCard').value.trim();
+            }
+            DB.setUsers(users);
+            setUser({ ...u, password: undefined });
+            closeModal();
+            showMsg('个人信息已更新', 'success');
+            renderProfile();
+        }
+
+        // ---------- 发起合同（支持多方） ----------
+        function handleInitiate(e) {
+            e.preventDefault();
+            const user = getUser();
+            const title = document.getElementById('contractTitle').value.trim();
+            const signerInputs = document.querySelectorAll('.signer-phone');
+            const signerPhones = [];
+            signerInputs.forEach(inp => {
+                const val = inp.value.trim();
+                if (val) signerPhones.push(val);
+            });
+            if (!title || signerPhones.length === 0) { showMsg('请填写标题和至少一位签署人'); return; }
+            const creatorSig = document.getElementById('creatorSignature').value.trim();
+            if (!creatorSig) { showMsg('请输入您的签名'); return; }
+            const file = document.getElementById('contractFile').files[0];
+            if (!file) { showMsg('请上传合同文件'); return; }
+
+            const users = DB.getUsers();
+            const signers = [];
+            const allPhones = [user.phone, ...signerPhones];
+            if (new Set(allPhones).size !== allPhones.length) {
+                showMsg('签署人不能包含自己且不能重复');
+                return;
+            }
+            for (let phone of signerPhones) {
+                const u = users.find(u => u.phone === phone);
+                if (!u) { showMsg(`签署人 ${phone} 未注册`); return; }
+                signers.push({
+                    userId: u.id,
+                    phone: u.phone,
+                    name: u.realName || u.username,
+                    status: 'pending',
+                    signature: '',
+                    signedAt: null
+                });
+            }
+
+            // 发起人签署
+            const creatorSignObj = {
+                userId: user.id,
+                phone: user.phone,
+                name: user.realName || user.username,
+                status: 'signed',
+                signature: creatorSig,
+                signedAt: new Date().toISOString()
+            };
+            const allSigners = [creatorSignObj, ...signers];
+
+            const contract = {
+                id: DB.getNextId('contracts'),
+                title,
+                creatorId: user.id,
+                creatorName: user.realName || user.username,
+                filePath: 'contract_' + Date.now() + '_' + file.name,
+                signers: allSigners,
+                status: 'sent', // 初始状态
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            // 自动更新状态
+            const allSigned = allSigners.every(s => s.status === 'signed');
+            contract.status = allSigned ? 'completed' : 'sent';
+            const contracts = DB.getContracts();
+            contracts.push(contract);
+            DB.setContracts(contracts);
+            showMsg('合同发起成功！', 'success');
+            document.getElementById('initiateForm').reset();
+            document.getElementById('signerListContainer').innerHTML = `
+                <div class="signer-item" style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                    <input type="tel" class="form-control signer-phone" placeholder="签署人手机号" style="flex:1;" required>
+                    <button type="button" class="remove-signer-btn" style="display:none;">✕</button>
+                </div>
+            `;
+            loadSentContracts();
+            document.querySelector('#dashTabs .tab[data-tab="sent"]').click();
+        }
+
+        // ---------- 加载合同列表 ----------
+        function loadSentContracts() {
+            const container = document.getElementById('sentList');
+            const contracts = DB.getContracts().filter(c => c.creatorId === getUser().id);
+            renderContractList(container, contracts, 'sent');
+        }
+
+        function loadSignContracts() {
+            const container = document.getElementById('signList');
+            const user = getUser();
+            const contracts = DB.getContracts().filter(c => {
+                if (c.status === 'withdrawn') return false;
+                const me = c.signers ? c.signers.find(s => s.userId === user.id) : null;
+                return me && me.status === 'pending';
+            });
+            renderContractList(container, contracts, 'sign');
+        }
+
+        function loadSignedContracts() {
+            const container = document.getElementById('signedList');
+            const user = getUser();
+            const contracts = DB.getContracts().filter(c => {
+                if (c.status === 'withdrawn') return false;
+                const me = c.signers ? c.signers.find(s => s.userId === user.id) : null;
+                return me && me.status === 'signed';
+            });
+            renderContractList(container, contracts, 'signed');
+        }
+
+        function renderContractList(container, contracts, type) {
+            if (!contracts || contracts.length === 0) {
+                container.innerHTML = '<div class="empty-state">📭 暂无合同</div>';
+                return;
+            }
+            let html = '';
+            contracts.forEach(c => {
+                const statusMap = {
+                    'sent': '待签署',
+                    'partial': '部分签署',
+                    'completed': '已完成',
+                    'withdrawn': '已撤回'
+                };
+                const statusCls = {
+                    'sent': 'badge-yellow',
+                    'partial': 'badge-purple',
+                    'completed': 'badge-green',
+                    'withdrawn': 'badge-red'
+                };
+                const statusText = statusMap[c.status] || c.status;
+
+                const signedCount = c.signers ? c.signers.filter(s => s.status === 'signed').length : 0;
+                const total = c.signers ? c.signers.length : 0;
+                const statusSummary = `${signedCount}/${total} 已签署`;
+
+                let actionsHtml = '';
+                if (type === 'sign' && c.status !== 'withdrawn') {
+                    actionsHtml = `
+                        <button class="btn btn-sm btn-success" onclick="window.signContract(${c.id})">✍️ 签署</button>
+                        <button class="btn btn-sm btn-outline" onclick="window.viewContract(${c.id})">查看</button>
+                    `;
+                } else if (type === 'sent' && c.status !== 'withdrawn') {
+                    actionsHtml = `
+                        <button class="btn btn-sm btn-outline" onclick="window.viewContract(${c.id})">查看</button>
+                        ${c.status === 'sent' || c.status === 'partial' ? `<button class="btn btn-sm btn-warning" onclick="window.withdrawContract(${c.id})">撤回</button>` : ''}
+                        ${c.filePath ? `<a href="#" class="btn btn-sm btn-outline" onclick="alert('模拟下载：${c.filePath}')">📎 下载</a>` : ''}
+                    `;
+                } else {
+                    actionsHtml = `
+                        <button class="btn btn-sm btn-outline" onclick="window.viewContract(${c.id})">查看</button>
+                        ${c.filePath ? `<a href="#" class="btn btn-sm btn-outline" onclick="alert('模拟下载：${c.filePath}')">📎 下载</a>` : ''}
+                    `;
+                }
+
+                let signersHtml = '';
+                if (c.signers && c.signers.length > 0) {
+                    signersHtml = c.signers.map(s => {
+                        const statusIcon = s.status === 'signed' ? '✅' : '⏳';
+                        return `<span class="badge ${s.status === 'signed' ? 'badge-green' : 'badge-yellow'}">${s.name} ${statusIcon}</span>`;
+                    }).join(' ');
+                }
+
+                html += `
+                    <div class="contract-item">
+                        <div class="head">
+                            <div>
+                                <div class="title">${c.title}</div>
+                                <div class="meta">
+                                    发起人：${c.creatorName || '未知'} &nbsp;|&nbsp; 签署进度：${statusSummary}
+                                    &nbsp;|&nbsp; <span class="badge ${statusCls[c.status] || 'badge-gray'}">${statusText}</span>
+                                    ${c.createdAt ? ' &nbsp;|&nbsp; ' + new Date(c.createdAt).toLocaleString() : ''}
+                                </div>
+                                ${signersHtml ? `<div class="meta" style="margin-top:4px;">${signersHtml}</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="actions">${actionsHtml}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // ---------- 签署合同 ----------
+        window.signContract = function(contractId) {
+            const contract = DB.getContracts().find(c => c.id === contractId);
+            if (!contract) { showMsg('合同不存在'); return; }
+            const user = getUser();
+            if (!contract.signers) { showMsg('合同数据异常'); return; }
+            const me = contract.signers.find(s => s.userId === user.id);
+            if (!me || me.status === 'signed') { showMsg('您已签署或无权签署'); return; }
+
+            showModal(`
+                <div style="padding: 8px 0;">
+                    <h3 style="margin-bottom: 12px;">✍️ 签署合同</h3>
+                    <p style="color: #6b7a8f; margin-bottom: 16px;">合同标题：${contract.title}</p>
+                    <div class="form-group">
+                        <label>您的签名</label>
+                        <input type="text" class="form-control" id="signatureInput" placeholder="输入您的签名" value="${user.realName || user.username}">
+                    </div>
+                    <div class="signature-area" id="signaturePreview">
+                        <span class="sig-placeholder">预览签名</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 16px;">
+                        <button class="btn btn-success" id="confirmSignBtn" style="flex:1;">确认签署</button>
+                        <button class="btn btn-outline" onclick="closeModal()" style="flex:1;">取消</button>
+                    </div>
+                </div>
+            `);
+            const input = document.getElementById('signatureInput');
+            const preview = document.getElementById('signaturePreview');
+            if (input && preview) {
+                input.addEventListener('input', function() {
+                    const val = this.value.trim();
+                    preview.innerHTML = val ? `<span class="sig-text">${val}</span>` :
+                        `<span class="sig-placeholder">预览签名</span>`;
+                });
+                input.dispatchEvent(new Event('input'));
+            }
+            document.getElementById('confirmSignBtn').addEventListener('click', function() {
+                const signature = document.getElementById('signatureInput').value.trim();
+                if (!signature) { showMsg('请输入签名'); return; }
+                const contracts = DB.getContracts();
+                const idx = contracts.findIndex(c => c.id === contractId);
+                if (idx === -1) { showMsg('合同不存在'); return; }
+                const c = contracts[idx];
+                const signer = c.signers.find(s => s.userId === user.id);
+                if (!signer || signer.status === 'signed') { showMsg('您已签署或无权签署'); return; }
+                signer.status = 'signed';
+                signer.signature = signature;
+                signer.signedAt = new Date().toISOString();
+                const allSigned = c.signers.every(s => s.status === 'signed');
+                c.status = allSigned ? 'completed' : 'partial';
+                c.updatedAt = new Date().toISOString();
+                DB.setContracts(contracts);
+                closeModal();
+                showMsg('签署成功！', 'success');
+                loadSignContracts();
+                loadSignedContracts();
+                loadSentContracts();
+            });
+        };
+
+        // ---------- 撤回合同 ----------
+        window.withdrawContract = function(contractId) {
+            if (!confirm('确定要撤回该合同吗？撤回后不可恢复。')) return;
+            const contracts = DB.getContracts();
+            const idx = contracts.findIndex(c => c.id === contractId);
+            if (idx === -1) { showMsg('合同不存在'); return; }
+            const c = contracts[idx];
+            if (c.status === 'completed') { showMsg('合同已完成，无法撤回'); return; }
+            if (c.status === 'withdrawn') { showMsg('合同已撤回'); return; }
+            c.status = 'withdrawn';
+            c.updatedAt = new Date().toISOString();
+            DB.setContracts(contracts);
+            showMsg('合同已撤回', 'success');
+            loadSentContracts();
+            loadSignContracts();
+            loadSignedContracts();
+        };
+
+        // ---------- 查看合同详情 ----------
+        window.viewContract = function(contractId) {
+            const contract = DB.getContracts().find(c => c.id === contractId);
+            if (!contract) { showMsg('合同不存在'); return; }
+            const statusMap = {
+                'sent': '待签署',
+                'partial': '部分签署',
+                'completed': '已完成',
+                'withdrawn': '已撤回'
+            };
+            const statusCls = {
+                'sent': 'badge-yellow',
+                'partial': 'badge-purple',
+                'completed': 'badge-green',
+                'withdrawn': 'badge-red'
+            };
+
+            let signersHtml = '';
+            if (contract.signers && contract.signers.length > 0) {
+                signersHtml = contract.signers.map(s => {
+                    const statusText = s.status === 'signed' ? '✅ 已签署' : '⏳ 待签署';
+                    return `<div class="signer-item"><span>${s.name} (${s.phone})</span> <span class="badge ${s.status === 'signed' ? 'badge-green' : 'badge-yellow'}">${statusText}</span></div>`;
+                }).join('');
+            } else {
+                signersHtml = '<div class="text-muted">无签署人信息</div>';
+            }
+
+            let signatureHtml = '';
+            if (contract.status === 'completed') {
+                let sigs = contract.signers.filter(s => s.status === 'signed').map(s =>
+                    `<div><strong>${s.name}</strong>: <span class="sig-text" style="font-size:24px;">${s.signature || '(未签名)'}</span> <span class="text-muted">${s.signedAt ? new Date(s.signedAt).toLocaleString() : ''}</span></div>`
+                ).join('');
+                signatureHtml = `<div class="signature-area" style="flex-direction:column; gap:8px;">${sigs || '无签名'}</div>`;
+            } else if (contract.status === 'sent' || contract.status === 'partial') {
+                signatureHtml = `<div class="signature-area"><span class="sig-placeholder">⏳ 等待所有签署人完成签署</span></div>`;
+            } else {
+                signatureHtml = `<div class="signature-area"><span class="sig-placeholder">合同已撤回</span></div>`;
+            }
+
+            showModal(`
+                <div class="contract-detail">
+                    <h3 style="margin-bottom: 12px;">📄 ${contract.title}</h3>
+                    <div class="field"><span class="label">状态：</span><span class="badge ${statusCls[contract.status] || 'badge-gray'}">${statusMap[contract.status] || contract.status}</span></div>
+                    <div class="field"><span class="label">发起人：</span><span class="value">${contract.creatorName || '未知'}</span></div>
+                    <div class="field"><span class="label">创建时间：</span><span class="value">${contract.createdAt ? new Date(contract.createdAt).toLocaleString() : ''}</span></div>
+                    <div class="field"><span class="label">合同文件：</span>${contract.filePath ? `<a href="#" class="btn btn-sm btn-outline" onclick="alert('模拟下载：${contract.filePath}')">📎 下载文件</a>` : '无'}</div>
+                    <div style="margin-top: 16px;">
+                        <div class="label" style="margin-bottom:6px;">签署人列表</div>
+                        <div class="signer-list">${signersHtml}</div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <div class="label" style="margin-bottom:6px;">签署信息</div>
+                        ${signatureHtml}
+                    </div>
+                    <div style="margin-top: 16px; text-align:right;">
+                        <button class="btn btn-sm btn-outline" onclick="closeModal()">关闭</button>
+                    </div>
+                </div>
+            `);
+        };
+
+        // ================================================================
+        //  管理员后台
+        // ================================================================
+        function renderAdmin() {
+            const user = getUser();
+            if (!user || user.role !== 'admin') { window.location.hash = 'login'; return; }
+
+            app.innerHTML = `
+                <div class="card" style="max-width: 900px;">
+                    <div class="topbar">
+                        <div class="topbar-user">
+                            <div class="avatar" style="background:#ef4444;">A</div>
+                            <span>👑 管理员 <span style="font-weight:400;font-size:14px;color:#6b7a8f;">${user.realName || user.username}</span></span>
+                        </div>
+                        <div class="topbar-actions">
+                            <button class="btn btn-sm btn-outline" id="adminLogoutBtn">退出</button>
+                        </div>
+                    </div>
+
+                    <div id="globalMsg" class="msg"></div>
+
+                    <div class="admin-stats" id="adminStats">
+                        <div class="stat"><div class="num" id="statTotal">-</div><div class="label">总合同</div></div>
+                        <div class="stat"><div class="num" id="statSent">-</div><div class="label">待签署</div></div>
+                        <div class="stat"><div class="num" id="statCompleted">-</div><div class="label">已完成</div></div>
+                        <div class="stat"><div class="num" id="statUsers">-</div><div class="label">总用户</div></div>
+                    </div>
+
+                    <div class="tabs" id="adminTabs">
+                        <button class="tab active" data-tab="contracts">📋 所有合同</button>
+                        <button class="tab" data-tab="users">👤 用户管理</button>
+                        <button class="tab" data-tab="settings">⚙️ 设置</button>
+                    </div>
+
+                    <div id="adminContracts" class="tab-content active">
+                        <div id="adminContractList"><div class="empty-state">加载中...</div></div>
+                    </div>
+                    <div id="adminUsers" class="tab-content">
+                        <div style="margin-bottom:12px;text-align:right;">
+                            <button class="btn btn-sm btn-primary" id="addUserBtn">+ 添加用户</button>
+                        </div>
+                        <div id="adminUserList"><div class="empty-state">加载中...</div></div>
+                    </div>
+                    <div id="adminSettings" class="tab-content">
+                        <div style="padding:8px 0;">
+                            <h4 style="margin-bottom:12px;">修改管理员密码</h4>
+                            <form id="changePwdForm">
+                                <div class="form-group">
+                                    <label>当前密码</label>
+                                    <input type="password" class="form-control" id="oldPwd" placeholder="当前密码" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>新密码</label>
+                                    <input type="password" class="form-control" id="newPwd" placeholder="新密码（至少6位）" required minlength="6">
+                                </div>
+                                <div class="form-group">
+                                    <label>确认新密码</label>
+                                    <input type="password" class="form-control" id="confirmPwd" placeholder="确认新密码" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">修改密码</button>
+                            </form>
+                            <hr style="margin:24px 0;border:none;border-top:1px solid #edf2f7;">
+                            <h4 style="margin-bottom:12px;">机构审核</h4>
+                            <div id="orgReviewList"><div class="empty-state">加载中...</div></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('adminLogoutBtn').addEventListener('click', function() {
+                setToken(null);
+                setUser(null);
+                window.location.hash = 'login';
+            });
+
+            document.querySelectorAll('#adminTabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('#adminTabs .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const target = this.dataset.tab;
+                    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                    const map = {
+                        'contracts': 'adminContracts',
+                        'users': 'adminUsers',
+                        'settings': 'adminSettings'
+                    };
+                    document.getElementById(map[target]).classList.add('active');
+                    if (target === 'contracts') loadAdminContracts();
+                    if (target === 'users') loadAdminUsers();
+                    if (target === 'settings') loadOrgReview();
+                });
+            });
+
+            document.getElementById('addUserBtn').addEventListener('click', showAddUserModal);
+            document.getElementById('changePwdForm').addEventListener('submit', handleChangeAdminPwd);
+
+            loadAdminStats();
+            loadAdminContracts();
+            loadAdminUsers();
+            loadOrgReview();
+        }
+
+        function loadAdminStats() {
+            const contracts = DB.getContracts();
+            const users = DB.getUsers().filter(u => u.role !== 'admin');
+            document.getElementById('statTotal').textContent = contracts.length;
+            document.getElementById('statSent').textContent = contracts.filter(c => c.status === 'sent' || c.status === 'partial')
+                .length;
+            document.getElementById('statCompleted').textContent = contracts.filter(c => c.status === 'completed').length;
+            document.getElementById('statUsers').textContent = users.length;
+        }
+
+        function loadAdminContracts() {
+            const container = document.getElementById('adminContractList');
+            const contracts = DB.getContracts();
+            if (contracts.length === 0) { container.innerHTML = '<div class="empty-state">暂无合同</div>'; return; }
+            const statusMap = {
+                'sent': '待签署',
+                'partial': '部分签署',
+                'completed': '已完成',
+                'withdrawn': '已撤回'
+            };
+            const statusCls = {
+                'sent': 'badge-yellow',
+                'partial': 'badge-purple',
+                'completed': 'badge-green',
+                'withdrawn': 'badge-red'
+            };
+            let html =
+                `<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>标题</th><th>发起人</th><th>签署进度</th><th>状态</th><th>操作</th></tr></thead><tbody>`;
+            contracts.forEach(c => {
+                const signed = c.signers ? c.signers.filter(s => s.status === 'signed').length : 0;
+                const total = c.signers ? c.signers.length : 0;
+                html += `
+                    <tr>
+                        <td>#${c.id}</td>
+                        <td>${c.title}</td>
+                        <td>${c.creatorName || '未知'}</td>
+                        <td>${signed}/${total}</td>
+                        <td><span class="badge ${statusCls[c.status] || 'badge-gray'}">${statusMap[c.status] || c.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline" onclick="window.viewContract(${c.id})">查看</button>
+                            ${c.filePath ? `<a href="#" class="btn btn-sm btn-outline" onclick="alert('模拟下载：${c.filePath}')">📎</a>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        function loadAdminUsers() {
+            const container = document.getElementById('adminUserList');
+            const users = DB.getUsers().filter(u => u.role !== 'admin');
+            if (users.length === 0) { container.innerHTML = '<div class="empty-state">暂无用户</div>'; return; }
+            let html =
+                `<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>用户名</th><th>手机</th><th>真实姓名</th><th>角色</th><th>认证</th><th>操作</th></tr></thead><tbody>`;
+            users.forEach(u => {
+                const roleLabel = u.role === 'org' ? '🏢 机构' : '👤 用户';
+                const verifiedLabel = u.verified ? '✅ 已认证' : '❌ 未认证';
+                html += `
+                    <tr>
+                        <td>#${u.id}</td>
+                        <td>${u.username}</td>
+                        <td>${u.phone}</td>
+                        <td>${u.realName || '-'}</td>
+                        <td>${roleLabel}</td>
+                        <td>${verifiedLabel}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline" onclick="window.editUser(${u.id})">编辑</button>
+                            <button class="btn btn-sm btn-danger" onclick="window.deleteUser(${u.id})">删除</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        // 添加用户弹窗
+        function showAddUserModal() {
+            showModal(`
+                <div style="padding:4px 0;">
+                    <h3 style="margin-bottom:12px;">➕ 添加用户</h3>
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label>用户名 <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="addUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label>手机号 <span class="required">*</span></label>
+                            <input type="tel" class="form-control" id="addPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>密码 <span class="required">*</span></label>
+                            <input type="password" class="form-control" id="addPassword" placeholder="至少6位" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>真实姓名</label>
+                            <input type="text" class="form-control" id="addRealName">
+                        </div>
+                        <div class="form-group">
+                            <label>角色</label>
+                            <select class="form-control" id="addRole">
+                                <option value="user">用户</option>
+                                <option value="org">机构</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>机构名称（机构角色需填写）</label>
+                            <input type="text" class="form-control" id="addOrgName" placeholder="如为机构请填写">
+                        </div>
+                        <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+                            <label style="margin:0;">蓝V认证</label>
+                            <input type="checkbox" id="addVerified" style="width:18px;height:18px;">
+                        </div>
+                        <div style="display:flex;gap:10px;margin-top:16px;">
+                            <button type="submit" class="btn btn-primary" style="flex:1;">添加</button>
+                            <button type="button" class="btn btn-outline" onclick="closeModal()" style="flex:1;">取消</button>
+                        </div>
+                    </form>
+                </div>
+            `);
+            document.getElementById('addUserForm').addEventListener('submit', handleAddUser);
+        }
+
+        function handleAddUser(e) {
+            e.preventDefault();
+            const username = document.getElementById('addUsername').value.trim();
+            const phone = document.getElementById('addPhone').value.trim();
+            const password = document.getElementById('addPassword').value.trim();
+            const realName = document.getElementById('addRealName').value.trim();
+            const role = document.getElementById('addRole').value;
+            const orgName = document.getElementById('addOrgName').value.trim();
+            const verified = document.getElementById('addVerified').checked;
+            if (!username || !phone || !password) { showMsg('请填写必填项'); return; }
+            if (password.length < 6) { showMsg('密码至少6位'); return; }
+            const users = DB.getUsers();
+            if (users.some(u => u.phone === phone)) { showMsg('手机号已存在'); return; }
+            users.push({
+                id: DB.getNextId('users'),
+                username,
+                phone,
+                password,
+                realName: realName || username,
+                role,
+                verified,
+                orgName: role === 'org' ? orgName : '',
+                orgCode: '',
+                idCard: ''
+            });
+            DB.setUsers(users);
+            closeModal();
+            showMsg('用户添加成功', 'success');
+            loadAdminUsers();
+            loadAdminStats();
+        }
+
+        window.editUser = function(userId) {
+            const users = DB.getUsers();
+            const user = users.find(u => u.id === userId);
+            if (!user) { showMsg('用户不存在'); return; }
+            showModal(`
+                <div style="padding:4px 0;">
+                    <h3 style="margin-bottom:12px;">✏️ 编辑用户 #${user.id}</h3>
+                    <form id="editUserForm">
+                        <div class="form-group">
+                            <label>用户名</label>
+                            <input type="text" class="form-control" id="editUsername" value="${user.username || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>手机号</label>
+                            <input type="tel" class="form-control" id="editPhone" value="${user.phone || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>新密码（留空不修改）</label>
+                            <input type="password" class="form-control" id="editPassword" placeholder="留空则保留原密码">
+                        </div>
+                        <div class="form-group">
+                            <label>真实姓名</label>
+                            <input type="text" class="form-control" id="editRealName" value="${user.realName || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>角色</label>
+                            <select class="form-control" id="editRole">
+                                <option value="user" ${user.role === 'user' ? 'selected' : ''}>用户</option>
+                                <option value="org" ${user.role === 'org' ? 'selected' : ''}>机构</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>机构名称</label>
+                            <input type="text" class="form-control" id="editOrgName" value="${user.orgName || ''}">
+                        </div>
+                        <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+                            <label style="margin:0;">蓝V认证</label>
+                            <input type="checkbox" id="editVerified" ${user.verified ? 'checked' : ''} style="width:18px;height:18px;">
+                        </div>
+                        <div style="display:flex;gap:10px;margin-top:16px;">
+                            <button type="submit" class="btn btn-primary" style="flex:1;">保存</button>
+                            <button type="button" class="btn btn-outline" onclick="closeModal()" style="flex:1;">取消</button>
+                        </div>
+                    </form>
+                </div>
+            `);
+            document.getElementById('editUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('editUsername').value.trim();
+                const phone = document.getElementById('editPhone').value.trim();
+                const password = document.getElementById('editPassword').value.trim();
+                const realName = document.getElementById('editRealName').value.trim();
+                const role = document.getElementById('editRole').value;
+                const orgName = document.getElementById('editOrgName').value.trim();
+                const verified = document.getElementById('editVerified').checked;
+                if (!username || !phone) { showMsg('用户名和手机号必填'); return; }
+                const users = DB.getUsers();
+                const idx = users.findIndex(u => u.id === userId);
+                if (idx === -1) { showMsg('用户不存在'); return; }
+                const u = users[idx];
+                u.username = username;
+                u.phone = phone;
+                if (password) u.password = password;
+                u.realName = realName || username;
+                u.role = role;
+                u.orgName = role === 'org' ? orgName : '';
+                u.verified = verified;
+                DB.setUsers(users);
+                closeModal();
+                showMsg('用户信息已更新', 'success');
+                loadAdminUsers();
+                loadAdminStats();
+            });
+        };
+
+        window.deleteUser = function(userId) {
+            if (!confirm('确定要删除该用户吗？')) return;
+            let users = DB.getUsers();
+            users = users.filter(u => u.id !== userId);
+            DB.setUsers(users);
+            showMsg('用户已删除', 'success');
+            loadAdminUsers();
+            loadAdminStats();
+        };
+
+        function loadOrgReview() {
+            const container = document.getElementById('orgReviewList');
+            const users = DB.getUsers().filter(u => u.role === 'org');
+            if (users.length === 0) { container.innerHTML = '<div class="empty-state">暂无机构账号</div>'; return; }
+            let html =
+                `<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>机构名称</th><th>手机</th><th>信用代码</th><th>认证状态</th><th>操作</th></tr></thead><tbody>`;
+            users.forEach(o => {
+                html += `
+                    <tr>
+                        <td>${o.orgName || o.username}</td>
+                        <td>${o.phone}</td>
+                        <td>${o.orgCode || '-'}</td>
+                        <td>${o.verified ? '✅ 已认证' : '❌ 未认证'}</td>
+                        <td>
+                            ${!o.verified ? `<button class="btn btn-sm btn-success" onclick="window.verifyOrg(${o.id})">认证</button>` : '<span class="text-muted">已认证</span>'}
+                            ${o.orgLicense ? `<a href="#" class="btn btn-sm btn-outline" onclick="alert('模拟查看执照：${o.orgLicense}')">📎 执照</a>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        window.verifyOrg = function(userId) {
+            if (!confirm('确认认证该机构？')) return;
+            const users = DB.getUsers();
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                user.verified = true;
+                DB.setUsers(users);
+                showMsg('机构已认证', 'success');
+                loadOrgReview();
+                loadAdminUsers();
+            }
+        };
+
+        function handleChangeAdminPwd(e) {
+            e.preventDefault();
+            const oldPwd = document.getElementById('oldPwd').value.trim();
+            const newPwd = document.getElementById('newPwd').value.trim();
+            const confirmPwd = document.getElementById('confirmPwd').value.trim();
+            if (!oldPwd || !newPwd || !confirmPwd) { showMsg('请填写完整'); return; }
+            if (newPwd.length < 6) { showMsg('新密码至少6位'); return; }
+            if (newPwd !== confirmPwd) { showMsg('两次密码输入不一致'); return; }
+            const users = DB.getUsers();
+            const admin = users.find(u => u.role === 'admin');
+            if (!admin || admin.password !== oldPwd) { showMsg('当前密码错误'); return; }
+            admin.password = newPwd;
+            DB.setUsers(users);
+            showMsg('密码修改成功', 'success');
+            document.getElementById('oldPwd').value = '';
+            document.getElementById('newPwd').value = '';
+            document.getElementById('confirmPwd').value = '';
+        }
+
+        // ================================================================
+        //  确保所有全局函数已暴露
+        // ================================================================
+        window.viewContract = viewContract;
+        window.signContract = signContract;
+        window.withdrawContract = withdrawContract;
+        window.editUser = editUser;
+        window.deleteUser = deleteUser;
+        window.verifyOrg = verifyOrg;
+    </script>
+</body>
+</html>

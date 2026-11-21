@@ -1,0 +1,122 @@
+{include file=../../../include/member/pc/header.html}
+<style>.main .center{background:#fff}</style>
+<div class="logbox" id="logbox">
+    <h1>会员注册</h1>
+    <div class="qc">
+        <?php echo quicklogin();?>
+    </div>
+    <form class="logform" onsubmit="return reg(this);">
+        {pboot:if({pboot:registerstatus})}
+        <?php
+        $bu=gpvar('bu');
+        if($bu){
+            $bu2='&bu='.$bu;
+            $w=gpvar('w');
+            if($w){
+                $bu2.='&w=wap';
+            }
+        }
+        ?>
+        <div class="box">
+            <dl>
+                <dd>账号：</dd>
+                <dt>
+                    <input type="text" name="username" id="username" required maxlength="25" placeholder="请输入账号">
+                </dt>
+            </dl>
+            <dl>
+                <dd>密码：</dd>
+                <dt>
+                    <input type="password" name="password" id="password" required maxlength="25" placeholder="请输入密码">
+                </dt>
+            </dl>
+            <dl>
+                <dd>确认密码：</dd>
+                <dt>
+                    <input type="password" name="rpassword" id="rpassword" required maxlength="25" placeholder="请重复密码">
+                </dt>
+            </dl>
+            {pboot:2if({pboot:registercodestatus}==1)}
+            <dl>
+                <dd>验证码：</dd>
+                <dt>
+                    <input type="text" name="checkcode" id="checkcode" required class="regcode" maxlength="4" placeholder="请输入验证码">
+                    <img src="{pboot:sitepath}/core/code.php" onclick="this.src='{pboot:sitepath}/core/code.php?t='+(new Date).getTime()" width="84" height="33">
+                </dt>
+            </dl>
+            {/pboot:2if}
+        </div>
+        <input type="submit" class="button" value="注册">
+        {else}
+        <div class="nolog">
+            <p>暂不开放会员注册！</p>
+            <p>即将返回首页（<span id="st">5</span>）</p>
+        </div>
+        <script>
+        sectime('./');
+        </script>
+        {/pboot:if}
+    </form>
+    <div class="logreg">
+        <input type="checkbox" id="deal" style="position:relative;top:2px;">
+        <label for="deal" class="ui-checkbox"></label>
+        <label for="deal">我已阅读并同意 </label>
+        <a href="<?php echo pbcode('member','service','fu');?>">《用户服务协议》</a>
+        <label>和</label>
+        <a href="<?php echo pbcode('member','service','ys');?>">《隐私政策》</a>
+    </div>
+    <div class="logreg">已经有账号啦？立马<a href="<?php echo pbcode('member','login','reg').$bu2;?>">登录</a>吧！或者<a href="<?php echo pbcode('member','login','auto').$bu2;?>">游客登录</a></div>
+</div>
+<script type="text/javascript" src="{pboot:sitetplpath}/js/jquery-1.12.4.min.js"></script>
+<script>
+var x = $('#username');
+if (x) {
+    x.focus();
+}
+
+function reg(obj) {
+    var ck=$id('deal').checked;
+    if(!ck){
+        alert('请阅读并勾选《用户服务协议》 和 《隐私政策》！');
+        return false;
+    }
+    var url = '{pboot:register}';
+    var username = $(obj).find("#username").val();
+    var nickname = username;
+    var password = $(obj).find("#password").val();
+    var rpassword = $(obj).find("#rpassword").val();
+    var checkcode = $(obj).find("#checkcode").val();
+    var bu = '<?php echo $bu;?>';
+    var wap = '<?php echo $w;?>';
+    $.ajax({
+        type: 'POST',
+        url: url,
+        dataType: 'json',
+        data: {
+            username: username,
+            nickname: nickname,
+            password: password,
+            rpassword: rpassword,
+            checkcode: checkcode,
+            bu: bu,
+            wap: wap
+        },
+        success: function(response, status) {
+            if (response.code) {
+                var url = response.tourl;
+                x = '<div class="wait-box"><img src="include/member/image/loading.gif">注册成功~.~</div>';
+                $id('logbox').innerHTML = x;
+                top.location.href = url;
+            } else {
+                $('#codeimg').click();
+                alert(response.data);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('返回数据异常！');
+        }
+    });
+    return false;
+}
+</script>
+{include file=../../../include/member/pc/footer.html}

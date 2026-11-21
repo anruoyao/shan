@@ -1,0 +1,337 @@
+{include file='common/head.html'}
+
+<div class="layui-body">
+	{if([$list])}
+	<script>
+	var href=location.href;
+	if(href.indexOf('#tab=t2#tab=t2')>-1 || href.indexOf('#tab=t1#tab=t1')>-1){
+		href=href.replace('#tab=t2#tab=t2','#tab=t2');
+		href=href.replace('#tab=t1#tab=t1','#tab=t1');
+		location.href=href;
+	}
+	</script>
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">内链</li>
+	    <li lay-id="t2">伪原创</li>
+	    <li lay-id="t3">关键词</li>
+	    <li lay-id="t4">新增内链、伪原创、关键词</li>
+	    <li lay-id="t5" style="display:none;">内链、伪原创设置</li>
+	  </ul>
+	  <div style="padding:20px 10px 0px 10px">
+	  	1、内链，针对文章/章节内容，在前台页面打开时，会自动把匹配的词添加上链接
+	  	<br>
+	  	2、伪原创，针对文章/章节内容，采集、发布、编辑，这三种情况下才会自动进行伪原创替换
+	  	<br>
+	  	3、关键词，前台所有页面，任意位置，任意字符，凡是匹配的，都会时时替换
+	  </div>
+	  <div class="layui-tab-content">
+	  	<div class="layui-tab-item layui-show">
+	  		<table class="layui-table">
+	  			<thead>
+                    <tr>
+                    	<th><input type="checkbox" title="全选" name="list1[]" onclick="selectall(1,1)"></th>
+                        <th>名称</th>
+                        <th>链接</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	{$list}
+                </tbody>
+	  		</table>
+			<div class="layui-btn-group">
+				<button type="button" onclick="selectall(1)" class="layui-btn layui-btn-sm">全选</button>
+				<button type="submit" name="submit" value="del" onclick="return go(1)" class="layui-btn layui-btn-sm">删除选中项</button>
+				<button type="submit" name="submit" value="delall11" onclick="return go(11)" class="layui-btn layui-btn-sm">清空全部</button>
+			</div>
+	  		<div class="page">{$pagebox}</div>
+	  	</div>
+	  	<div class="layui-tab-item">
+	  		<table class="layui-table">
+	  			<thead>
+                    <tr>
+                    	<th><input type="checkbox" title="全选" name="list2[]" onclick="selectall(2,1)"></th>
+                        <th>近义词</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	{$list2}
+                </tbody>
+	  		</table>
+			<div class="layui-btn-group">
+				<button type="button" onclick="selectall(2)" class="layui-btn layui-btn-sm">全选</button>
+				<button type="submit" name="submit" value="del" onclick="return go(2)" class="layui-btn layui-btn-sm">删除选中项</button>
+				<button type="submit" name="submit" value="delall22" onclick="return go(22)" class="layui-btn layui-btn-sm">清空全部</button>
+			</div>
+	  		<div class="page">{$pagebox2}</div>
+	  	</div>
+	  	<div class="layui-tab-item">
+	  		<table class="layui-table">
+	  			<thead>
+                    <tr>
+                    	<th><input type="checkbox" title="全选" name="list3[]" onclick="selectall(3,1)"></th>
+                        <th>原词</th>
+                        <th>新词</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	{$list3}
+                </tbody>
+	  		</table>
+			<div class="layui-btn-group">
+				<button type="button" onclick="selectall(3)" class="layui-btn layui-btn-sm">全选</button>
+				<button type="submit" name="submit" value="del" onclick="return go(3)" class="layui-btn layui-btn-sm">删除选中项</button>
+				<button type="submit" name="submit" value="delall33" onclick="return go(33)" class="layui-btn layui-btn-sm">清空全部</button>
+			</div>
+	  		<div class="page">{$pagebox3}</div>
+	  	</div>
+	  	<div class="layui-tab-item">
+	  		 <form action="{url./admin/Tags/add}" method="post" class="layui-form">
+	  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内链</label>
+                    <div class="layui-input-block">
+                        <textarea name="tags" class="layui-textarea" style="height:300px"></textarea>
+                        <div class="layui-form-mid layui-word-aux">格式：“百度,https://www.baidu.com”，“词,链接”，英文逗号分隔，一行一组</div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">伪原创近义词</label>
+                    <div class="layui-input-block">
+                        <textarea name="jin" class="layui-textarea" style="height:300px"></textarea>
+                        <div class="layui-form-mid layui-word-aux">格式：“词1,词2,词3.....”，英文逗号分隔，一行一组</div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">关键词替换</label>
+                    <div class="layui-input-block">
+                        <textarea name="rep" class="layui-textarea" style="height:300px"></textarea>
+                        <div class="layui-form-mid layui-word-aux">格式：“原词,新词”，英文逗号分隔，一行一组</div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+					 <div class="layui-input-block">
+					    <button class="layui-btn" lay-submit>立即提交</button>
+					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					 </div>
+				</div>
+	  		 </form>
+	  	</div>
+	  	<div class="layui-tab-item">
+	  		 <form action="{url./admin/Tags/set}" method="post" class="layui-form">
+	  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
+
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">单篇字数</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="words_tags" required  lay-verify="required" placeholder="写数字，如：100" value="{$words_tags}" class="layui-input">
+                     	<div class="layui-form-mid layui-word-aux">写数值，采集时，某篇文章xxx字以上才会插入内链</div>
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">单篇插入词数</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="num_tags" required  lay-verify="required" placeholder="写数字，如：3"  value="{$num_tags}" class="layui-input">
+                     	<div class="layui-form-mid layui-word-aux">采集时，单篇文章随机插入xxx个内链，0为不启用</div>
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">是否启用伪原创</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="auto_rep" required  lay-verify="required" placeholder="写0或1"  value="{$auto_rep}" class="layui-input">
+                     	<div class="layui-form-mid layui-word-aux">采集时，是否启用伪原创替换，0为关闭，1为启用</div>
+                     </div>
+                </div>
+
+                <div class="layui-form-item">
+					 <div class="layui-input-block">
+					    <button class="layui-btn" lay-submit>立即提交</button>
+					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					 </div>
+				</div>
+	  		 </form>
+	  	</div>
+	  </div>
+	</div>
+	{/if} 
+	
+	{if([$mod])}
+
+
+		{if(![$id2] && ![$id3])}
+		<div class="layui-tab layui-tab-brief" lay-filter="tab">
+		  <ul class="layui-tab-title">
+		    <li class="layui-this">内链修改</li>
+		  </ul>
+		  <div class="layui-tab-content">
+		  	<div class="layui-tab-item layui-show">
+		  		 <form action="{url./admin/Tags/mod/id/'.[$get.id].'}{$backurl}" method="post" class="layui-form">
+		  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
+
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">名称</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="name" required  lay-verify="required" value="{$tags->name}" placeholder="请输入名称"  class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">链接</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="link" required  lay-verify="required" value="{$tags->link}" placeholder="请输入链接"  class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                 <div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit>立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						    {fun=get_btn_back()}
+						 </div>
+					</div>
+					
+		  		 </form>
+		  	</div>
+		  </div>
+		 </div>
+		 {else}
+			{if([$id2])}
+			<div class="layui-tab layui-tab-brief" lay-filter="tab">
+			  <ul class="layui-tab-title">
+			    <li class="layui-this">近义词修改</li>
+			  </ul>
+			  <div class="layui-tab-content">
+			  	<div class="layui-tab-item layui-show">
+			  		 <form action="{url./admin/Tags/mod/id2/'.[$get.id2].'}{$backurl}" method="post" class="layui-form">
+			  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
+
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">近义词</label>
+		                     <div class="layui-input-block">
+		                     	<input type="text" name="key" required  lay-verify="required" value="{$tags.key}" placeholder="请输入近义词"  class="layui-input">
+		                     	<div class="layui-form-mid layui-word-aux">“词1,词2,词3”，英文逗号分隔添加多个近义词</div>
+		                     </div>
+		                </div>
+		                
+		                 <div class="layui-form-item">
+							 <div class="layui-input-block">
+							    <button class="layui-btn" lay-submit>立即提交</button>
+							    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							    {fun=get_btn_back()}
+							 </div>
+						</div>
+						
+			  		 </form>
+			  	</div>
+			  </div>
+			 </div>
+			 {/if}
+			{if([$id3])}
+			<div class="layui-tab layui-tab-brief" lay-filter="tab">
+			  <ul class="layui-tab-title">
+			    <li class="layui-this">关键词修改</li>
+			  </ul>
+			  <div class="layui-tab-content">
+			  	<div class="layui-tab-item layui-show">
+			  		 <form action="{url./admin/Tags/mod/id3/'.[$get.id3].'}{$backurl}" method="post" class="layui-form">
+			  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
+
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">原词</label>
+		                     <div class="layui-input-block">
+		                     	<input type="text" name="key1" required  lay-verify="required" value="{$tags.key1}" placeholder="请输入原词"  class="layui-input">
+		                     </div>
+		                </div>
+		                
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">新词</label>
+		                     <div class="layui-input-block">
+		                     	<input type="text" name="key2" required  lay-verify="required" value="{$tags.key2}" placeholder="请输入新词"  class="layui-input">
+		                     </div>
+		                </div>
+		                
+		                 <div class="layui-form-item">
+							 <div class="layui-input-block">
+							    <button class="layui-btn" lay-submit>立即提交</button>
+							    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							    {fun=get_btn_back()}
+							 </div>
+						</div>
+						
+			  		 </form>
+			  	</div>
+			  </div>
+			 </div>
+			 {/if}
+		 {/if}
+	{/if} 
+</div>
+{include file='common/foot.html'}
+<script>
+function selectall(my,id) {
+    var list = document.getElementsByName('list'+my+'[]');
+    var c = list[0].checked;
+    if(id==1){
+    	if(c){
+    		c='';
+    	}else{
+    		c=1;
+    	}
+    }
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+function go(my){
+	var xxx='';
+	var ii=0;
+    var list = document.getElementsByName('list'+my+'[]');
+    for (var i = 1; i < list.length; i++) {
+    	var c=list[i].checked;
+    	var v=list[i].value;
+    	if(c){
+    		ii++;
+    		if(ii==1){
+    			xxx=v;
+    		}else{
+    			xxx+='-'+v;
+    		}
+    	}
+    }
+    if(!xxx && my!=11 && my!=22 && my!=33){
+    	alert('请选择需要操作的对象！');
+    }else{
+    	if(my==11){
+    		var x='确定要清空所有内链吗？';
+    		xxx='del';
+    	}else if(my==22){
+    		var x='确定要清空所有近义词吗？';
+    		xxx='del';
+    	}else if(my==33){
+    		var x='确定要清空所有关键词吗？';
+    		xxx='del';
+    	}else{
+    		var x='确定要删除选中项吗？';
+    	}
+    	x=confirm(x);
+    	if(!x){
+    		return false;
+    	}
+    	var href='?p=/Tags/del/idx'+my+'/'+xxx;
+    	location.href=href;
+    }
+}
+</script>

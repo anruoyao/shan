@@ -1,0 +1,40 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li lay-id="t1"><a href="?p=/Member/index">会员列表</a></li>
+            <li lay-id="t2"><a href="?p=/Member/index#tab=t2">会员新增</a></li>
+            <li lay-id="t3"><a href="?p=/Member/author">作者管理</a></li>
+            <li class="layui-this" lay-id="t4"><a href="?p=/Member/tx">提现管理</a></li>
+            <li lay-id="t5"><a href="?p=/Member/addnew">批量新增账号</a></li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>订单</th>
+                            <th>订单状态</th>
+                            <th>账号</th>
+                            <th>账号状态</th>
+                            <th>金币余额(个)</th>
+                            <th>提现金币(个)</th>
+                            <th>提现金额(元)</th>
+                            <th>提现账户</th>
+                            <th>提现状态</th>
+                            <th>异常待审</th>
+                            <th>提现时间</th>
+                            <th>异常提示<span style="color:red">(异常状态下作者可见)</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {$list}
+                    </tbody>
+                </table>
+                <div class="page">{$pagebar}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

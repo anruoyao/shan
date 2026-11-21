@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>作家福利</title>
+    <style>
+        /* 基础重置 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #d6c4b0; /* 整体背景色 */
+            color: #4a3b32; /* 主要文字颜色 */
+            display: flex;
+            justify-content: center;
+            line-height: 1.6;
+        }
+
+        /* 模拟手机容器 */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: #cbb69d; /* 内部背景色 */
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航栏 */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            background-color: #f8f6f4;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #e0dcd8;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .nav-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* 头部 Banner */
+        .hero-banner {
+            background: linear-gradient(to bottom, #d0c1ad, #bca486);
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 使用伪元素模拟远山背景效果 */
+        .hero-banner::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><path d="M0,30 L20,10 L40,25 L60,5 L80,20 L100,15 L100,30 Z" fill="%23a88c70" opacity="0.4"/></svg>') no-repeat bottom center;
+            background-size: cover;
+            pointer-events: none;
+        }
+
+        .hero-year {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #554433;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: "STSong", "SimSun", serif; /* 宋体风格 */
+            font-size: 38px;
+            font-weight: bold;
+            color: #3b2b20;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-url {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #665544;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            font-weight: bold;
+            color: #3b2b20;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 选项卡导航 */
+        .tabs-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px;
+            position: sticky;
+            top: 50px;
+            z-index: 90;
+        }
+
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 15px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(to right, #e8d5b5, #f7e8cf, #e8d5b5);
+            color: #5a4030;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #d4bca1;
+        }
+
+        /* 内容区域 */
+        .content-area {
+            padding: 0 15px 30px;
+            flex: 1;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 标题模块样式 */
+        .section-title {
+            text-align: center;
+            font-size: 15px;
+            color: #5a4030;
+            margin: 20px auto 15px;
+            position: relative;
+            width: fit-content;
+            padding: 4px 20px;
+            border: 1px solid #8b6b4a;
+            border-radius: 4px;
+            background-color: transparent;
+        }
+
+        /* 标题两边的装饰线 */
+        .section-title::before,
+        .section-title::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 15px;
+            height: 1px;
+            background-color: #8b6b4a;
+        }
+        .section-title::before { left: -20px; }
+        .section-title::after { right: -20px; }
+
+
+        /* 内容卡片 */
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(139, 107, 74, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #4a3b32;
+            line-height: 1.8;
+        }
+
+        .content-box p {
+            margin-bottom: 8px;
+        }
+        .content-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-box ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+
+        .content-box li {
+            margin-bottom: 4px;
+        }
+
+        /* 特殊文本颜色 */
+        .highlight {
+            color: #5a4030;
+            font-weight: bold;
+        }
+
+        /* 表格样式 */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+            text-align: center;
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid rgba(139, 107, 74, 0.4);
+            padding: 8px 4px;
+        }
+
+        .custom-table th {
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+
+        /* 针对部分表格靠左对齐的专属样式 */
+        .table-left-align th,
+        .table-left-align td {
+            text-align: left;
+            padding-left: 10px;
+            vertical-align: top;
+        }
+
+        /* 底部装饰 */
+        .footer-decoration {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .footer-decoration svg {
+            width: 100%;
+            height: 80px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- 顶部导航 -->
+    <div class="navbar">
+        <div class="back-btn">‹</div>
+        <div class="nav-title">作家福利</div>
+    </div>
+
+    <!-- 顶部 Banner -->
+    <div class="hero-banner">
+        <div class="hero-year">❖ 2026 ❖</div>
+        <div class="hero-title">作家福利</div>
+        <div class="hero-url">shbook.top</div>
+        <div class="hero-subtitle">山海书盟</div>
+    </div>
+
+    <!-- 选项卡 -->
+    <div class="tabs-container">
+        <div class="tab-btn active" onclick="switchTab(0)">签约机制</div>
+        <div class="tab-btn" onclick="switchTab(1)">激励计划</div>
+        <div class="tab-btn" onclick="switchTab(2)">取消情形</div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content-area">
+        
+        <!-- Tab 1: 签约机制 -->
+        <div class="content-section active" id="tab-0">
+            <div class="section-title">签约模式</div>
+            <div class="content-box">
+                <p><strong>签约类型：</strong>全版权非独家5年签约（纯分成）</p>
+                <p><strong>分成比例：</strong>作者分成为80%（渠道收入需扣除20%运营费）</p>
+                <p><strong>营收模式：</strong>渠道为主，渠道与本站付费并重</p>
+            </div>
+
+            <div class="section-title">申请签约</div>
+            <div class="content-box">
+                <p>作品字数满1万字后可在作者后台申请签约，如果申请通过，请加所属责编QQ，完成合同签署流程</p>
+                <p>如果作品质量较优，责编可能会主动邀请签约，收到邀请后请及时加编辑QQ</p>
+                <p>也可以通过以下邮箱选择一位编辑内投，内投需附带书名、简介与至少四千字正文</p>
+                <ul style="list-style-type: none; padding-left: 0;">
+                    <li>·青松 3313662017@qq.com</li>
+                    <li>·小二 1290673011@qq.com</li>
+                    <li>·02 &nbsp;&nbsp;3387450269@qq.com</li>
+                    <li>·沈约 1367799127@qq.com</li>
+                    <li>·江白 3171753894@qq.com</li>
+                    <li>·浮桥 3970812183@qq.com</li>
+                    <li>·灰帝 lzh159357cv@qq.com</li>
+                    <li>·特别爱你 3639407114@qq.com</li>
+                    <li>·池雨 2259783470@qq.com</li>             
+                    <li>·繁星 1627018615@qq.com</li>
+                    <li>·北齐 3192923716@qq.com</li>
+                </ul>
+            </div>
+
+            <div class="section-title">签约流程</div>
+            <div class="content-box">
+                <ul>
+                    <li>双方达成签约意向，作者注册合同系统完成实名认证，按照责编指引完成签约</li>
+                    <li>网站编辑部核对签约材料与信息无误，完成电子签约并归档，修改签约作品状态为已签约</li>
+                    <li>编辑部安排签约作品推荐直至上架与上渠道</li>
+                    <li>合同系统网址：139.196.237.28/jieshao.html</li>
+                </ul>
+            </div>
+            <!-- 已删除签约内容、创作福利、后续开发 -->
+        </div>
+
+        <!-- Tab 2: 激励计划 -->
+        <div class="content-section" id="tab-1">
+            <!-- 渠道申报部分 -->
+            <div class="section-title">渠道申报</div>
+            <div class="content-box">
+                <table class="custom-table table-left-align">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">渠道名称</th>
+                            <th style="width: 40%;">申报字数</th>
+                            <th style="width: 30%;">申报频率</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>番茄</td>
+                            <td>2万字</td>
+                            <td>每月2次</td>
+                        </tr>
+                        <tr>
+                            <td>百度</td>
+                            <td>2万字</td>
+                            <td>每月2次</td>
+                        </tr>
+                        <tr>
+                            <td>QQ浏览器</td>
+                            <td>10万字</td>
+                            <td>每月1次</td>
+                        </tr>
+                        <tr>
+                            <td>七猫</td>
+                            <td>10万字</td>
+                            <td>每月1次</td>
+                        </tr>
+                        <tr>
+                            <td>独阅读</td>
+                            <td>10万字（限男频，不要玄幻、飞卢风、恋爱文）</td>
+                            <td>每月1次</td>
+                        </tr>
+                        <tr>
+                            <td>书临互动</td>
+                            <td>10万字</td>
+                            <td>每月2次</td>
+                        </tr>
+                        <tr>
+                            <td>少年梦</td>
+                            <td>20万字（限男频）</td>
+                            <td>每月1次</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 15px;">
+                    <p style="margin-bottom: 8px;">备注：</p>
+                    <p>1.每月申报2次的，分别于月初（1-4日统计，5日申报）、月中（16-19日统计，20日申报）两次报录渠道。<br>每月申报1次的，仅于月中（16-19日统计，20日申报）申报一次。</p>
+                    <p>2.需要申报渠道的作者，请在规定时间内按责编指引填写渠道申报表格，过期不候。</p>
+                    <p>3.部分尚未完全磋商完毕的渠道，如次元姬、息壤、美团等，不列入本表，如果需要申报请单独联系责编。</p>
+                </div>
+            </div>
+
+            <!-- 全勤奖 -->
+            <div class="section-title">全勤奖</div>
+            <div class="content-box">
+                <table class="custom-table table-left-align">
+                    <thead>
+                        <tr>
+                            <th>要求</th>
+                            <th>奖励</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>月更字数≥6万</td>
+                            <td>当月渠道费总额的 5%</td>
+                        </tr>
+                        <tr>
+                            <td>月更字数≥9万</td>
+                            <td>当月渠道费总额的 10%</td>
+                        </tr>
+                        <tr>
+                            <td>月更字数≥12万</td>
+                            <td>当月渠道费总额的 15%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 15px;">
+                    <p style="margin-bottom: 8px;">备注：</p>
+                    <p>1.申请全勤当月需同时满足断更天数≤5日（单日更新字数≤2000字属于断更）</p>
+                    <p>2.如果需要申请全勤，请在申请当月结束前按照责编指引，带作者后台更新截图，填写相关统计接龙或表格。过期未填视作放弃。</p>
+                    <p>3.全勤奖在申请次月1日统一发放，如果满足条件但未收到全勤，请及时联系所属责编。</p>
+                </div>
+            </div>
+
+            <!-- 创作激励 (原催更奖) -->
+            <div class="section-title">创作激励</div>
+            <div class="content-box">
+                <table class="custom-table table-left-align">
+                    <thead>
+                        <tr>
+                            <th>要求</th>
+                            <th>支持平台</th>
+                            <th>奖励金</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>单付费平台均订 &gt; 100</td>
+                            <td>独阅读、少年梦</td>
+                            <td>100元/月</td>
+                        </tr>
+                        <tr>
+                            <td>单付费平台均订 &gt; 200</td>
+                            <td>独阅读、少年梦</td>
+                            <td>200元/月</td>
+                        </tr>
+                        <tr>
+                            <td>单免费渠道在读 &gt; 5万</td>
+                            <td>番茄、QQ浏览器</td>
+                            <td>100元/月</td>
+                        </tr>
+                        <tr>
+                            <td>单免费渠道在读 &gt; 10万</td>
+                            <td>番茄、QQ浏览器</td>
+                            <td>200元/月</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 15px;">
+                    <p>备注：1.获得创作激励当月更新字数需≥6万字，且断更天数≤5日。</p>
+                    <p>2.创作激励无需申请，达到要求后，于次月20日随本站稿费一同发放。</p>
+                </div>
+            </div>
+
+            <!-- 稿费结算 (原征文奖) -->
+            <div class="section-title">稿费结算</div>
+            <div class="content-box">
+                <p>各平台渠道费，平台将会在到账后3个工作日内结算到作者账户；</p>
+                <p>本站订阅与各项福利稿费，于每月20日结算上月稿费；</p>
+                <p>达到全勤领取条件的，于每月1日发放上月全勤。</p>
+                <p>所有稿费无需申请，由平台直接结算到作者在后台提供的账户中。</p>
+                <p>渠道费无结算金额限制，本站稿费需≥20元后发放，如当月本站收入不足基础结算金额，则在积累够20元后统一发放。</p>
+            </div>
+        </div>
+
+        <!-- Tab 3: 取消情形 -->
+        <div class="content-section" id="tab-2">
+            <div class="section-title">范围</div>
+            <div class="content-box">
+                <p>当作品出现以下情形时，视情节轻重，本站有权取消以上单项或全部奖励，情况特别严重者，将通过司法途径追回作者在本站的所获得所有稿酬。</p>
+                <ul style="list-style-type: none; padding-left: 0;">
+                    <li>● 作品创作期间出现违约</li>
+                    <li>● 作者与作品涉及抄袭、剽窃或其他侵犯著作权的行为；</li>
+                    <li>● 作品更新出现欺骗读者行为，包括但不限于：利用小说生成器等类似违规软件进行写作；大量无意义情节填充、重复之前已写内容（无论事后是否删除）、粘贴资料、将感言作为正文收费等情形；</li>
+                    <li>● 作品更新出现内容违禁行为，包括但不限于：色情违禁、政治违禁、法律违禁等</li>
+                    <li>● 作者恶意散布谣言，诋毁本站及工作人员，利用签约作者身份及其他网站相关身份欺骗读者，谋取非法所得；</li>
+                    <li>● 其他违背作品签约协议或法律法规的情形</li>
+                </ul>
+                <p style="margin-top: 10px;">在法律允许的范围内，本站对本福利计划拥有最终解释权，本次全新福利计划予以公布实施后，此前有关福利计划相应废止。</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 底部装饰 -->
+    <div class="footer-decoration">
+        <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,30 L10,20 L20,28 L35,10 L50,25 L65,12 L80,22 L90,15 L100,25 L100,30 Z" fill="#8b6b4a"/>
+        </svg>
+    </div>
+</div>
+
+<script>
+    // 选项卡切换逻辑
+    function switchTab(index) {
+        // 获取所有的 tab 按钮和内容区块
+        const tabs = document.querySelectorAll('.tab-btn');
+        const sections = document.querySelectorAll('.content-section');
+
+        // 移除所有 active 类
+        tabs.forEach(tab => tab.classList.remove('active'));
+        sections.forEach(section => section.classList.remove('active'));
+
+        // 为当前点击的 tab 和对应的内容添加 active 类
+        tabs[index].classList.add('active');
+        document.getElementById('tab-' + index).classList.add('active');
+        
+        // 切换时滚动到顶部（可选，视需求而定）
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>

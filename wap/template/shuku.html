@@ -1,0 +1,54 @@
+<?php require_once(dirname(__FILE__).'/header_inner.html');?>
+<div class="novel">
+	<div class="type-list">
+		<?php echo shukucat();?>
+	</div>
+</div>
+<div class="novel vipbox">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title"><img style="position:relative;top:2px" src="style/image/vip.png"> VIP小说</h3>
+		</div>
+	</div>
+	<div class="novel-slide">
+		<ol class="novel-slide-ol">
+			<?php echo vipbox(8);?>
+		</ol>
+	</div>
+</div>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">热门推荐</h3>
+		</div>
+	</div>
+	<div class="novel-slide">
+		<ol class="novel-slide-ol">
+			<?php echo randnew(8);?>
+		</ol>
+	</div>
+</div>
+<div class="money">
+	<center>
+		<?php echo axd(29);?>
+	</center>
+</div>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">书库</h3>
+			<span class="novel-title-desc">共<font id="total">X</font>本</span>
+		</div>
+	</div>
+	<?php echo book4list('shuku',$page);?>
+</div>
+<style type="text/css">
+#fnav{
+	display: none
+}
+</style>
+<?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">
+fnav(2);
+$id('fnav').style.display='block';
+</script>

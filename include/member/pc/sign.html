@@ -1,0 +1,115 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $sign_conditions;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">签约中心</p>
+        <h1 class="aw-title">申请签约</h1>
+        <p class="aw-subtitle">满足条件并同意协议后提交申请，编辑审核通过后自动生成合同。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','ucenter');?>">返回作者中心</a>
+    </div>
+</div>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">签约条件</h2>
+        <span class="aw-card__hint">全部满足后可提交</span>
+    </div>
+    <ul class="aw-sign-list">
+        <li class="<?php echo $sign_conditions['realname']?'is-ok':'is-bad';?>">
+            <span class="aw-sign-list__icon"><?php echo $sign_conditions['realname']?aw_icon('check'):aw_icon('warning');?></span>
+            <div><strong>实名认证</strong><em>真实姓名、身份证号与手机号已完善</em></div>
+            <a href="<?php echo pbcode('member','info');?>">去完善</a>
+        </li>
+        <li class="<?php echo $sign_conditions['has_words']?'is-ok':'is-bad';?>">
+            <span class="aw-sign-list__icon"><?php echo $sign_conditions['has_words']?aw_icon('check'):aw_icon('warning');?></span>
+            <div><strong>作品字数 ≥ 1 万字</strong><em>当前最高作品字数：<?php echo aw_num($sign_conditions['words']);?> 字</em></div>
+            <a href="<?php echo pbcode('member','yc');?>">去创作</a>
+        </li>
+        <li class="<?php echo $sign_conditions['info']?'is-ok':'is-bad';?>">
+            <span class="aw-sign-list__icon"><?php echo $sign_conditions['info']?aw_icon('check'):aw_icon('warning');?></span>
+            <div><strong>作品信息完整</strong><em>已上传封面并填写作品简介</em></div>
+            <a href="<?php echo pbcode('member','yc');?>">去完善</a>
+        </li>
+    </ul>
+</section>
+
+<?php if($sign_conditions['sign']==3):?>
+<section class="aw-card aw-section">
+    <div class="aw-empty">
+        <?php echo aw_icon('check');?>
+        <span>你已是签约作者，合同由编辑后台生成，如有疑问请联系编辑。</span>
+        <a class="aw-btn aw-btn--primary aw-btn--sm" href="<?php echo pbcode('member','gf');?>">查看稿费</a>
+    </div>
+</section>
+<?php elseif($sign_conditions['sign']==4):?>
+<section class="aw-card aw-section">
+    <div class="aw-empty">
+        <?php echo aw_icon('clock');?>
+        <span>签约申请已提交，正在等待编辑审核。</span>
+        <a class="aw-btn aw-btn--sm" href="<?php echo pbcode('member','yc','sign/2');?>" onclick="return tipx(8);">取消申请</a>
+    </div>
+</section>
+<?php else:?>
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">作品全版权独家授权协议</h2>
+        <span class="aw-card__hint">提交即视为同意</span>
+    </div>
+    <div class="aw-agreement">
+        <p>本人自愿将签约作品的全版权独家授权予山海书盟，授权范围包括电子阅读、有声、渠道分发及合同约定的其他权利。</p>
+        <p>签约后作者可获得本站订阅分成、渠道收入与平台激励，具体比例与结算规则以编辑后台生成的合同为准。</p>
+        <p>合同由编辑后台在签约通过后自动生成，并在通知中告知作者。</p>
+    </div>
+    <label class="aw-agree">
+        <input type="checkbox" id="agree">
+        <span>我已阅读并同意《山海书盟作品全版权独家授权协议》</span>
+    </label>
+    <?php if($sign_conditions['sign']==2):?>
+        <?php if($sign_conditions['eligible']):?>
+        <div class="aw-form-actions">
+            <a class="aw-btn aw-btn--primary" id="signSubmit" href="<?php echo pbcode('member','yc','sign/4');?>" onclick="return signCheck();">提交签约申请</a>
+        </div>
+        <?php else:?>
+        <div class="aw-form-actions">
+            <button class="aw-btn" type="button" disabled>暂不满足签约条件</button>
+        </div>
+        <?php endif;?>
+    <?php else:?>
+    <div class="aw-form-notes">
+        <p class="aw-form-note"><?php echo aw_icon('warning');?><span>作品审核通过并成为普通作者后，才可提交签约申请。</span></p>
+    </div>
+    <?php endif;?>
+</section>
+<script>
+function signCheck(){
+    var agree=document.getElementById('agree');
+    if(!agree || !agree.checked){
+        alert('请先勾选同意授权协议！');
+        return false;
+    }
+    return tipx(7);
+}
+(function(){
+    var agree=document.getElementById('agree');
+    var btn=document.getElementById('signSubmit');
+    if(!agree || !btn){
+        return;
+    }
+    var sync=function(){
+        if(agree.checked){
+            btn.classList.remove('is-disabled');
+            btn.removeAttribute('aria-disabled');
+        }else{
+            btn.classList.add('is-disabled');
+            btn.setAttribute('aria-disabled','true');
+        }
+    };
+    agree.addEventListener('change',sync);
+    sync();
+})();
+</script>
+<?php endif;?>
+{include file=../../../include/member/pc/footer.html}

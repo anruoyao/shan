@@ -1,0 +1,174 @@
+{include file=header_inner.html}
+<?php
+global $dsql;
+$sh_pb = $this->getVar('pbarr');
+$sh_book_id = intval($sh_pb['id']);
+$sh_scode = intval($sh_pb['scode']);
+$sh_title = $sh_pb['title'];
+$sh_author = $sh_pb['author'];
+$sh_ico = $sh_pb['ico'];
+$sh_over = $sh_pb['over'];
+$sh_subscode = $sh_pb['subscode'];
+$sh_visits = $sh_pb['visits'];
+$sh_likes = $sh_pb['likes'];
+$sh_update_time = $sh_pb['update_time'];
+$sh_lastid = $sh_pb['lastid'];
+$sh_lasttitle = $sh_pb['lasttitle'];
+$sh_firstid = $sh_pb['firstid'];
+$sh_description = $sh_pb['description'];
+$sh_chapter_total = sh_chapter_count($sh_book_id);
+$sh_url = sh_book_url($sh_book_id);
+$sh_cat_name = sh_cat_name($sh_scode);
+$sh_intro = trim(html_entity_decode(strip_tags(preg_replace('/<br\s*\/?\s*>|<\/p>/i', "\n", (string) $sh_description)), ENT_QUOTES, 'UTF-8'));
+$sh_intro = $sh_intro !== '' ? $sh_intro : '暂无作品简介。';
+$sh_first_url = $sh_firstid ? sh_article_url($sh_firstid) : $sh_url;
+$sh_last_url = $sh_lastid ? sh_article_url($sh_lastid) : $sh_url;
+$sh_down_txt = isset($GLOBALS['downTXT']) ? $GLOBALS['downTXT'] : '';
+$sh_subscribe_url = '';
+if (!empty($GLOBALS['pay_ready'])) {
+    $sh_access = $dsql->one("select gid,gtype,jinbi,jifen from ay_content where id=$sh_book_id limit 1", 1);
+    $sh_vip = explode('-', $GLOBALS['vip_all'] ?? '');
+    $sh_gid = intval($sh_vip[0]) ?: intval($sh_access['gid'] ?? 0);
+    $sh_gtype = intval($sh_access['gtype'] ?? 0);
+    $sh_jinbi = intval($sh_access['jinbi'] ?? 0);
+    $sh_jifen = intval($sh_access['jifen'] ?? 0);
+    $sh_paid_chapters = !empty($GLOBALS['chapter_jb']) && $sh_chapter_total > intval($GLOBALS['free_chapter'] ?? 0);
+    if ($sh_access && $sh_gid && ($sh_gtype === 0 || $sh_gtype >= 4) && ($sh_jinbi > 0 || $sh_jifen > 0 || $sh_paid_chapters)) {
+        $sh_subscribe_url = pbcode('member', 'pay', 'content_' . $sh_book_id . '_0', 'all');
+    }
+}
+?>
+<main class="sh-main sh-book-page">
+	<div class="sh-container">
+
+		<div class="sh-crumbs">
+			<a href="./">首页</a><i>/</i><a href="<?php echo pbcode('shuku');?>">书城</a><i>/</i><a href="<?php echo sh_cat_url($sh_scode);?>"><?php echo sh_e($sh_cat_name);?></a><i>/</i><span><?php echo sh_e($sh_title);?></span>
+		</div>
+		<section class="sh-bookhero">
+			<div class="sh-bookhero__inner">
+				<div class="sh-bookhero__cover">
+					<?php echo sh_cover_img($sh_ico, $sh_title);?>
+				</div>
+				<div class="sh-bookhero__main">
+
+					<h1><?php echo sh_e($sh_title);?><span class="sh-tag <?php echo $sh_over === '连载' ? 'sh-tag--ing' : '';?>"><?php echo sh_e($sh_over);?></span></h1>
+					<p class="sh-bookhero__meta">
+						<span>作者</span>
+						<a href="<?php echo sh_author_url($sh_author);?>"><?php echo sh_e($sh_author);?></a>
+						<span>·</span>
+						<a href="<?php echo sh_cat_url($sh_scode);?>"><?php echo sh_e($sh_cat_name);?></a>
+						<span>·</span>
+						<span><?php echo sh_words($sh_subscode);?></span>
+						<span>·</span>
+						<span>更新于 <?php echo sh_time_ago($sh_update_time);?></span>
+					</p>
+					<div class="sh-bookhero__stats">
+						<div><span>人气</span><b><?php echo sh_num($sh_visits);?></b></div>
+						<div><span>点赞热度</span><b><?php echo sh_num($sh_likes);?></b></div>
+						<div><span>字数</span><b><?php echo sh_words($sh_subscode);?></b></div>
+						<div><span>章节</span><b><?php echo $sh_chapter_total;?></b></div>
+					</div>
+					<div class="sh-bookhero__actions">
+						<?php if ($sh_firstid) { ?>
+						<a class="sh-btn sh-btn--primary" href="<?php echo sh_e($sh_first_url);?>">开始阅读</a>
+						<?php } ?>
+						<a class="sh-btn mb{pboot:loginstatus}{pboot:registerstatus}" href="javascript:vlof('f','<?php echo $sh_book_id;?>','');">收藏</a>
+						<?php if ($sh_subscribe_url) { ?>
+						<a class="sh-btn" href="<?php echo sh_e($sh_subscribe_url);?>">订阅</a>
+						<?php } ?>
+						<a class="sh-btn" href="<?php echo sh_e($sh_url);?>#catalog">目录</a>
+						<?php if ($sh_down_txt) { ?>
+						<a class="sh-btn sh-btn--ghost" href="<?php echo pbcode('txt', $sh_scode, $sh_book_id);?>" target="_blank">下载</a>
+						<?php } ?>
+					</div>
+					<p class="sh-bookhero__latest">
+						最新章节：
+						<?php if ($sh_lastid && $sh_lasttitle) { ?>
+						<a href="<?php echo sh_e($sh_last_url);?>"><?php echo sh_e($sh_lasttitle);?></a>
+						<?php } else { echo '暂无章节'; } ?>
+						<span id="lastread" style="margin-left:14px"></span>
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<nav class="sh-booknav" aria-label="作品内容">
+			<a href="<?php echo sh_e($sh_url);?>#introduction">作品简介</a>
+			<a href="<?php echo sh_e($sh_url);?>#catalog">目录 <span><?php echo $sh_chapter_total;?></span></a>
+			<a href="<?php echo sh_e($sh_url);?>#reviews">书评区</a>
+		</nav>
+
+		<div class="sh-layout sh-book-layout">
+			<div>
+				<section class="sh-synopsis" id="introduction">
+					<h2>作品简介</h2>
+					<p><?php echo sh_e($sh_intro);?></p>
+				</section>
+				<section class="sh-catalog" id="catalog">
+					<div class="sh-catalog__head">
+						<h2>目录<span>共 <?php echo $sh_chapter_total;?> 章</span></h2>
+						<?php if ($sh_chapter_total) { ?>
+						<div class="sh-catalog__tools">
+							<input type="text" class="sh-input" id="shChapterSearch" aria-label="搜索章节" placeholder="搜索章节">
+							<div class="sh-switch">
+								<button type="button" class="is-active" aria-pressed="true" data-chapter-order="asc">正序</button>
+								<button type="button" aria-pressed="false" data-chapter-order="desc">倒序</button>
+							</div>
+						</div>
+						<?php } ?>
+					</div>
+					<div class="sh-chapters" id="shChapters">
+						<?php echo sh_chapter_list($sh_book_id);?>
+					</div>
+					<p class="sh-chapter-empty" id="shChapterEmpty" hidden>未找到匹配的章节。</p>
+					<div class="sh-catalog__more" id="shChapterActions" hidden>
+						<button type="button" id="shChapterMore" aria-controls="shChapters" aria-expanded="false">展开全部目录</button>
+					</div>
+				</section>
+
+				<section class="sh-comments" id="reviews">
+					<div class="CommentBox" id="CommentBox">
+						<h2 class="h">书评区</h2>
+						{include file=comment.html}
+					</div>
+				</section>
+			</div>
+
+			<aside class="sh-side">
+				<div class="sh-sidecard">
+					<div class="sh-sidecard__head"><h3>作品信息</h3></div>
+					<ul class="sh-info">
+						<li><span>分类</span><a href="<?php echo sh_cat_url($sh_scode);?>"><?php echo sh_e($sh_cat_name);?></a></li>
+						<li><span>状态</span><b><?php echo sh_e($sh_over);?></b></li>
+						<li><span>字数</span><b><?php echo sh_words($sh_subscode);?></b></li>
+						<li><span>章节</span><b><?php echo $sh_chapter_total;?> 章</b></li>
+						<li><span>更新</span><b><?php echo $sh_update_time ? date('Y-m-d', strtotime($sh_update_time)) : '-';?></b></li>
+					</ul>
+				</div>
+				<div class="sh-sidecard">
+					<div class="sh-sidecard__head"><h3>同类推荐</h3><a class="sh-more" href="<?php echo sh_cat_url($sh_scode);?>">更多<i>›</i></a></div>
+					<div style="padding-top:2px">
+						<?php echo sh_same_books($sh_scode, $sh_book_id, 6);?>
+					</div>
+				</div>
+				<div class="sh-sidecard sh-share">
+					<div class="sh-sidecard__head"><h3>分享本书</h3></div>
+					<?php echo share4xx($sh_book_id);?>
+				</div>
+			</aside>
+		</div>
+
+		<?php
+		$sh_ad = axd(54);
+		if (trim($sh_ad)) {
+			echo '<div class="sh-ad">' . $sh_ad . '</div>';
+		}
+		?>
+
+	</div>
+</main>
+{include file=footer_inner.html}
+<script type="text/javascript">
+vlof('v', '<?php echo $sh_book_id;?>', 'no');
+lastread('<?php echo $sh_book_id;?>');
+</script>

@@ -1,0 +1,105 @@
+<?php
+!$id?$id=[$pbarr.id]:'';
+$x0='<script>$id("CommentBox").style.display="none";</script>';
+global $dsql;$x=$dsql->one("select value from ay_config where name='comment_check_code' limit 1",1);
+$x=$x[value];
+if($x==1){
+	$checkcode='
+	<style>
+	.CommentBox .c .ckc{ float: left; margin-top: 5px; width: calc(100% - 42px); margin-left: 47px; height: 26px; overflow: hidden; }
+	.CommentBox .c .ckc input{ float: left; padding: 0px; border: 1px solid #dedddd; height: calc(100% - 2px); overflow: hidden;text-indent:5px; }
+	.CommentBox .c .ckc img{ height: 100%; margin-left: 5px; cursor: pointer; }
+	</style>
+	<div class="ckc">
+		<input type="text" name="checkcode" required id="checkcode" placeholder="请输入验证码">
+		<img src="'.$pcbaseall.'core/code.php" onclick="this.src=\''.$pcbaseall.'core/code.php?t=\'+(new Date).getTime()" height="26" />
+	</div>';
+}
+$x1='
+<style>
+.CommentBox .c .ckc input { width: 250px }
+.CommentBox .c .txt .ny { display: none }
+.CommentBox .c .txt .words_box { width: 100% }
+.CommentBox .c .ckc, .CommentBox .c .btn .tj { margin-left: 0 !important }
+</style>
+<div class="c mbl">
+	<div class="f">
+		<form name="formcomment" id="formcomment" method="post" action="'.pbcode('comment','add','','all').'&contentid='.$id.'" onsubmit="return cgSubmit();">
+			<div class="txt">
+				<div class="words_box">
+					<textarea name="comment" id="comment" required rows="6" cols="58" tabindex="2" title="评论内容" onchange="cgCount(this)" onkeyup="cgCount(this)"></textarea>
+				</div>
+			</div>
+			'.$checkcode.'
+			<div class="btn">
+				<div class="tj">
+					<input type="submit" name="newcommu" tabindex="4" value="提交评论" title="提交评论" />
+				</div>
+				<div class="div_r">剩余字数：<b id="cgNum">360</b>/360</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="recomment" id="recomment"></div>
+<div class="recomment_bg" id="recomment_bg" onclick="hf()"></div>
+<div class="ccbox mbl" id="ccbox">
+	<ul class="ulc" id="ulc">
+		<br />
+		<br /> &nbsp;::&nbsp;正在为您加载评论&hellip;&hellip;
+		<img style="position:relative;top:1px;width:10px" src="'.$pcbaseall.'template/tpl/image/loading.gif" />
+		<br />
+		<br />
+		<br />
+	</ul>
+	<div class="cm">
+		<div class="i">每页<b>10</b>条，共<b>0</b>条</div>
+		<div class="n">
+			<div><img src="'.$pcbaseall.'template/tpl/image/loading.gif" id="cIMG" /></div>
+			<div><a class="info">第<b>0</b>/0页</a><a class="no" title="已经是第一页了">&lt;&lt;</a><a class="no" title="没有上一页">&lt;</a></div>
+			<div><a class="no" title="没有下一页">&gt;</a><a class="no" title="已经是最后一页了">&gt;&gt;</a></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	commentNow("'.$id.'","1","no");
+    function cgCount(message) {
+        var lenM=message.value.length;
+        $id("cgNum").innerHTML=360-lenM;
+        $id("cgNum").innerHTML<0?message.value=message.value.substring(0,360):"";
+    }
+	function cgSubmit(){
+		if(uid == 0 || !uid){
+			alert("抱歉，登录会员才能评论哦！");
+			var href="'.pbcode('member','login','','all').'";
+			location.href=href;
+			return false;
+		}
+		if(getcookie("ComMember_'.$id.'") == 1){
+			alert("抱歉，24小时之内只能评论一次！");
+			return false;
+		}
+		var cEl=$id("comment_content") || $id("comment");
+		if(!cEl || !cEl.value){
+			alert("请输入你要评论的内容！");
+			return false;
+		}
+		if($id("cgNum").innerHTML<0){
+			alert("抱歉，超出字数限制了！");
+			return false;
+		}
+	}
+	</script>
+</div>';
+$x2='
+<div class="c">
+	<div id="SOHUCS" sid="'.$id.'"></div>
+	<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js"></script>
+	<script type="text/javascript">
+	window.changyan.api.config({
+		appid: "'.$CY_appid.'",
+		conf: "'.$CY_conf.'"
+	});
+	</script>
+</div>';
+$x='x'.$DISPLAY_COM;
+echo $$x;
+?>

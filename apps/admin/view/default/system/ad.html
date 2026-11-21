@@ -1,0 +1,98 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="t1">广告位列表</li>
+            <li lay-id="t2">新增广告位</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">
+                <a href="?p=/Ad/index"{if(![$pw])} style="color:red"{else}{/if}>广告位</a>
+                &nbsp;/&nbsp;
+                <a href="?p=/Ad/index/pw/1"{if([$pw]==1)} style="color:red"{else}{/if}>电脑版</a>
+                &nbsp;/&nbsp;
+                <a href="?p=/Ad/index/pw/2"{if([$pw]==2)} style="color:red"{else}{/if}>手机版</a>
+            </div>
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Ad/mod}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" lay-ignore="" id="checkall" title="全选"></th>
+                                <th>编号</th>
+                                <th>广告位类型</th>
+                                <th>广告位名称</th>
+                                <th>广告位状态</th>
+                                <th>相关操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>{$adlist}</tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        <button type="button" onclick="selectall()" class="layui-btn layui-btn-sm">全选</button>
+                        <button type="submit" name="submit" value="del" onclick="return delad();" class="layui-btn layui-btn-sm">批量删除</button>
+                        <button type="submit" name="submit" value="adstatus_1" class="layui-btn layui-btn-sm">状态开</button>
+                        <button type="submit" name="submit" value="adstatus_0" class="layui-btn layui-btn-sm">状态关</button>
+                        <button type="submit" name="submit" value="adbody" class="layui-btn layui-btn-sm">清空广告代码</button>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form action="{url./admin/Ad/add}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">广告位名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="adname" required lay-verify="required" placeholder="广告位名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">广告位内容</label>
+                        <div class="layui-input-block">
+                            <textarea name="adbody" class="layui-textarea" style="height:300px">{$dtarr->adbody}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">广告位类型</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="adtype" value="1" title="电脑版" checked>
+                            <input type="radio" name="adtype" value="2" title="手机版">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">广告位状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="adstatus" value="1" title="是" checked>
+                            <input type="radio" name="adstatus" value="0" title="否">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}
+<script>
+function selectall() {
+    var list = document.getElementsByName('list[]');
+    var c = list[0].checked;
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+
+function delad() {
+    event.returnValue = confirm("确定要删除广告位吗？\n正常情况是，编辑，删除里面的广告代码！");
+}
+</script>

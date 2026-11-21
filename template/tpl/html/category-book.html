@@ -1,0 +1,96 @@
+{include file=header_inner.html}
+<?php
+$sh_cat_scode = isset($GLOBALS['scode']) ? intval($GLOBALS['scode']) : 0;
+$sh_cat_name = isset($GLOBALS['name']) ? $GLOBALS['name'] : '作品分类';
+$sh_route_page = isset($GLOBALS['page']) ? intval($GLOBALS['page']) : 1;
+$sh_sort = isset($_GET['sort']) ? $_GET['sort'] : 'update';
+$sh_sort_map = sh_category_sort();
+$sh_filters = sh_library_filter_query($_GET);
+if (!is_string($sh_sort) || !array_key_exists($sh_sort, $sh_sort_map)) {
+    $sh_sort = 'update';
+}
+$sh_page = isset($_GET['page']) ? intval($_GET['page']) : $sh_route_page;
+if ($sh_page < 1) {
+    $sh_page = 1;
+}
+$sh_base = pbcode('category', $sh_cat_scode);
+$sh_cat_filter = ' and scode=' . $sh_cat_scode;
+$sh_list = sh_book_page(($sh_cat_scode > 0 ? $sh_cat_filter : '') . $sh_filters['where'], $sh_sort, $sh_page, 24);
+$sh_cat_total = sh_book_count($sh_cat_filter);
+$sh_category_picks = array(
+    '热门推荐' => sh_books($sh_cat_filter, 'visits desc,id desc', 4),
+    '连载推荐' => sh_books($sh_cat_filter . " and subtitle<>'1'", 'update_time desc,id desc', 4),
+    '编辑推荐' => sh_books($sh_cat_filter . ' and isrecommend=1', 'sorting asc,score desc,id desc', 4),
+    '新书入库' => sh_books($sh_cat_filter, 'create_time desc,id desc', 4)
+);
+?>
+<main class="sh-main sh-category-page">
+	<div class="sh-container">
+
+		<div class="sh-crumbs sh-page-crumb">
+			<a href="./">首页</a><i>/</i><a href="<?php echo sh_e(pbcode('shuku'));?>#categories">作品分类</a><i>/</i><span><?php echo sh_e($sh_cat_name);?></span>
+		</div>
+		<section class="sh-category-index">
+			<div class="sh-section__head">
+				<div class="sh-section__title"><h1><?php echo sh_e($sh_cat_name);?></h1><p><?php echo $sh_cat_total;?> 部作品</p></div>
+				<a class="sh-more" href="<?php echo sh_e($sh_base);?>#allbooks">查看全部<i>›</i></a>
+			</div>
+			<div class="sh-cat-picks">
+				<?php foreach ($sh_category_picks as $sh_pick_label => $sh_pick_books) { ?>
+				<section class="sh-block">
+					<header class="sh-block__head"><h3><?php echo sh_e($sh_pick_label);?></h3></header>
+					<ol class="sh-block__list">
+						<?php foreach ($sh_pick_books as $sh_i => $sh_b) { echo sh_book_row($sh_b, $sh_i + 1); } ?>
+						<?php if (!$sh_pick_books) { ?><li class="sh-block__empty">暂无作品</li><?php } ?>
+					</ol>
+				</section>
+				<?php } ?>
+			</div>
+		</section>
+
+		<div class="sh-layout">
+			<section id="allbooks">
+				<div class="sh-section__head"><div class="sh-section__title"><h2>全部作品</h2><p>共 <?php echo $sh_list['total'];?> 部</p></div></div>
+				<?php echo sh_library_nav($sh_base, $sh_sort, $sh_filters['values']);?>
+				<div class="sh-toolbar">
+					<div class="sh-toolbar__tabs">
+						<?php foreach ($sh_sort_map as $sh_k => $sh_v) { ?>
+						<a href="<?php echo sh_e(sh_library_url($sh_base, $sh_k, $sh_filters['values']));?>#allbooks" class="<?php echo $sh_sort === $sh_k ? 'is-active' : '';?>"><?php echo $sh_v['label'];?></a>
+						<?php } ?>
+					</div>
+					<span class="sh-toolbar__count">第 <?php echo $sh_list['page'];?> / <?php echo $sh_list['pages'];?> 页</span>
+				</div>
+
+				<div class="sh-books">
+					<?php
+					if (!$sh_list['rows']) {
+						echo sh_empty('没有符合筛选条件的作品');
+					}
+					foreach ($sh_list['rows'] as $sh_b) {
+						echo sh_book_card($sh_b);
+					}
+					?>
+				</div>
+
+				<?php echo sh_pagination(str_replace('%', '%%', sh_library_url($sh_base, $sh_sort, $sh_filters['values'])) . '&page=%d#allbooks', $sh_list['page'], $sh_list['pages'], $sh_list['total']);?>
+			</section>
+
+			<aside class="sh-side">
+				<div class="sh-sidecard">
+					<div class="sh-sidecard__head"><h3>作品分类</h3><a class="sh-more" href="<?php echo pbcode('shuku');?>">书城<i>›</i></a></div>
+					<div style="padding-top:6px">
+						<?php
+						$sh_cats = sh_cat_map();
+						foreach ($sh_cats as $sh_c) {
+							$sh_active = intval($sh_c['scode']) === $sh_cat_scode ? ' style="color:var(--sh-teal);font-weight:600"' : '';
+							echo '<a class="sh-minibook" style="padding:9px 0"' . $sh_active . ' href="' . pbcode('category', $sh_c['scode']) . '"><span class="sh-minibook__body"><strong>' . sh_e($sh_c['name']) . '</strong></span><span style="margin-left:auto;color:var(--sh-faint);font-size:11px">›</span></a>';
+						}
+						?>
+					</div>
+				</div>
+			</aside>
+		</div>
+
+	</div>
+</main>
+{include file=footer_inner.html}

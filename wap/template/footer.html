@@ -1,0 +1,157 @@
+<?php
+if($memberadd=='1' && !strstr($template,'article')){
+echo '
+<div class="money" style="margin-bottom:0.75rem;">
+	<center>
+		<a href="'.pbcode('member','yc','','all').'" style="float:left;width:100%;">
+			<img src="'.$pcbaseall.'include/member/image/yc_wap.jpg" style="float:left;width:100%;" />
+		</a>
+	</center>
+</div>';
+}
+if(!strstr($template,'article')){
+echo '
+<div class="money">
+	<center>
+		'.axd(28).'
+	</center>
+</div>';
+}
+?>
+<div class="footer" id="footer">
+	<div class="bx2">
+		<?php
+		if($xxx_time && $xxx_jinbi){
+		    $x=$dsql->one("select id from ay_content where status=1 limit 1",1);
+		    $id_=$x[id];
+		    if($id_){
+		        $hash=md5($id_.$xxx_jinbi);
+		        $x=ROOT_PATH.'/include/chapter_pbcode_xyz/index.php';
+		        if(file_exists($x)){
+		            $x='book';
+		        }else{
+		            $x='content';
+		        }
+		        $url=pbcode($x,$id_);
+		        $url.='#'.$hash;
+		        echo '
+		        <a href="'.$url.'" class="xxx_time">
+		            <img src="style/image/jb.png" />
+		        </a>
+		        <script>$id("pgsq2").href="'.$url.'";</script>';
+		    }
+		}else{
+			echo '<style>#pgsq2{display:none}</style>';
+		}
+		?>
+		<p class="jf">
+			<a class="cur" href="javascript:translate();" id="zh_visits_s">简体版</a>
+			·
+			<a href="javascript:translate(1);" id="zh_visits_t">繁體版</a>
+			·
+			<a style="color:blue" href="sitemap.xml" title="XML地图" target="_blank">XML地图</a>
+			·
+			<a style="color:blue" href="<?php echo pbcode('tags');?>" title="Tags标签">Tags标签</a>
+		</p>
+		<p>网文自留地，作家避风港</p>
+        <p>
+            <?php echo $siteicp;?>
+            <?php echo $sitestatistical;?>
+        </p>
+        <?php
+        if($appdown){
+            echo '
+            <p class="wapapp" style="width:100% !important;margin:0px !important">
+                <a href="'.$pcbaseall.'app/" style="color:red;text-decoration:underline;" target="_blank">APP客户端</a>
+            </p>';
+        }
+        ?>
+	</div>
+</div>
+<div class="mark-box" id="mark-box">
+    <div class="h">
+        <div class="d back" onClick="closemark()">返回</div>
+        <div class="d title" id="d-title"></div>
+        <div class="d close" onClick="closemark()">X</div>
+    </div>
+    <div class="mark-body" id="mark-body"></div>
+</div>
+<script type="text/javascript">
+var imgs = document.querySelectorAll('img');
+if(typeof(IntersectionObserver)=='function'){
+    var observer = new IntersectionObserver(imgsrc);
+    for (var i = 0; i < imgs.length; ++i) {
+        observer.observe(imgs[i]);
+    }
+}else{
+    for(var i=0;i<imgs.length;i++){
+        var crs=imgs[i].getAttribute('crs');
+        if(!crs){
+            continue;
+        }
+        imgs[i].src=crs;
+    }
+}
+translateInitilization();
+var jianfancookie=big5_getCookie(targetEncodingCookie);
+if(jianfancookie == '1'){
+	$id('zh_visits_s').className='';
+	$id('zh_visits_t').className='cur';
+	translateBody();
+}
+</script>
+<div id="LoginDta" style="display:none">
+	<script type="text/javascript">
+	$id("LoginBox") ? document.write("<script src='" + PC_URL + "hi.login.php?my=wap&t=" + (new Date).getTime() + "'></s" + "cript>") : '';
+	</script>
+</div>
+<script type="text/javascript">
+$id("LoginBox") ? $id("LoginBox").innerHTML=$id("LoginDta").innerHTML : "";
+</script>
+<script type="text/javascript">
+var temp='<?php echo str_replace(".html","",$template);?>';
+var BookID='<?php echo $id?$id:"";?>';
+var ArcID='<?php echo $xid;?>';
+var NewID='<?php echo $lastid;?>';
+var newCookie=BookID + '-' + ArcID;
+if(BookID){
+	var Readed=getcookie('Readed');
+	if(Readed){
+		Readed=',' + Readed + ',';
+		if(Readed.indexOf(BookID + '-')>-1){
+			var arr=Readed.split(BookID + '-');
+			var x=arr[1];
+			var arr=x.split(',');
+			x=arr[0];
+			var x=BookID + '-' + x;
+			Readed=Readed.replace(x + ',','');
+			if(temp == 'book' || temp == 'chapter'){
+				newCookie=x;
+			}
+		}
+		Readed=Readed.substring(0,Readed.length - 1);
+		Readed=newCookie + Readed;
+		setcookie('Readed',Readed,30);
+	} else{
+		setcookie('Readed',newCookie,30);
+	}
+}
+sitemap();
+</script>
+</div>
+</body>
+</html>
+<?php echo axd(36);?>
+<?php
+if(!strstr($template,'article')){
+	echo '<script type="text/javascript">url2disknext();</script>';
+}
+?>
+<div class="fnav">
+	<ul id="fnav">
+		<li class="cur"><a href="./"><span class="s01"></span>首页</a></li>
+		<li><a href="<?php echo pbcode('member','fav','','all');?>"><span class="s02"></span>书架</a></li>
+		<li><a href="<?php echo pbcode('ping');?>"><span class="s03 s03_"></span>发现</a></li>
+		<li><a href="<?php echo pbcode('member','ucenter','','all');?>"><span class="s04"></span>我的</a></li>
+	</ul>
+</div>

@@ -1,0 +1,142 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $id,$title,$scode,$content,$subtitle,$ico,$xid,$xtitle,$tags,$author_say;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Editing</p>
+        <h1 class="aw-title"><?php echo $xid?'编辑章节':'编辑作品';?></h1>
+        <p class="aw-subtitle">修改后需要重新审核，请确认内容无误后再提交。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','yc');?>">返回作品列表</a>
+    </div>
+</div>
+
+<form class="aw-form-card" action="<?php echo pbcode('member','yc_edit',$xid?$id.'/'.$xid:'');?>" method="post" enctype="multipart/form-data" onsubmit="return checkyc();">
+    <input type="hidden" name="ycid" value="<?php echo $id;?>" />
+    <div class="aw-form-grid">
+        <div class="aw-field aw-field--full">
+            <label for="yctitle"><?php echo ycvar('yct',$xid);?> <span class="req">*</span></label>
+            <input class="aw-input" type="text" name="yctitle" id="yctitle" value="<?php echo $xtitle?$xtitle:$title;?>">
+        </div>
+
+        <?php if(ycvar('ycbook')):?>
+            <?php if($xid):?>
+            <div class="aw-field aw-field--full">
+                <label>隶属</label>
+                <div class="aw-form-row">
+                    <select class="aw-select" name="ycscode" id="ycscode">
+                        <?php echo catoption('article',$scode);?>
+                    </select>
+                    <span class="aw-help">→</span>
+                    <select class="aw-select" name="ycid" id="ycid">
+                        <?php echo catoption('article','',$id);?>
+                    </select>
+                </div>
+            </div>
+            <?php else:?>
+            <div class="aw-field">
+                <label for="ycscode">隶属栏目 <span class="req">*</span></label>
+                <select class="aw-select" name="ycscode" id="ycscode">
+                    <option value="0">请选择栏目...</option>
+                    <?php echo catoption('book',$scode);?>
+                </select>
+            </div>
+            <div class="aw-field">
+                <label for="ycsubtitle">作品状态</label>
+                <select class="aw-select" name="ycsubtitle" id="ycsubtitle">
+                    <?php echo overoption($subtitle);?>
+                </select>
+            </div>
+            <div class="aw-field aw-field--full">
+                <label for="tags">作品标签</label>
+                <input class="aw-input" type="text" name="tags" id="tags" value="<?php echo htmlspecialchars($tags,ENT_QUOTES,'UTF-8');?>" placeholder="多个标签用英文逗号分隔，如：玄幻,热血,升级流">
+                <p class="aw-help">标签用于作品分类与推荐，建议填写 3-5 个。</p>
+            </div>
+            <div class="aw-field aw-field--full">
+                <label>作品封面</label>
+                <div class="aw-upload">
+                    <div class="aw-upload__preview">
+                        <img id="ycimg" src="<?php echo ico($ico).'?'.time();?>" onerror="this.src='include/member/image/empty.jpg'">
+                    </div>
+                    <div class="aw-upload__control">
+                        <input class="aw-input" type="text" id="ycico2" value="" readonly="readonly" placeholder="尚未选择图片">
+                        <div class="aw-upload__buttons">
+                            <label class="aw-btn aw-btn--ghost" for="ycico">更换图片</label>
+                            <span class="aw-upload__hint">建议竖版封面，尺寸比例 3:4</span>
+                        </div>
+                        <div id="filebox" class="filebox">
+                            <input type="file" name="ycico" id="ycico" class="ycico" onchange="ycimgx(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif;?>
+        <?php else:?>
+            <div class="aw-field">
+                <label for="ycscode">隶属栏目 <span class="req">*</span></label>
+                <select class="aw-select" name="ycscode" id="ycscode">
+                    <option value="0">请选择栏目...</option>
+                    <?php echo catoption($scode);?>
+                </select>
+                <p class="aw-help">如果有子分类，需要选择子分类。</p>
+            </div>
+            <div class="aw-field aw-field--full">
+                <label>缩略图</label>
+                <div class="aw-upload">
+                    <div class="aw-upload__preview">
+                        <img id="ycimg" src="<?php echo ico($ico).'?'.time();?>" onerror="this.src='include/member/image/empty.jpg'">
+                    </div>
+                    <div class="aw-upload__control">
+                        <input class="aw-input" type="text" id="ycico2" value="" readonly="readonly" placeholder="尚未选择图片">
+                        <div class="aw-upload__buttons">
+                            <label class="aw-btn aw-btn--ghost" for="ycico">更换图片</label>
+                            <span class="aw-upload__hint">建议竖版封面，尺寸比例 3:4</span>
+                        </div>
+                        <div id="filebox" class="filebox">
+                            <input type="file" name="ycico" id="ycico" class="ycico" onchange="ycimgx(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif;?>
+
+        <div class="aw-field aw-field--full">
+            <p class="aw-form-note"><?php echo aw_icon('warning');?><span>声明：提交后需要重新审核。维护网络环境人人有责；禁止发布任何违法违规内容，否则一切法律后果自行承担。</span></p>
+        </div>
+
+        <div class="aw-field aw-field--full aw-editor">
+            <label for="yccontent"><?php echo ycvar('ycc',$xid);?></label>
+            <textarea class="aw-textarea" name="yccontent" id="yccontent" rows="10" cols="60"><?php echo str_replace(array(PHP_EOL,"\t","\n","\r"),'<br>',$content);?></textarea>
+        </div>
+
+        <?php if($xid):?>
+        <div class="aw-field aw-field--full">
+            <label for="author_say">作者有话说</label>
+            <textarea class="aw-textarea" name="author_say" id="author_say" rows="3" maxlength="500" placeholder="可选，展示在章节末尾"><?php echo htmlspecialchars($author_say,ENT_QUOTES,'UTF-8');?></textarea>
+            <p class="aw-help">最多 500 字，发布后会展示在章节正文之后。</p>
+        </div>
+        <?php endif;?>
+    </div>
+    <div class="aw-form-actions">
+        <a class="aw-btn aw-btn--ghost" href="<?php echo pbcode('member','yc');?>">取消</a>
+        <button type="submit" class="aw-btn aw-btn--primary">提交审核</button>
+    </div>
+</form>
+
+<script type="text/javascript" src="include/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+CKEDITOR.replace('yccontent', {
+    "toolbar": [
+        ["Maximize"],
+        ["Undo", "Redo"],
+        ["JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock"],
+        ["NumberedList", "BulletedList", "Outdent", "Indent", "Blockquote"],
+        ["Find", "Replace", "SelectAll"],
+        "\/", ["Styles", "Format", "FontSize"],
+        ["TextColor", "BGColor", "Bold", "Italic", "Underline", "Strike", "RemoveFormat"]
+    ],
+    "height": 450
+});
+</script>
+{include file=../../../include/member/pc/footer.html}

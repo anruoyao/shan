@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:wb="//open.weibo.com/wb">
+<head>
+	<meta charset="UTF-8">
+	<meta name="App-Config" content="fullscreen=yes,useHistoryState=yes,transition=yes" />
+	<meta name=apple-mobile-web-app-capable content=yes />
+	<meta name=apple-touch-fullscreen content=yes />
+	<meta name=format-detection content="telephone=no,email=no" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<title>Login...</title>
+	<link rel="stylesheet" type="text/css" href="style/css/common.css" />
+	<script type="text/javascript">
+	var LOGIN_URL="<?php echo $pcbaseall;?>";
+	</script>
+	<script type="text/javascript" src="style/js/ajax.js?<?php echo time().rand(1,100);?>"></script>
+</head>
+<body>
+	<div>
+		<center id="login">
+			<img src="style/image/loading.gif">&nbsp;Login...
+		</center>
+		<center id="xTime">5</center>
+	</div>
+	<script type="text/javascript">
+	var id="<?php echo $id;?>";
+	var code="<?php echo gpvar('code');?>";
+	var u="<?php echo $username;?>";
+	var n="<?php echo $nickname;?>";
+	if(u && n){
+		var hash="<?php echo gpvar('hash');?>";
+		login(id,'weibo',n,'',hash,u);
+	} else{
+		weibo(id,code,'<?php echo $wb;?>');
+	}
+	</script>
+</body>
+</html>

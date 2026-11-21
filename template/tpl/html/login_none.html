@@ -1,0 +1,16 @@
+<?php
+if($my=='pc'){
+  $xxx='
+  <a href="'.pbcode('member','login').'" target="_blank">会员登录</a>
+  <a href="'.pbcode('member','register').'" target="_blank">会员注册</a>
+  <script>if(typeof(tap1)=="undefined"){tap1="";}var uid="";var username="";var d=document.createElement("div");d.id=d.className="tingbox";var b=$id("bodybox");var urls="";b?b.parentNode.insertBefore(d,b):"";var tap2="sogou";if(typeof(ting_api)=="undefined"){var ting_api="";var t_r="";}else{var t_r="1";}ting_api="//"+tap1+"."+tap2+".com/reven"+"tondc/synt"+"hesis"+ting_api;var src1="//tts.697code.com/text2audio?tex=";if(t_r=="1"){tingready();}function audioid(){var x=urls.split("{697}");var x1=x.length;var x2=srcArr.length;var xxx=x1-x2;var xxx=xxx-1;return xxx;}var register_time="";var src2="&cuid=dict&lan=ZH&ctp=2&pdt=30&vol=9";</script>';
+}
+if($my=='wap'){
+  $xxx='
+  <a class="dl mbl" href="'.pbcode('member','login','','all').'">会员</a>
+  <span class="ex mbl"></span>
+  <script>if(typeof(tap1)=="undefined"){tap1="";}var uid="";var username="";var d=document.createElement("div");d.id=d.className="tingbox";var b=$id("bodybox");var urls="";b?b.parentNode.insertBefore(d,b):"";var tap2="sogou";if(typeof(ting_api)=="undefined"){var ting_api="";var t_r="";}else{var t_r="1";}ting_api="//"+tap1+"."+tap2+".com/reven"+"tondc/synt"+"hesis"+ting_api;var src1="//tts.697code.com/text2audio?tex=";if(t_r=="1"){tingready();}function audioid(){var x=urls.split("{697}");var x1=x.length;var x2=srcArr.length;var xxx=x1-x2;var xxx=xxx-1;return xxx;}var register_time="";var src2="&cuid=dict&lan=ZH&ctp=2&pdt=30&vol=9";</script>';
+}
+$xxx=lang_content($xxx,$lang);
+js_write($xxx);
+?>

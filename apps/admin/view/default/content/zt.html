@@ -1,0 +1,328 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    {if([$list])}
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="t1">专题管理</li>
+            <li lay-id="t2" class="red">新增专题</li>
+            <li lay-id="t3">批量新增</li>
+        </ul>
+        <div class="layui-tab-content">
+            <form action="?p=/Sort/index" method="post" class="layui-form so">
+                <input type="hidden" name="formcheck" value="{$formcheck}">
+                <input type="text" name="key" value="" placeholder="请输入搜索关键字" class="layui-input">
+                <button class="layui-btn" lay-submit>搜索</button>
+            </form>
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Zt/mod}" method="post" id="sortForm" name="sortForm">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <table class="layui-table" id="sortTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" lay-ignore id="checkall" title="全选"></th>
+                                <th>专题名称</th>
+                                <th>编码</th>
+                                <th>URL名称</th>
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$sorts}
+                        </tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        <button type="button" onclick="selectall()" class="layui-btn layui-btn-sm">全选</button>
+                        <button type="submit" name="submit" value="sorting" class="layui-btn layui-btn-sm">保存排序</button>
+                        <button type="submit" name="submit" onclick="return setDelAction();" class="layui-btn layui-btn-sm">批量删除</button>
+                        <button type="submit" name="submit" value="status_1" class="layui-btn layui-btn-sm">状态开</button>
+                        <button type="submit" name="submit" value="status_0" class="layui-btn layui-btn-sm">状态关</button>
+                        <button type="submit" name="submit" value="zt_0" class="layui-btn layui-btn-sm">移除内容</button>
+                    </div>
+                    <script>
+                    function setDelAction(){
+		     			document.sortForm.action = "{url./admin/Zt/del}"; 
+		     			return confirm("您确定要删除选中的专题么？");
+		     		}
+					function selectall() {
+					    var list = document.getElementsByName('list[]');
+					    var c = list[0].checked;
+					    for (var i = 0; i < list.length; i++) {
+					        if (c) {
+					            list[i].checked = '';
+					        } else {
+					            list[i].checked = 'checked';
+					        }
+					    }
+					}
+		     		$("#sortTable").treetable({ expandable: true,column: 1,indent:20,stringCollapse:'收缩',stringExpand:'展开' });
+			     	</script>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form action="{url./admin/Zt/add}" method="post" class="layui-form" lay-filter="sort">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-tab">
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">父专题</label>
+                                    <div class="layui-input-block">
+                                        <select name="pcode">
+                                            <option value="0">顶级专题</option>
+                                            {$sort_select}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">专题名称 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="name" required lay-verify="required" placeholder="请输入专题名称" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">URL名称 </label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="filename" placeholder="请输入URL名称，如:test" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">SEO标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="title" placeholder="请输入专题SEO标题，需前端调用" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">SEO关键字</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="keywords" placeholder="请输入专题SEO关键字，需前端调用" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">SEO描述</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="description" placeholder="请输入专题SEO描述，需前端调用" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">状态</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="status" value="1" title="显示" checked>
+                                        <input type="radio" name="status" value="0" title="隐藏">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- 批量新增 -->
+            <div class="layui-tab-item">
+                <form action="{url./admin/Zt/add}" method="post" class="layui-form" lay-filter="sort">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-form-item" style="margin-top:20px">
+                        <label class="layui-form-label">父专题</label>
+                        <div class="layui-input-block">
+                            <select name="pcode">
+                                <option value="0">顶级专题</option>
+                                {$sort_select}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">专题名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="multiplename" required lay-verify="required" placeholder="请输入专题名称，多个专题用逗号隔开" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="1" title="显示" checked>
+                            <input type="radio" name="status" value="0" title="隐藏">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {/if}
+    {if([$mod])}
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">专题修改</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">
+                <a href="?p=/Zt/index"><i class="fa fa-home"></i>专题管理</a>&nbsp;&gt;&nbsp;修改&nbsp;“<a href="?p=/Zt/mod/scode/{$sort.scode}{$backurl}">{$sort.name}</a>”
+            </div>
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Zt/mod/scode/'.[$sort.scode].'}{$backurl}" method="post" class="layui-form" lay-filter="sort">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-tab">
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">父专题</label>
+                                    <div class="layui-input-block">
+                                        <select name="pcode" id="pcode">
+                                            <option value="0">顶级专题</option>
+                                            {$sort_select}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">专题名称 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="name" required lay-verify="required" value="{$sort.name}" placeholder="请输入专题名称" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">URL名称 </label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="filename" value="{$sort.filename}" placeholder="请输入URL名称，如:test" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">SEO标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="title" value="{$sort.title}" placeholder="请输入专题SEO标题，需前端调用" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">SEO关键字</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="keywords" value="{$sort.keywords}" placeholder="请输入专题SEO关键字，需前端调用" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">SEO描述</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="description" placeholder="请输入专题SEO描述，需前端调用" class="layui-textarea">{$sort.description}</textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">状态</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="status" value="1" title="显示" {if([$sort.status]==1)}checked="checked"{/if}>
+                                        <input type="radio" name="status" value="0" title="隐藏" {if([$sort.status]==0)}checked="checked"{/if}>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            {fun=get_btn_back()}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {/if}
+    {if([$pbarr.ztlist])}
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href="?p=/Zt/index" style="color:#009688">专题内容</a></li>
+        </ul>
+        <div class="layui-tab-content">
+            <form action="?p=/Sort/index" method="post" class="layui-form so">
+                <input type="hidden" name="formcheck" value="{$formcheck}">
+                <input type="text" name="key" value="" placeholder="请输入搜索关键字" class="layui-input">
+                <button class="layui-btn" lay-submit>搜索</button>
+            </form>
+            <div class="loc">{$pbarr.loc}</div>
+            <div class="layui-tab-item"></div>
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Sort/mod}/xid/{$pbarr.scode}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" lay-ignore="" id="checkall" title="全选"></th>
+                                <th>ID</th>
+                                <th>标题</th>
+                                <th>栏目</th>
+                                <th>更新时间</th>
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>置顶</th>
+                                <th>推荐</th>
+                                <th>头条</th>
+                                <th>访问量</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>{$pbarr.ztlist}</tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        <button type="button" onclick="selectall()" class="layui-btn layui-btn-sm">全选</button>
+                        <button type="submit" name="submit" value="sorting" class="layui-btn layui-btn-sm">保存排序</button>
+                        <button type="submit" name="submit" value="del" onclick="return del();" class="layui-btn layui-btn-sm">批量删除</button>
+                        <button type="submit" name="submit" value="status_1" class="layui-btn layui-btn-sm">状态开</button>
+                        <button type="submit" name="submit" value="status_0" class="layui-btn layui-btn-sm">状态关</button>
+                        <button type="submit" name="submit" value="istop_1" class="layui-btn layui-btn-sm">置顶开</button>
+                        <button type="submit" name="submit" value="istop_0" class="layui-btn layui-btn-sm">置顶关</button>
+                        <button type="submit" name="submit" value="isrecommend_1" class="layui-btn layui-btn-sm">推荐开</button>
+                        <button type="submit" name="submit" value="isrecommend_0" class="layui-btn layui-btn-sm">推荐关</button>
+                        <button type="submit" name="submit" value="isheadline_1" class="layui-btn layui-btn-sm">头条开</button>
+                        <button type="submit" name="submit" value="isheadline_0" class="layui-btn layui-btn-sm">头条关</button>
+                        <button type="submit" name="submit" value="zt_0" class="layui-btn layui-btn-sm">移除内容</button>
+                    </div>
+                    <div class="page">{$pbarr.pagebox}</div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {/if}
+</div>
+{include file='common/foot.html'}
+<script type="text/javascript">
+function del(tip) {
+    if (tip != 1) {
+        var list = document.getElementsByName('list[]');
+        for (var i = 0; i < list.length; i++) {
+            var c = list[i].checked;
+            if (c) {
+                break;
+            }
+        }
+        if (!c) {
+            alert('请选择要删除的项目！');
+            return false;
+        }
+        tip = '确定要删除选中的项目吗？';
+    } else {
+        tip = '确定要删除这条内容吗？';
+    }
+    event.returnValue = confirm(tip);
+}
+
+function selectall() {
+    var list = document.getElementsByName('list[]');
+    var c = list[0].checked;
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+</script>

@@ -1,0 +1,29 @@
+<?php
+$cs=$_SERVER["QUERY_STRING"];
+$cs=cleanstr($cs);
+$cs=explode('&',$cs);
+$cs=$cs[0];
+$cs=explode('=',$cs);
+$cs=$cs[0];
+$cs=explode('?',$cs);
+$cs=$cs[0];
+$path=explode('/',$cs);
+global $scode,$name,$page,$seotitle,$keywords,$description,$filename;
+$scode=$path[0];
+$arr=explode('_',$scode);
+$scode=$arr[0];
+$page=$arr[1];
+!$page?$page=1:'';
+if(!is_numeric($scode)){
+	$sql="filename='$scode'";
+}else{
+	$sql="scode='$scode'";
+}
+$x=$dsql->one("select scode,name,title,keywords,description,filename from ay_content_sort where $sql limit 1",1);
+$scode=$x[scode];
+$name=$x[name];
+$seotitle=$x[title];
+$keywords=$x[keywords];
+$description=$x[description];
+$filename=$x[filename];
+?>

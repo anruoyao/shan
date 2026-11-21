@@ -1,0 +1,433 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li><a href="?p=/cj/index">采集管理</a></li>
+            {if([$pbarr.content])}
+            <li class="layui-this"><a href="?p=/cj/add/content/697" class="red">新增采集规则</a></li>
+            {else}
+            <li class="{if([$pbarr.book])}layui-this{/if}"><a href="?p=/cj/add/book/697" class="red">新增小说规则</a></li>
+            <li class="{if([$pbarr.chapter])}layui-this{/if}"><a href="?p=/cj/add/chapter/697" class="red">新增章节规则</a></li>
+            {/if}
+        </ul>
+        <div class="layui-tab-content">
+            {if([$pbarr.book])}
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/cj/add/book/697" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">栏目规则</li>
+                            <li>书页规则</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">规则名称 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="rule_697code_com" required lay-verify="required" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">发布栏目</label>
+                                    <div class="layui-input-block">
+                                        <select name="scode">
+                                            <option value="">请选择栏目</option>
+                                            {$pbarr.navxxx}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">匹配网址 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <textarea name="url" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">起始 / 终止</label>
+                                    <div class="layui-input-inline" style="width:100px;">
+                                        <input type="text" name="num1" value="1" class="layui-input">
+                                    </div>
+                                    <div class="layui-input-inline" style="width:auto;line-height:38px;"> - </div>
+                                    <div class="layui-input-inline" style="width:100px;">
+                                        <input type="text" name="num2" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">匹配规则 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-inline" style="width:300px;">
+                                        <textarea name="urlrep1" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                    <div class="layui-input-inline" style="width:auto;line-height:100px;"> - </div>
+                                    <div class="layui-input-inline" style="width:300px;">
+                                        <textarea name="urlrep2" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">必须包含</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="urlyes" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">不能包含</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="urlno" value="" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">书页网址</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="testurl" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">章节列表 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="chapterurl" value="" placeholder="填写 “697code.com” 代表与书页同网址" required lay-verify="required" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">章节列表 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="chapterurlrep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">书名 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="title" value="" required lay-verify="required" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">书名 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="titlerep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">作者</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="author" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">作者 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="authorrep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">分类名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="name" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">分类名称 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="namerep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">简介</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="description" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">简介 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="descriptionrep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">缩略图</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="ico" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">缩略图 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="icorep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">状态</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="subtitle" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">状态 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="subtitlerep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">字数</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="subscode" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">字数 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="subscoderep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            {fun=get_btn_back()}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {/if}
+            {if([$pbarr.chapter])}
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/cj/add/chapter/697" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">章节列表规则</li>
+                            <li>章节内容规则</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">规则名称 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="rule_697code_com" required lay-verify="required" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">匹配网址 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <textarea name="url" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">匹配规则 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-inline" style="width:300px;">
+                                        <textarea name="urlrep1" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                    <div class="layui-input-inline" style="width:auto;line-height:100px;"> - </div>
+                                    <div class="layui-input-inline" style="width:300px;">
+                                        <textarea name="urlrep2" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">必须包含</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="urlyes" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">不能包含</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="urlno" value="" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">章节网址</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="testurl" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">章节名称 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="title" value="" required lay-verify="required" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">章节名称 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="titlerep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">章节内容 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="content" value="" required lay-verify="required" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">章节内容 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="contentrep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            {fun=get_btn_back()}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {/if}
+            {if([$pbarr.content])}
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/cj/add/content/697" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">栏目规则</li>
+                            <li>内容规则</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">规则名称 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="rule_697code_com" required lay-verify="required" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">发布栏目 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <select name="scode" required lay-verify="required">
+                                            <option value="">请选择栏目</option>
+                                            {$pbarr.navxxx}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">匹配网址 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <textarea name="url" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">起始 / 终止</label>
+                                    <div class="layui-input-inline" style="width:100px;">
+                                        <input type="text" name="num1" value="1" class="layui-input">
+                                    </div>
+                                    <div class="layui-input-inline" style="width:auto;line-height:38px;"> - </div>
+                                    <div class="layui-input-inline" style="width:100px;">
+                                        <input type="text" name="num2" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">匹配规则 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-inline" style="width:300px;">
+                                        <textarea name="urlrep1" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                    <div class="layui-input-inline" style="width:auto;line-height:100px;"> - </div>
+                                    <div class="layui-input-inline" style="width:300px;">
+                                        <textarea name="urlrep2" required lay-verify="required" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">必须包含</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="urlyes" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">不能包含</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="urlno" value="" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">内容网址</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="testurl" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">标题 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="title" value="" required lay-verify="required" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">标题 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="titlerep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">内容 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="content" value="" required lay-verify="required" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">内容 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="contentrep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">作者</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="author" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">作者 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="authorrep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">简介</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="description" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">简介 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="descriptionrep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">缩略图</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="ico" value="" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">缩略图 .. 匹配</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="icorep" class="layui-textarea" style="min-height:69.7px"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            {fun=get_btn_back()}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

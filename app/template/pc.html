@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit" />
+	<meta name="force-rendering" content="webkit" />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge" />
+	<meta name="applicable-device" content="pc" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title>app下载-<?php echo $sitetitle;?></title>
+	<meta name="keywords" content="app,app下载,app免费下载,<?php echo $sitetitle;?>app" />
+	<meta name="description" content="<?php echo $sitetitle;?>免费提供app下载！" />
+	<base href="<?php echo $pcbase;?>" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="app/css/pc.css" />
+</head>
+<body>
+	<?php echo $noapp;?>
+	<div class="navbox">
+		<div class="box">
+			<a href="./"><img src="template/tpl/image/logo.png" /></a>
+			<?php
+			global $dsql;$dd=$dsql->all("select scode,name from ay_content_sort where status=1 and pcode=0 order by sorting asc,id asc",1);
+			foreach($dd as $xx)
+		{
+			$id=$xx[scode];
+			$name=$xx[name];
+			$url=pbcode('category',$id);
+			$xxx.='<a href="'.$url.'" title="'.$name.'" target="_blank">'.$name.'</a>';
+			}
+			echo $xxx;
+			$xxx='';
+			?>
+		</div>
+	</div>
+	<div class="yw-page yw-page-app">
+		<div class="yw-header jsHeader">
+			<div class="yw-constr app-constr">
+				<div class="yw-hd-slide-x">
+					<div class="yw-hd-slide-con app-yhsc">
+						<h2 class="yw-hd-slide-h app-yhsh yw-font">海量小说 自在阅读</h2>
+						<p class="yw-hd-slide-p app-yhsp">网文汇集，各种类型的热门小说</p>
+						<p class="yw-hd-slide-p app-yhsp">电脑站、手机站、app，多种终端无广告阅读</p>
+						<p class="yw-hd-slide-p app-yhsp">可看书，可听书，全自动采集更新</p>
+						<div class="yw-hd-app-dld">
+							<a href="./" class="yw-hd-app-btn" target="_blank">在线阅读</a>
+							<a href="app/?my=down" class="yw-hd-app-btn" target="_blank"><i class="icon-android"></i>安卓版下载</a>
+							<div class="qr-box" onmouseover="this.className='qr-box cur'" onmouseout="this.className='qr-box'">
+								<div class="load-qr-pic qr-qd-pic jsPicQr">
+									<img src="<?php echo $pcbaseall.'core/qrcode.php?string='.$pcbaseall.'app/?my=down';?>">
+								</div>
+								<a class="qq-qr-icon jsLoadQr"><i class="icon-qr"></i></a>
+							</div>
+						</div>
+						<div class="yw-app-mb-pic"><img src="app/image/dt.png" class="yw-app-mb"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="yw-app-shine">
+		<div class="yw-constr app-constr">
+			<ul class="yw-app-shine-ul yw-app-shine-qd jsAppUl">
+				<p class="yw-data-desc mb-app"><?php echo $sitetitle;?>免费提供APP下载，无广告绿色阅读，为广大书友提供不一样的阅读体验，也为作者朋友的书籍推广略尽绵薄之力。书友们在体验阅读的同时，希望能够对作者和正版书籍的支持！绿色上网，尊重版权，让我们一起为小说界的健康发展加油！</p>
+				<i class="yw-data-line jsSlideApp"></i>
+				<li class="yw-app-shine-li yw-slide-s"> <i class="yw-app-qd-p1 yw-app-p-icon"></i>
+					<h4 class="yw-app-shine-t">定制书架 专享首发</h4>
+					<p class="yw-app-shine-p">自定义你的私人书架，更新秒速同步，私人快速，让阅读更舒适。</p>
+				</li>
+				<li class="yw-app-shine-li yw-slide-m"> <i class="yw-app-qd-p2 yw-app-p-icon"></i>
+					<h4 class="yw-app-shine-t">作家齐聚 书友互动</h4>
+					<p class="yw-app-shine-p">作家通过红包、书评走近读者，书友通过书单、本章说让分享更快乐。</p>
+				</li>
+				<li class="yw-app-shine-li yw-slide-l"> <i class="yw-app-qd-p3 yw-app-p-icon"></i>
+					<h4 class="yw-app-shine-t">品质推荐 云端同步</h4>
+					<p class="yw-app-shine-p">数百位编辑文心雕龙，每日导读个性定制，多端同步读书进度，让读书更轻松。</p>
+				</li> <span class="justify_fix"></span>
+			</ul>
+		</div>
+	</div>
+	</div>
+	<div class="footerbox">
+		<?php
+		global $dsql;$x=$dsql->one("select description from ay_site where id=1 limit 1",1);
+		$description=$x['description'];
+		echo $description;
+		?>
+	</div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<div class="mark-box" id="mark-box">
+	<div class="bg" onclick="closeMark()"></div>
+	<div class="Mark-body" id="Mark-body">
+		<div class="close" onclick="closeMark()">X</div>
+		<div class="d-title" id="d-title"></div>
+		<div class="mark-body" id="mark-body"></div>
+		<div class="bg"></div>
+	</div>
+</div>
+<script type="text/javascript">
+var imgs = document.querySelectorAll('img');
+if(typeof(IntersectionObserver)=='function'){
+    var observer = new IntersectionObserver(imgsrc);
+    for (var i = 0; i < imgs.length; ++i) {
+        observer.observe(imgs[i]);
+    }
+}else{
+    for(var i=0;i<imgs.length;i++){
+        var crs=imgs[i].getAttribute('crs');
+        if(!crs){
+            continue;
+        }
+        imgs[i].src=crs;
+    }
+}
+if($id('header')){
+	var Header=$id('header').offsetHeight;
+} else{
+	var Header=0;
+}
+if($id('Nav')){
+	var Nav=$id('Nav').offsetHeight;
+} else{
+	var Nav=0;
+}
+if($id('Float') && $id('LR')){
+	var className=$id('Float').className;
+	var Float2Top=$id('Float').offsetTop;
+	var Float=$id('Float').offsetHeight;
+	var LRTop=$id('LR').offsetTop;
+	var FatherBottom2Top=LRTop + $id('LR').offsetHeight;
+	setTimeout(function(){
+		FatherBottom2Top=LRTop + $id('LR').offsetHeight;
+	},3000);
+}
+</script>
+<?php
+$sh_bottomad = axd(49);
+if (trim($sh_bottomad)) {
+	echo '<div class="sh-footer-ad"><div class="sh-container"><center>' . $sh_bottomad . '</center></div></div>';
+}
+?>
+<footer class="sh-footer" id="footer">
+	<div class="sh-container">
+		<div class="sh-footer__main">
+			<div class="sh-footer__brand">
+				<a href="./"><img src="template/tpl/image/<?php echo replogo();?>" alt="<?php echo sh_e($sitetitle);?>" /></a>
+				<p><?php echo $sitecopyright ? strip_tags($sitecopyright) : '山海书盟 · 网文自留地，作家避风港。';?></p>
+			</div>
+			<div class="sh-footer__cols">
+				<div class="sh-footer__col">
+					<h4>发现</h4>
+					<a href="<?php echo pbcode('shuku');?>">全站书库</a>
+					<a href="/paihang/">排行榜</a>
+					<a href="<?php echo pbcode('quanben');?>">完本小说</a>
+					<a href="<?php echo pbcode('tags');?>">标签索引</a>
+				</div>
+				<div class="sh-footer__col">
+					<h4>分类</h4>
+					<?php
+					$sh_footer_cats = sh_cat_map();
+					$sh_footer_i = 0;
+					foreach ($sh_footer_cats as $sh_fc) {
+						if ($sh_footer_i >= 6) break;
+						echo '<a href="' . pbcode('category', $sh_fc['scode']) . '">' . sh_e($sh_fc['name']) . '</a>';
+						$sh_footer_i++;
+					}
+					?>
+				</div>
+				<div class="sh-footer__col">
+					<h4>关于</h4>
+					<a href="<?php echo pbcode('member','yc');?>">作者专区</a>
+					<a href="wap/" target="_blank">手机版</a>
+					<a href="sitemap.xml" target="_blank">XML 地图</a>
+					<a href="<?php echo pbcode('member','register');?>">成为作者</a>
+				</div>
+			</div>
+		</div>
+		<div class="sh-footer__bottom">
+			<p><?php echo strip_tags($siteicp);?> <?php echo $sitestatistical;?></p>
+			<p>
+				<a href="sitemap.xml" title="XML地图" target="_blank">XML地图</a>
+				<a href="<?php echo pbcode('tags');?>" title="Tags标签" target="_blank">Tags标签</a>
+				<a class="app<?php echo $appdown;?>" href="app/" title="APP客户端下载" target="_blank">APP客户端下载</a>
+			</p>
+		</div>
+	</div>
+</footer>
+<a href="javascript:window.scrollTo(0,0);" class="pageScroll" id="pageScroll">Top</a>
+<div class="TIP" id="TIP"></div>
+<div class="MAK" id="MAK"></div>
+<div id="loginData" style="display:none;">
+	<script>
+	document.write("<script src='hi.login.php?my=pc&t=" + (new Date).getTime() + "'></s" + "cript>")
+	</script>
+</div>
+<script type="text/javascript">
+$id('loginInfo') ? $id('loginInfo').innerHTML=$id('loginData').innerHTML : '';
+$id('loginData').innerHTML='';
+<?php
+$sh_fp = $this->getVar('pbarr');
+$sh_fp_id = isset($sh_fp['id']) ? intval($sh_fp['id']) : 0;
+$sh_fp_xid = isset($sh_fp['xid']) ? intval($sh_fp['xid']) : 0;
+$sh_fp_lastid = isset($sh_fp['lastid']) ? intval($sh_fp['lastid']) : 0;
+?>
+var temp='<?php echo str_replace(array("tpl",".html"),"",$template);?>';
+var BookID='<?php echo $sh_fp_id;?>';
+var ArcID='<?php echo $sh_fp_xid;?>';
+var NewID='<?php echo $sh_fp_lastid;?>';
+var newCookie=BookID + '-' + ArcID;
+if(BookID && temp != 'category'){
+	var Readed=getcookie('Readed');
+	if(Readed){
+		Readed=',' + Readed + ',';
+		if(Readed.indexOf(BookID + '-')>-1){
+			var arr=Readed.split(BookID + '-');
+			var x=arr[1];
+			var arr=x.split(',');
+			x=arr[0];
+			var x=BookID + '-' + x;
+			Readed=Readed.replace(x + ',','');
+			newCookie=x;
+		}
+		Readed=Readed.substring(0,Readed.length - 1);
+		Readed=newCookie + Readed;
+		setcookie('Readed',Readed,30);
+	} else{
+		setcookie('Readed',newCookie,30);
+	}
+}
+</script>
+<?php echo axd(56);?>
+<script type="text/javascript" src="template/tpl/js/reader.js?v=20261121b"></script>
+</body>
+</html>

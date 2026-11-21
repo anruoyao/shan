@@ -1,0 +1,19 @@
+<?php define('MEMBER_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">个人中心</p>
+        <h1 class="aw-title">评论互动</h1>
+        <p class="aw-subtitle">查看我对评论的回复。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','cmt');?>">我的评论</a>
+        <a class="aw-btn aw-btn--primary" href="<?php echo pbcode('member','re');?>">评论回复</a>
+    </div>
+</div>
+<section class="aw-card">
+    <div class="mbox_re" id="biglist">
+        <?php echo biglist();?>
+    </div>
+</section>
+{include file=../../../include/member/pc/footer.html}

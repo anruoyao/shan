@@ -1,0 +1,38 @@
+<?php require_once(dirname(__FILE__).'/header.html');?>
+<div class="Layout" style="margin-top:15px">
+	<div class="Box4Con">
+		<div class="aaabox">
+			<div class="loc">
+				<a href="./">首页</a>
+				&gt;
+				<a href="<?php echo pbcode('zt');?>">专题库</a>
+				<?php
+				if($name){
+					echo '&gt;';
+					echo '<a href="'.pbcode('zt',$scode).'">'.$name.'</a>';
+				}
+				?>
+			</div>
+			<?php
+			if($name){
+				$x=ztlist();
+				$arr=explode('{x}',$x);
+				$x01=$arr[0];
+				$x02=$arr[1];
+				$x01=str_replace(' target="_blank"','',$x01);
+				$x='
+				<ul class="aaalist">'.$x01.'</ul>
+				<div class="aaapage">'.$x02.'</div>';
+				echo $x;
+			}else{
+				$x='<div class="ztbox">'.ztbox().'</div>';
+				echo $x;
+			}
+			?>
+		</div>
+	</div>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">
+$id('fnav').style.display='block';
+</script>

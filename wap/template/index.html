@@ -1,0 +1,468 @@
+<?php require_once(dirname(__FILE__).'/header_index.html');?>
+<div class="content">
+    <div id="gallery" class="gallery" w="1200" h="311">
+        <div id="D1pic1" class="fPic">
+            <?php
+			function xxx_Scroll_(){
+				global $dsql;
+				$dd=$dsql->all("select adbody from ay_ad where adstatus='1' and id=103 limit 1",1,usedbname());
+				foreach($dd as $xx)
+				{
+					$xxx=$xx[adbody];
+					$ii++;
+					if($ii==1){
+						preg_match_all('/src=\"(.*?)\"/',$xxx,$arr);
+						$img=$arr[1][0];
+						if($img){
+							if(strstr($img,'http')){
+								$x=explode('//',$img);
+								$x=$x[1];
+								$img=strstr($x,'/');
+								$img=ltrim($img,'/');
+							}else{
+								$img=ltrim($img,'/');
+							}
+							if($img){
+								$img=ROOT_PATH.'/wap/'.$img;
+								if(file_exists($img)){
+								    $info = getimagesize($img);
+								    $width  = $info[0];
+								    $height = $info[1];
+								}
+							}
+						}
+					}
+				}
+				if($xxx){
+					$width=1079;
+					$height=640;
+					$xxx=str_replace('<a','<div class="fcon"><a',$xxx);
+					$xxx=str_replace('</a>','</a></div>',$xxx);
+					$xxx.='
+					<script>
+						document.getElementById("gallery").setAttribute("w","'.$width.'");
+						document.getElementById("gallery").setAttribute("h","'.$height.'");
+					</script>';
+				}else{
+					$xxx='<style>.huan1{display:none}</style>';
+				}
+				return $xxx;
+			}
+        	echo xxx_Scroll_();
+	        ?>
+        </div>
+        <div class="fbg">
+            <div class="D1fBt" id="D1fBt"></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="style/js/koala.min.1.5.js"></script>
+    <script type="text/javascript">
+    var x = document.getElementById("D1pic1").getElementsByTagName('div');
+    var len = x.length;
+    if (len) {
+        var w_ = document.getElementById("gallery").offsetWidth;
+        var w = document.getElementById("gallery").getAttribute('w');
+        var h = document.getElementById("gallery").getAttribute('h');
+        var h_ = w_ * h / w;
+        document.getElementById("gallery").style.height = h_ + 'px';
+        var btn = '';
+        for (i = 1; i <= len; i++) {
+            if (i == 1) {
+                var x = ' class="current"';
+            } else {
+                var x = '';
+            }
+            btn += '<a href="javascript:" hidegallery="true" target="_self"' + x + '><i>' + i + '</i></a>';
+        }
+        document.getElementById("D1fBt").innerHTML = btn;
+        Qfast.add('widgets', { path: "style/js/terminator2.2.min.js", type: "js", requires: ['fx'] });
+        Qfast(false, 'widgets', function() {
+            K.tabs({
+                id: 'gallery', //焦点图包裹id
+                conId: "D1pic1", //** 大图域包裹id
+                tabId: "D1fBt",
+                tabTn: "a",
+                conCn: '.fcon', //** 大图域配置class
+                auto: 1, //自动播放 1或0
+                effect: 'fxspeed', //效果配置
+                eType: 'click', //** 鼠标事件
+                interval: 2000 //** 停顿时间
+            })
+        })
+    }
+    </script>
+    <div class="home-nav">
+        <a href="./" class="guide-nav-a">
+            <i class="icon icon-home"></i>
+            <h4 class="guide-nav-h">首 页</h4>
+        </a>
+        <a href="<?php echo pbcode('shuku');?>" class="guide-nav-a">
+            <i class="icon icon-sort"></i>
+            <h4 class="guide-nav-h">分 类</h4>
+        </a>
+        <a href="<?php echo pbcode('quanben');?>" class="guide-nav-a">
+            <i class="icon icon-end"></i>
+            <h4 class="guide-nav-h">全 本</h4>
+        </a>
+        <a href="<?php echo pbcode('paihang');?>" class="guide-nav-a">
+            <i class="icon icon-rank"></i>
+            <h4 class="guide-nav-h">排 行</h4>
+        </a>
+        <a href="<?php echo pbcode('member','look','','all');?>" class="guide-nav-a">
+            <i class="icon icon icon-newbook"></i>
+            <h4 class="guide-nav-h">足 迹</h4>
+        </a>
+    </div>
+    <div class="money">
+        <center>
+            <?php echo axd(24);?>
+        </center>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">畅销精品</h3>
+            </div>
+            <div class="novel-header-r">
+                <a href="<?php echo pbcode('shuku');?>">更多</a>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <?php echo SByou_NeT_TJ(8);?>
+            </ol>
+        </div>
+    </div>
+    <?php
+	if($memberadd=='1'){
+	echo '
+	<div class="money" style="margin-top:0.75rem;">
+		<center>
+			<a href="'.pbcode('member','yc','','all').'" style="float:left;width:100%;">
+				<img src="'.$pcbaseall.'include/member/image/yc_wap.jpg" style="float:left;width:100%;" />
+			</a>
+		</center>
+	</div>';
+	}
+	?>
+    <div class="money">
+        <center>
+            <?php echo axd(25);?>
+        </center>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">人气风向</h3>
+            </div>
+        </div>
+        <?php
+        $list='';
+        $info='';
+        $ii=0;
+		$dd=$dsql->all("select id from ay_content force index(idx_isheadline) where status=1 and isheadline=1 order by id desc limit 5",1);
+		foreach($dd as $xx)
+		{
+			$ii++;
+			$id=$xx[id];
+			$xx=$dsql->one("select title,ico,description,author,scode,uid from ay_content where id=$id limit 1",1);
+			$title=$xx[title];
+			$ico=$xx[ico];
+			$ico=ico($ico,1);
+			$description=$xx[description];
+			$author=$xx[author];
+			$scode=$xx[scode];
+			$uid=$xx[uid];
+			$x=strip_tags($description);
+			$description=str_replace(array("	"," ","　"),"",$x);
+			$url=pbcode('book',$id);
+			$x=$dsql->one("select name from ay_content_sort where scode=$scode limit 1",1);
+			$name=$x[name];
+			if($author){
+				if($uid){
+					$x=$dsql->one("select headpic from ay_member where id=$uid limit 1",1);
+					$headpic=$x[headpic];
+					$headpic=ico($headpic,1);
+				}else{
+					$x=rand(1,100);
+					$headpic=$pcbaseall."uploads/empty/".$x.".gif";
+				}
+				$author='<div><img src="'.$headpic.'">'.$author.'</div>';
+			}
+			$list.='
+            <div class="swiper_item_zbtj active'.$ii.'">
+                <a href="'.$url.'" title="'.$title.'" class="slide-image">
+                    <img src="'.$ico.'">
+                </a>
+            </div>';
+            if($ii==1){
+            	$c=' cur';
+            }else{
+            	$c='';
+            }
+            $info.='
+            <div class="box'.$ii.$c.'">
+            	<div><span>['.$name.']</span><a href="'.$url.'" title="'.$title.'">'.$title.'</a></div>
+            	'.$author.'
+            	<div>'.$description.'</div>
+            </div>';
+		}
+        ?>
+        <div class="uni-swiper-wrapper">
+            <div class="uni-swiper-slides">
+                <div class="uni-swiper-slide-frame">
+                	<?php echo $list;?>
+                </div>
+            </div>
+        </div>
+        <div class="infobox">
+        	<?php echo $info;?>
+        </div>
+        <script>
+        initZbtjSwiper();
+        </script>
+    </div>
+    <div class="novel hrlz qljz bjlj lastlimr10">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">编辑力荐</h3>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <?php
+				function bjlj($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(bjlj) where bjlj=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description,author,scode,subtitle from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$description=$xx[description];
+						$author=$xx[author];
+						$scode=$xx[scode];
+						$subtitle=$xx[subtitle];
+						$x=strip_tags($description);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$x=$dsql->one("select name from ay_content_sort where scode=$scode limit 1",1);
+						$name=$x[name];
+						if(!$subtitle){
+							$subtitle='连载';
+						}else{
+							$subtitle='完结';
+						}
+						$xxx.='
+						<li class="novel-slide-li">
+							<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+								<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+								<div class="box_r">
+									<div class="novel-slide-caption">'.$title.'</div>
+									<p class="novel-slide-author novel-slide-author_"><span class="gray">'.$author.'</span></p>
+									<p class="novel-slide-author novel-slide-author_ op_"><font>'.$name.'</font><font>'.$subtitle.'</font></p>
+								</div>
+								<p class="novel-slide-author des_"><span class="gray">'.$description.'</span></p>
+							</a>
+						</li>';
+					}
+					return $xxx;
+				}
+				echo bjlj(100);
+				?>
+            </ol>
+        </div>
+    </div>
+    <div class="novel hrlz qljz lastlimr10">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">热读精选</h3>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <li class="novel-slide-li">
+                    <?php
+				function rdjx($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(rdjx) where rdjx=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$ii++;
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description,author from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$x=$xx[description];
+						$author=$xx[author];
+						$x=strip_tags($x);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$xxx.='
+						<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+							<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+							<div class="box_r">
+								<div class="novel-slide-caption">'.$title.'</div>
+								<p class="novel-slide-author novel-slide-author_"><span class="gray">'.$author.'</span></p>
+								<p class="novel-slide-author"><span class="gray">'.$description.'</span></p>
+							</div>
+						</a>';
+						if($ii%2==0){
+							$xxx.='</li><li class="novel-slide-li">';
+						}
+					}
+					return $xxx;
+				}
+				echo rdjx(100);
+				?>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="novel hrlz lastlimr10">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">火热连载</h3>
+            </div>
+        </div>
+        <div class="novel-slide" style="margin-bottom: .75rem;">
+            <ol class="novel-slide-ol">
+                <?php
+				function hrlz($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(hrlz) where hrlz=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$x=$xx[description];
+						$x=strip_tags($x);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$xxx.='
+						<li class="novel-slide-li">
+							<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+								<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+								<div class="novel-slide-caption">'.$title.'</div>
+								<p class="novel-slide-author"><span class="gray">'.$description.'</span></p>
+							</a>
+						</li>';
+					}
+					return $xxx;
+				}
+				echo hrlz(100);
+				?>
+            </ol>
+        </div>
+    </div>
+    <div class="novel hrlz qljz">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">潜力佳作</h3>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <li class="novel-slide-li">
+                    <?php
+				function qljz($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(qljz) where qljz=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$ii++;
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description,author from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$x=$xx[description];
+						$author=$xx[author];
+						$x=strip_tags($x);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$xxx.='
+						<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+							<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+							<div class="box_r">
+								<div class="novel-slide-caption">'.$title.'</div>
+								<p class="novel-slide-author novel-slide-author_"><span class="gray">'.$author.'</span></p>
+								<p class="novel-slide-author"><span class="gray">'.$description.'</span></p>
+							</div>
+						</a>';
+						if($ii%2==0){
+							$xxx.='</li><li class="novel-slide-li">';
+						}
+					}
+					return $xxx;
+				}
+				echo qljz(100);
+				?>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="money">
+        <center>
+            <?php echo axd(26);?>
+        </center>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title" id="classic-element">分类强推</h3> <span class="novel-title-desc">热门好书抢先看</span>
+            </div>
+        </div>
+        <?php
+		$arr=array();
+		$xxx='';
+		global $dsql;$dd=$dsql->all("select scode,name from ay_content_sort where status=1 order by sorting asc,id asc",1);
+		foreach($dd as $xx)
+		{
+		$idCur=$xx[scode];
+		$nameCur=$xx[name];
+		$arr[ $idCur ]=$nameCur;
+		}
+		foreach ($arr as $key => $value){
+		$ii++;
+		$xxx.=CatHead($ii,$arr);
+		$xxx.='
+		<div class="novel-slide novel-category" id="tab'.$ii.'">
+			<ol class="novel-slide-ol active">'.SByou_NeT_Cat($key,$value,4).'</ol>
+		</div>';
+		}
+		echo $xxx;
+		?>
+    </div>
+    <div class="money">
+        <center>
+            <?php echo axd(27);?>
+        </center>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">最近更新</h3>
+            </div>
+            <div class="novel-header-r"><a href="<?php echo pbcode('shuku');?>" class="novel-header-btn">更多</a></div>
+        </div>
+        <ol class="book-ol book-ol-normal">
+            <?php echo SByou_NeT_NewArt(10);?>
+        </ol>
+    </div>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">
+var t01 = parseInt('<?php echo time()+$MAKE_HTML_TIME;?>');
+var t02 = new Date().getTime();
+t02 = Math.round(t02 / 1000);
+if (t02 > t01) {
+    mk(0);
+}
+</script>

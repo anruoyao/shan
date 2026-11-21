@@ -1,0 +1,10 @@
+#匹配规则(697code.com)
+<div id="content">[内容]</div>
+#过滤规则
+<script((.|\n)+?)</script>
+<div.+?>
+</div>
+<a.+?</a>
+&nbsp;
+http.+?//
+<!--.*?-->

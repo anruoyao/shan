@@ -1,0 +1,61 @@
+<?php require_once(dirname(__FILE__).'/header_inner.html');?>
+<div class="novel">
+	<div class="type-list">
+		<?php echo shukucat();?>
+	</div>
+</div>
+<div class="novel vipbox">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title"><img style="position:relative;top:2px" src="style/image/vip.png"> VIP小说</h3>
+		</div>
+	</div>
+	<div class="novel-slide">
+		<ol class="novel-slide-ol">
+			<?php echo vipbox(8);?>
+		</ol>
+	</div>
+</div>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">热门推荐</h3>
+		</div>
+	</div>
+	<div class="novel-slide">
+		<ol class="novel-slide-ol">
+			<?php echo SByou_NeT_TJ(8);?>
+		</ol>
+	</div>
+</div>
+<div class="money">
+	<center>
+		<?php echo axd(29);?>
+	</center>
+</div>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title"><?php echo str_replace('・','',$name);?></h3>
+			<span class="novel-title-desc">共<font id="total">X</font>本</span>
+		</div>
+	</div>
+	<?php echo book4list($scode,$page);?>
+</div>
+<style type="text/css">
+#fnav{
+	display: none
+}
+</style>
+<?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">
+fnav(2);
+$id('fnav').style.display='block';
+var as='<?php echo $AUTO_STATIC;?>';
+var t01=parseInt('<?php echo time()+$MAKE_HTML_TIME;?>');
+var t02=new Date().getTime();
+t02=Math.round(t02/1000);
+if(t02>t01 && as!='0'){
+    mk('<?php echo $scode;?>','<?php echo $filename;?>');
+}
+</script>

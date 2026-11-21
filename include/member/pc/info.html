@@ -1,0 +1,194 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $xingming,$usermobile,$yh_ka,$yh_ming,$yh_hang,$wximg,$qq,$nickname,$author_bio,$idcard,$headpic;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Author Profile</p>
+        <h1 class="aw-title">作者资料</h1>
+        <p class="aw-subtitle">完善实名信息与收款方式，用于签约、稿费结算与编辑联系。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','yc');?>">返回作品列表</a>
+    </div>
+</div>
+
+<form class="aw-form-card" method="post" action="<?php echo pbcode('member','info');?>" enctype="multipart/form-data" onsubmit="return umo(this);">
+    <div class="aw-form-grid">
+        <div class="aw-field aw-field--full">
+            <div class="aw-subcard">
+                <div class="aw-subcard__title"><?php echo aw_icon('edit');?>作者信息</div>
+                <div class="aw-form-grid">
+                    <div class="aw-field">
+                        <label for="nickname">笔名 <span class="req">*</span></label>
+                        <input class="aw-input" type="text" name="nickname" id="nickname" value="<?php echo htmlspecialchars($nickname,ENT_QUOTES,'UTF-8');?>" required>
+                    </div>
+                    <div class="aw-field">
+                        <label>作者头像</label>
+                        <div class="aw-upload">
+                            <div class="aw-upload__preview aw-upload__preview--square">
+                                <img id="headpicimg" src="<?php echo $headpic;?>" onerror="this.src='include/member/image/empty.jpg'">
+                            </div>
+                            <div class="aw-upload__control">
+                                <input class="aw-input" type="text" id="headpicpath" value="" readonly="readonly" placeholder="尚未上传头像">
+                                <div class="aw-upload__buttons">
+                                    <label class="aw-btn aw-btn--ghost" for="headpicfile">上传头像</label>
+                                    <span class="aw-upload__hint">建议正方形图片，清晰度不低于 200×200</span>
+                                </div>
+                                <div class="aw-upload__control filebox">
+                                    <input type="file" name="headpic" id="headpicfile" onchange="headpicx(this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="aw-field aw-field--full">
+                        <label for="author_bio">作者简介</label>
+                        <textarea class="aw-textarea" name="author_bio" id="author_bio" rows="3" placeholder="向读者介绍你自己和你的创作"><?php echo htmlspecialchars($author_bio,ENT_QUOTES,'UTF-8');?></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="aw-field aw-field--full">
+            <div class="aw-subcard">
+                <div class="aw-subcard__title"><?php echo aw_icon('user');?>身份信息</div>
+                <div class="aw-form-grid">
+                    <div class="aw-field">
+                        <label for="xingming">真实姓名 <span class="req">*</span></label>
+                        <input class="aw-input" type="text" name="xingming" id="xingming" value="<?php echo $xingming;?>" required>
+                    </div>
+                    <div class="aw-field">
+                        <label for="idcard">身份证号 <span class="req">*</span></label>
+                        <input class="aw-input" type="text" name="idcard" id="idcard" value="<?php echo htmlspecialchars($idcard,ENT_QUOTES,'UTF-8');?>" placeholder="签约与稿费结算使用">
+                    </div>
+                    <div class="aw-field">
+                        <label for="usermobile">手机号 <span class="req">*</span></label>
+                        <input class="aw-input" type="text" name="usermobile" id="usermobile" value="<?php echo $usermobile;?>" required>
+                    </div>
+                    <div class="aw-field">
+                        <label for="qq">QQ</label>
+                        <input class="aw-input" type="text" name="qq" id="qq" value="<?php echo $qq;?>" placeholder="用于编辑联系与签约沟通">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="aw-field aw-field--full">
+            <div class="aw-subcard">
+                <div class="aw-subcard__title"><?php echo aw_icon('wallet');?>收款方式</div>
+                <p class="aw-help" style="margin-bottom:14px">两种收款方式，二选一：银行卡或微信收款码。</p>
+                <div class="aw-form-grid">
+                    <div class="aw-field aw-field--full">
+                        <label for="yh_ka">银行卡号</label>
+                        <input class="aw-input" type="text" name="yh_ka" id="yh_ka" value="<?php echo $yh_ka;?>" placeholder="请输入本人银行卡号">
+                    </div>
+                    <div class="aw-field">
+                        <label for="yh_ming">开户人姓名</label>
+                        <input class="aw-input" type="text" name="yh_ming" id="yh_ming" value="<?php echo $yh_ming;?>" placeholder="与真实姓名一致">
+                    </div>
+                    <div class="aw-field">
+                        <label for="yh_hang">开户行</label>
+                        <input class="aw-input" type="text" name="yh_hang" id="yh_hang" value="<?php echo $yh_hang;?>" placeholder="如：中国工商银行XX支行">
+                    </div>
+                </div>
+
+                <div class="aw-field aw-field--full" style="margin-top:18px">
+                    <label>微信收款码</label>
+                    <div class="aw-upload">
+                        <div class="aw-upload__preview aw-upload__preview--square">
+                            <img id="ycimg" src="<?php echo $wximg;?>" onerror="this.src='include/member/image/empty.jpg'">
+                        </div>
+                        <div class="aw-upload__control">
+                            <input class="aw-input" type="text" id="ycico2" value="<?php echo $wximg;?>" readonly="readonly" placeholder="尚未上传收款码">
+                            <div class="aw-upload__buttons">
+                                <label class="aw-btn aw-btn--ghost" for="ycico">上传收款码</label>
+                                <a class="aw-btn aw-btn--sm aw-btn--ghost" href="javascript:delimg()">删除</a>
+                            </div>
+                            <span class="aw-upload__hint">请上传清晰的微信收款二维码图片</span>
+                            <div id="filebox" class="filebox">
+                                <input type="file" name="wximg" id="ycico" class="ycico" onchange="ycimgx(this)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="aw-form-actions">
+        <a class="aw-btn aw-btn--ghost" href="<?php echo pbcode('member','ucenter');?>">取消</a>
+        <button type="submit" class="aw-btn aw-btn--primary">保存资料</button>
+    </div>
+</form>
+
+<script>
+function delimg(){
+    $id('ycico2').value='';
+    $id('ycico').value='';
+    $id('ycimg').src='';
+}
+function headpicx(x){
+    var file=x.files[0];
+    if(!file){
+        return false;
+    }
+    if(!/image\/\w+/.test(file.type)){
+        alert('请上传一张图片~');
+        return false;
+    }
+    var reader=new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload=function(){
+        $id('headpicpath').value=x.value;
+        $id('headpicimg').src=this.result;
+    };
+}
+function umo(obj) {
+    var nickname = $id('nickname').value;
+    var idcard = $id('idcard').value;
+    var xingming = $id('xingming').value;
+    var usermobile = $id('usermobile').value;
+    var yh_ka = $id('yh_ka').value;
+    var yh_ming = $id('yh_ming').value;
+    var yh_hang = $id('yh_hang').value;
+    var wximg = $id('ycico2').value;
+    nickname = trim(nickname);
+    idcard = trim(idcard);
+    xingming = trim(xingming);
+    usermobile = trim(usermobile);
+    yh_ka = trim(yh_ka);
+    yh_ming = trim(yh_ming);
+    yh_hang = trim(yh_hang);
+    wximg = trim(wximg);
+    if (!nickname) {
+        $id('nickname').focus();
+        alert('请输入笔名！');
+        return false;
+    }
+    if (idcard && !/^(\d{15}|\d{17}[\dXx])$/.test(idcard)) {
+        $id('idcard').focus();
+        alert('身份证号格式不正确！');
+        return false;
+    }
+    if (!xingming) {
+        $id('xingming').focus();
+        alert('请输入真实姓名！');
+        return false;
+    }
+    if (usermobile) {
+        var x = ckp(usermobile);
+        if (!x) {
+            $id('usermobile').focus();
+            alert('请输入正确的手机号码！');
+            return false;
+        }
+    }
+    var yh = 0;
+    if (yh_ka && yh_ming && yh_hang) {
+        yh = 1;
+    }
+    if (!wximg && !yh) {
+        alert('请选择其中一种收款方式！');
+        return false;
+    }
+}
+</script>
+{include file=../../../include/member/pc/footer.html}

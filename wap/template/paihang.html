@@ -1,0 +1,57 @@
+<?php require_once(dirname(__FILE__).'/header_inner.html');?>
+<div class="home-nav">
+	<a href="./" class="guide-nav-a">
+		<i class="icon icon-home"></i>
+		<h4 class="guide-nav-h">首 页</h4>
+	</a>
+	<a href="<?php echo pbcode('shuku');?>" class="guide-nav-a">
+		<i class="icon icon-sort"></i>
+		<h4 class="guide-nav-h">分 类</h4>
+	</a>
+	<a href="<?php echo pbcode('quanben');?>" class="guide-nav-a">
+		<i class="icon icon-end"></i>
+		<h4 class="guide-nav-h">全 本</h4>
+	</a>
+	<a href="<?php echo pbcode('paihang');?>" class="guide-nav-a">
+		<i class="icon icon-rank"></i>
+		<h4 class="guide-nav-h">排 行</h4>
+	</a>
+	<a href="<?php echo pbcode('member','look','','all');?>" class="guide-nav-a">
+		<i class="icon icon icon-newbook"></i>
+		<h4 class="guide-nav-h">足 迹</h4>
+	</a>
+</div>
+<div class="novel tred">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">点击排行</h3><span> TOP 8</span>
+		</div>
+		<div class="novel-header-r"><a href="<?php echo pbcode('shuku');?>">更多</a></div>
+	</div>
+	<ol class="novel-text-list">
+		<?php echo paihang('visits',8);?>
+	</ol>
+</div>
+<div class="novel tred">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">收藏排行</h3><span> TOP 8</span>
+		</div>
+		<div class="novel-header-r"><a href="<?php echo pbcode('shuku');?>">更多</a></div>
+	</div>
+	<ol class="novel-text-list">
+		<?php echo paihang('fav',8);?>
+	</ol>
+</div>
+<div class="novel tred">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">本全排行</h3><span> TOP 8</span>
+		</div>
+		<div class="novel-header-r"><a href="<?php echo pbcode('shuku');?>">更多</a></div>
+	</div>
+	<ol class="novel-text-list">
+		<?php echo paihang('quanben',8);?>
+	</ol>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>

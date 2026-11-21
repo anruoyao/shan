@@ -1,0 +1,64 @@
+{include file='common/head.html'}
+<style>
+.ztbox{float:left;width:100%;margin-top:10px;overflow:hidden;}
+.ztbox label{float:left;margin-right:10px}
+.ztbox label:hover{color:red}
+.ztbox input{position:relative;top:2px;margin-right:5px}
+</style>
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">设置专题</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">
+                <a href="?p=/Sort/index"><i class="fa fa-home"></i>内容管理</a>&nbsp;&gt;&nbsp;设置专题
+            </div>
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/Sort/mod/xid/" method="post" lay-filter="sort">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <input type="hidden" name="ztset" value="1">
+                    <input type="hidden" name="go2url" value="{$go2url}">
+                    <div class="layui-tab">
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">内容ID</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="id_" required lay-verify="required" value="{$id_}" placeholder="内容ID" class="layui-input" readonly style="background:#f9f9f9;">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">设置专题 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        {$zt_select}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <a href="<?php echo base64_decode([$go2url]);?>" class="layui-btn layui-btn-primary">取 消</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}
+<script type="text/javascript">
+function selectall() {
+    var list = document.getElementsByName('list[]');
+    var c = list[0].checked;
+    for (var i = 0; i < list.length; i++) {
+        if (c) {
+            list[i].checked = '';
+        } else {
+            list[i].checked = 'checked';
+        }
+    }
+}
+</script>

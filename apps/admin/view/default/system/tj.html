@@ -1,0 +1,64 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="t1">统计信息</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-col-xs12">
+                    <table class="layui-table table-two">
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="font-size:16px;color:#000">会员统计（注册会员）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>会员总数</th>
+                                <td>{$mem_total}</td>
+                            </tr>
+                            <tr>
+                                <th>会员在线</th>
+                                <td>共计：{$mem_online}，新会员：{$mem_online_new}，老会员：{$mem_online_old}</td>
+                            </tr>
+                            <tr>
+                                <th>今日新增会员</th>
+                                <td>{$mem_today}</td>
+                            </tr>
+                            <tr>
+                                <th>昨日新增会员</th>
+                                <td>{$mem_yesterday}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-col-xs12">
+                    <table class="layui-table table-two">
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="font-size:16px;color:#000">访客统计（注册会员+游客）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>访客总数</th>
+                                <td>总ip：{$all_ip}，总pv：{$all_pv}</td>
+                            </tr>
+                            <tr>
+                                <th>访客ip</th>
+                                <td>今日ip：{$today_ip}，昨日ip：{$yesterday_ip}</td>
+                            </tr>
+                            <tr>
+                                <th>访客pv</th>
+                                <td>今日pv：{$today_pv}，昨日pv：{$yesterday_pv}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}
+<script>

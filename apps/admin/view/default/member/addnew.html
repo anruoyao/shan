@@ -1,0 +1,58 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+        <li lay-id="t1"><a href="?p=/Member/index">会员列表</a></li>
+        <li lay-id="t2"><a href="?p=/Member/index#tab=t2">会员新增</a></li>
+        <li lay-id="t3"><a href="?p=/Member/author">作者管理</a></li>
+        <li lay-id="t4"><a href="?p=/Member/tx">提现管理</a></li>
+        <li class="layui-this" lay-id="t5"><a href="?p=/Member/addnew">批量新增账号</a></li>
+      </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/Member/addnew" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">新增数量</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="num" required lay-verify="required" class="layui-input" value="10">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">类型</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="ka" value="0" title="普通会员" checked="checked">
+                            <?php
+                            $xxx='';
+                            global $pay_ka;
+                            $arr=explode(',',$pay_ka);
+                            foreach($arr as $xx){
+                                $ii++;
+                                $x=explode('-',$xx);
+                                $n=$x[0];
+                                $d=$x[1];
+                                $j=$x[2];
+                                $xxx.='<input type="radio" name="ka" value="'.$ii.'" title="'.$n.'">';
+                            }
+                            echo $xxx;
+                            ?>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="1" title="是" checked="checked">
+                            <input type="radio" name="status" value="0" title="否">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

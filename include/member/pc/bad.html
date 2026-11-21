@@ -1,0 +1,18 @@
+<?php define('MEMBER_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">个人中心</p>
+        <h1 class="aw-title">不太喜欢</h1>
+        <p class="aw-subtitle">你标记为不太喜欢的作品。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','index');?>">返回个人中心</a>
+    </div>
+</div>
+<section class="aw-card">
+    <div id="biglist">
+        <?php echo biglist();?>
+    </div>
+</section>
+{include file=../../../include/member/pc/footer.html}

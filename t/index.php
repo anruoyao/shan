@@ -1,0 +1,51 @@
+<?php
+if(!isset($dsql)){
+	define('IS_INDEX',true);
+	define('URL_BIND','pbcode');
+	define('PB_FILE',$_SERVER['SCRIPT_FILENAME']);
+	require_once('../core/start.php');
+}
+$x=$_SERVER['HTTP_USER_AGENT'];
+$x=strtolower($x);
+if(strstr($x,'spider') || strstr($x,'robot')){
+	exit;
+}
+$qs=$_SERVER['QUERY_STRING'];
+$qs=strip_tags($qs);
+$qs=trim($qs);
+if(!$qs){
+	$x='参数不全！';
+	$url=$pcbaseall;
+	error($x,$url,3);
+}else{
+	$arr=explode('-',$qs);
+	$tgid=$arr[0];
+	$uid=$arr[1];
+	$md5_=$arr[2];
+	if($tgid && $uid && $md5_){
+		$md5=md5($tgid.$uid.$locoysafe);
+		if(is_numeric($tgid) && is_numeric($uid) && $md5==$md5_){
+			$x=$dsql->one("select link from ay_tg where id=$tgid limit 1",1);
+			$link=$x[link];
+			if(!$link){
+				$x='内容不存在！';
+				$url=$pcbaseall;
+				error($x,$url,3);
+			}else{
+				session('tg',$hash);
+				$x='正在跳转！';
+				$url=$link;
+				success($x,$url,1);
+			}
+		}else{
+			$x='参数有误！';
+			$url=$pcbaseall;
+			error($x,$url,3);
+		}
+	}else{
+		$x='参数不全！';
+		$url=$pcbaseall;
+		error($x,$url,3);
+	}
+}
+?>

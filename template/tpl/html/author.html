@@ -1,0 +1,110 @@
+{include file=header_inner.html}
+<?php
+$sh_pb = $this->getVar('pbarr');
+$sh_author = isset($sh_pb['author']) ? $sh_pb['author'] : '';
+$sh_page = isset($sh_pb['page']) ? intval($sh_pb['page']) : 1;
+if ($sh_page < 1) {
+    $sh_page = 1;
+}
+$sh_stats = sh_author_stats($sh_author);
+$sh_list = sh_author_books($sh_author, $sh_page, 24);
+$sh_hall = $sh_author === '' && ($_GET['view'] ?? '') === 'honors';
+$sh_author_directory_url = pbcode('author');
+$sh_hall_url = $sh_author_directory_url . (strpos($sh_author_directory_url, '?') === false ? '?' : '&') . 'view=honors';
+$sh_author_tpl = str_replace('999999', '%d', pbcode('author', $sh_author, 999999));
+?>
+<main class="sh-main">
+	<div class="sh-container">
+		<?php if ($sh_author === '') { ?>
+		<div class="sh-crumbs sh-page-crumb"><a href="./">首页</a><i>/</i><a href="<?php echo sh_e(pbcode('shuku'));?>">书城</a><i>/</i><span>作者</span></div>
+		<nav class="sh-booknav" aria-label="作者目录">
+			<a href="<?php echo sh_e($sh_author_directory_url);?>" <?php if (!$sh_hall) echo 'aria-current="page"';?>>作者列表</a>
+			<a href="<?php echo sh_e($sh_hall_url);?>" <?php if ($sh_hall) echo 'aria-current="page"';?>>作者荣誉</a>
+		</nav>
+		<section class="sh-section">
+			<div class="sh-section__head">
+				<div class="sh-section__title"><h1><?php echo $sh_hall ? '作者荣誉' : '全部作者';?></h1></div>
+			</div>
+			<?php if ($sh_hall) { ?>
+				<?php $sh_honored = sh_honored_authors(); ?>
+				<?php if (!$sh_honored) { echo sh_empty('暂无已公开的作者荣誉'); } ?>
+				<div class="sh-authordir">
+					<?php foreach ($sh_honored as $sh_honoree) { ?>
+					<a class="sh-authordir__item" href="<?php echo sh_e(sh_author_url($sh_honoree['author']));?>">
+						<span class="sh-authordir__avatar"><?php echo sh_author_avatar($sh_honoree['author'], $sh_honoree['headpic']);?></span>
+						<span class="sh-authordir__body"><strong><?php echo sh_e($sh_honoree['author']);?></strong><em><?php echo sh_e(implode(' · ', sh_author_honors($sh_honoree['author_honor'])));?></em></span>
+						<span class="sh-authordir__arrow">›</span>
+					</a>
+					<?php } ?>
+				</div>
+			<?php } else { echo sh_author_directory(60); } ?>
+		</section>
+		<?php } else { ?>
+		<section class="sh-pagehead sh-authorhead">
+			<div class="sh-pagehead__inner">
+				<div class="sh-crumbs"><a href="./">首页</a><i>/</i><a href="<?php echo pbcode('author');?>">作者</a><i>/</i><span><?php echo sh_e($sh_author);?></span></div>
+				<div class="sh-authorhead__row">
+					<div class="sh-authorhead__avatar"><?php echo sh_author_avatar($sh_author, $sh_stats['headpic']);?></div>
+					<div class="sh-authorhead__info">
+						<h1><?php echo sh_e($sh_author);?><span class="sh-authorhead__badge">作者</span></h1>
+						<?php if ($sh_stats['title'] || $sh_stats['honors']) { ?>
+						<ul class="sh-authorhonors" aria-label="作者称号">
+							<?php if ($sh_stats['title']) { ?><li><?php echo sh_e($sh_stats['title']);?></li><?php } ?>
+							<?php foreach ($sh_stats['honors'] as $sh_honor) { ?><li><?php echo sh_e($sh_honor);?></li><?php } ?>
+						</ul>
+						<?php } ?>
+						<?php if ($sh_stats['bio'] !== '') { ?><p class="sh-authorbio"><?php echo sh_e($sh_stats['bio']);?></p><?php } ?>
+						<div class="sh-pagehead__stats">
+							<span><b><?php echo sh_num($sh_stats['count']);?></b>部作品</span>
+							<span><b><?php echo sh_num($sh_stats['words']);?></b>累计字数</span>
+							<span><b><?php echo $sh_stats['last'] ? date('m-d', strtotime($sh_stats['last'])) : '-';?></b>最近更新</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="sh-layout">
+			<div>
+				<div class="sh-section__head" style="margin-top:30px">
+					<div class="sh-section__title"><h2>全部作品</h2><p><?php echo $sh_list['total'];?> 部</p></div>
+				</div>
+				<div class="sh-books">
+					<?php
+					if (!$sh_list['rows']) {
+						echo sh_empty('这位作者还没有发布作品');
+					}
+					foreach ($sh_list['rows'] as $sh_b) {
+						echo sh_book_card($sh_b);
+					}
+					?>
+				</div>
+				<?php echo sh_pagination($sh_author_tpl, $sh_list['page'], $sh_list['pages'], $sh_list['total']);?>
+			</div>
+			<aside class="sh-side">
+				<div class="sh-sidecard">
+					<div class="sh-sidecard__head"><h3>作者信息</h3></div>
+					<ul class="sh-info">
+						<li><span>笔名</span><b><?php echo sh_e($sh_author);?></b></li>
+						<li><span>作品</span><b><?php echo $sh_list['total'];?> 部</b></li>
+						<li><span>字数</span><b><?php echo sh_words($sh_stats['words']);?></b></li>
+						<li><span>更新</span><b><?php echo $sh_stats['last'] ? date('Y-m-d', strtotime($sh_stats['last'])) : '-';?></b></li>
+					</ul>
+				</div>
+				<div class="sh-sidecard">
+					<div class="sh-sidecard__head"><h3>热门作品</h3></div>
+					<div style="padding-top:2px">
+						<?php
+						$sh_hot = sh_books(" and author='" . sh_author_clean($sh_author) . "'", 'visits desc', 5);
+						foreach ($sh_hot as $sh_b) {
+							echo '<a class="sh-minibook" href="' . sh_book_url($sh_b['id']) . '"><span class="sh-minibook__cover">' . sh_cover_img($sh_b['ico'], $sh_b['title']) . '</span><span class="sh-minibook__body"><strong>' . sh_e($sh_b['title']) . '</strong><em>' . sh_e($sh_b['author']) . '</em></span></a>';
+						}
+						?>
+					</div>
+				</div>
+			</aside>
+		</div>
+		<?php } ?>
+	</div>
+</main>
+{include file=footer_inner.html}

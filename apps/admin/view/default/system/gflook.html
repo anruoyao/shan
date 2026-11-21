@@ -1,0 +1,34 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href="?p=/Sort/index">结算清单</a></li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">《{$pbarr.title}》</div>
+            <div class="layui-tab-item"></div>
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Sort/mod}/xid/{$pbarr.xid}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <input type="hidden" name="go2url" value="<?php echo get_btn_qs();?>">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>月份</th>
+                                <th>名称</th>
+                                <th>发放总金额</th>
+                                <th>订阅收入</th>
+                                <th>渠道收入</th>
+                                <th>平台激励</th>
+                                <th>结算时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>{$list}</tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

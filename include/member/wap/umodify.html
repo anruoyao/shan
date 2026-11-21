@@ -1,0 +1,101 @@
+{include file=../../../include/member/wap/header.html}
+<?php
+$arr='username,nickname,headpic,useremail,usermobile';
+$arr=explode(',',$arr);
+foreach($arr as $v){
+    global $$v;
+}
+?>
+<dov class="main">
+    <div class="center">
+        <div class="bnav nfl">
+            <a href="<?php echo pbcode('member','ucenter');?>">会员中心</a>
+            &gt;&gt;
+            <a href="<?php echo pbcode('member','umodify');?>">修改资料</a>
+        </div>
+        <div class="mbox">
+            <form class="yccontent umo" method="post" action="{pboot:umodify}" enctype="multipart/form-data" onsubmit="return umo(this);">
+                <div class="box">
+                    <div class="t">账号：</div>
+                    <input type="text" disabled="disabled" autocomplete="off" value="<?php echo $username;?>">
+                </div>
+                <div class="box nic">
+                    <div class="t">昵称：</div>
+                    <input type="text" name="nickname" id="nickname" placeholder="请输入昵称" size="30" value="<?php echo $nickname;?>">
+                </div>
+                <div class="box img">
+                    <div class="t">头像：</div>
+                    <input type="text" id="ycico2" class="ycico2" value="<?php echo $headpic;?>" readonly="readonly">
+                    <div id="filebox" class="filebox">
+                        <input type="file" name="headpic" id="ycico" class="ycico" onchange="ycimgx(this)">
+                    </div>
+                    <div class="ycimgbox">
+                        <img id="ycimg" src="<?php echo $headpic.'?'.time();?>">
+                    </div>
+                </div>
+                <div class="box" style="display:none;">
+                    <div class="t">邮箱：</div>
+                    <input type="text" name="useremail" id="useremail" placeholder="请输入邮箱（用于找回密码）" value="<?php echo $useremail;?>">
+                </div>
+                <div class="box" style="display:none;">
+                    <div class="t">手机号码：</div>
+                    <input type="text" name="usermobile" id="usermobile" placeholder="请输入手机号码" value="<?php echo $usermobile;?>">
+                </div>
+                <div class="box">
+                    <div class="t">新密码：</div>
+                    <input type="text" name="password" id="password" placeholder="请输入新密码" autocomplete="off" value="">
+                </div>
+                <div class="box">
+                    <div class="t">重复密码：</div>
+                    <input type="text" name="rpassword" id="rpassword" placeholder="请重复输入新密码" autocomplete="off" value="">
+                </div>
+                <div class="box">
+                    <button type="submit" class="button">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</dov>
+<script>
+function umo(obj) {
+    var nickname = $id('nickname').value;
+    var useremail = $id('useremail').value;
+    var usermobile = $id('usermobile').value;
+    var password = $id('password').value;
+    var rpassword = $id('rpassword').value;
+    nickname = trim(nickname);
+    useremail = trim(useremail);
+    usermobile = trim(usermobile);
+    password = trim(password);
+    rpassword = trim(rpassword);
+    if (!nickname) {
+        $id('nickname').focus();
+        alert('请输入昵称！');
+        return false;
+    }
+    if (useremail) {
+        var x = cke(useremail);
+        if (!x) {
+            $id('useremail').focus();
+            alert('请输入正确的邮箱！');
+            return false;
+        }
+    }
+    if (usermobile) {
+        var x = ckp(usermobile);
+        if (!x) {
+            $id('usermobile').focus();
+            alert('请输入正确的手机号码！');
+            return false;
+        }
+    }
+    if (password || rpassword) {
+        if (password != rpassword) {
+            $id('password').focus();
+            alert('两次密码输入不一致！');
+            return false;
+        }
+    }
+}
+</script>
+{include file=../../../include/member/wap/footer.html}

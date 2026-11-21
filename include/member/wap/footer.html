@@ -1,0 +1,46 @@
+<div class="footer">
+    <div class="center">
+        <p class="jf">
+            <a class="cur" href="javascript:translate();" id="zh_visits_s">简体版</a>
+            ·
+            <a href="javascript:translate(1);" id="zh_visits_t">繁體版</a>
+            ·
+            <a style="color:blue" href="sitemap.xml" title="XML地图" target="_blank">XML地图</a>
+            ·
+            <a style="color:blue" href="<?php echo pbcode('tags');?>" title="Tags标签">Tags标签</a>
+        </p>
+        <p>维护网络环境，人人有责</p>
+        <?php
+        if($appdown){
+            echo '<p><a style="color:red" href="app/">APP客户端</a></p>';
+        }
+        ?>
+    </div>
+</div>
+<script type="text/javascript">
+var imgs = document.querySelectorAll('img');
+if (typeof(IntersectionObserver) == 'function') {
+    var observer = new IntersectionObserver(imgsrc);
+    for (var i of imgs) {
+        observer.observe(i);
+    }
+} else {
+    for (var i = 0; i < imgs.length; i++) {
+        var crs = imgs[i].getAttribute('crs');
+        if (!crs) {
+            continue;
+        }
+        imgs[i].src = crs;
+    }
+}
+translateInitilization();
+var jianfancookie = big5_getCookie(targetEncodingCookie);
+if (jianfancookie == '1') {
+    $id('zh_visits_s').className = '';
+    $id('zh_visits_t').className = 'cur';
+    translateBody();
+}
+</script>
+</body>
+
+</html>

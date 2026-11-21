@@ -1,0 +1,40 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li lay-id="t1"><a href="?p=/Tg/index">推广列表</a></li>
+            <li lay-id="t2"><a href="?p=/Tg/index#tab=t2">新增推广</a></li>
+            <li class="layui-this" lay-id="t3">佣金记录</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Tg/mod}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>推广链接</th>
+                                <th>推广者</th>
+                                <th>佣金(金币)</th>
+                                <th>消费者</th>
+                                <th>消费金额(元)</th>
+                                <th>时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>{$xxlist}</tbody>
+                    </table>
+                    <div class="layui-btn-group">
+                        <button type="submit" name="submit" value="deljinbi" onclick="return delxxx();" class="layui-btn layui-btn-sm">清空佣金记录</button>
+                    </div>
+                    <div class="page">{$pagebox}</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}
+<script>
+function delxxx() {
+    event.returnValue = confirm("确定要清空所有佣金记录吗？");
+}
+</script>

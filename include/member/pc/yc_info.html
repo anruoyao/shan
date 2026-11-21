@@ -1,0 +1,97 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php global $title,$score,$num_com,$num_dy,$num_dy_first,$num_zs_month,$num_jd,$num_chapters,$content_update_time,$gf_total,$gf_month,$gf_last_month,$page;?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">Analytics</p>
+        <h1 class="aw-title">作品数据</h1>
+        <p class="aw-subtitle"><?php echo $title;?> 的订阅、收藏、互动与收入数据。</p>
+    </div>
+    <div class="aw-page-actions">
+        <a class="aw-btn" href="<?php echo pbcode('member','yc_chapter',$page);?>"><?php echo aw_icon('book');?>章节管理</a>
+        <a class="aw-btn" href="<?php echo pbcode('member','yc_gf',$page);?>"><?php echo aw_icon('wallet');?>稿费明细</a>
+        <a class="aw-btn" href="<?php echo pbcode('member','yc');?>">返回作品列表</a>
+    </div>
+</div>
+
+<div class="aw-stats aw-stats--4 aw-section">
+    <div class="aw-stat">
+        <span class="aw-stat__label"><?php echo aw_icon('book');?>总订阅</span>
+        <p class="aw-stat__value"><?php echo $num_dy;?></p>
+        <div class="aw-stat__foot"><span>累计订阅章节数</span></div>
+    </div>
+    <div class="aw-stat">
+        <span class="aw-stat__label"><?php echo aw_icon('chart');?>均订</span>
+        <p class="aw-stat__value"><?php echo $num_jd;?></p>
+        <div class="aw-stat__foot"><span>平均每章订阅</span></div>
+    </div>
+    <div class="aw-stat">
+        <span class="aw-stat__label"><?php echo aw_icon('spark');?>首订</span>
+        <p class="aw-stat__value"><?php echo $num_dy_first;?></p>
+        <div class="aw-stat__foot"><span>上架首章订阅</span></div>
+    </div>
+    <div class="aw-stat">
+        <span class="aw-stat__label"><?php echo aw_icon('clock');?>追订</span>
+        <p class="aw-stat__value is-empty">暂无</p>
+        <div class="aw-stat__foot"><span>日维度数据待接入</span></div>
+    </div>
+</div>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">核心数据</h2>
+        <span class="aw-card__hint">本站数据</span>
+    </div>
+    <div class="aw-data-table">
+        <div class="aw-data-table__head">
+            <span>指标</span><span>总计</span><span>今日</span><span>昨日</span><span>本月</span>
+        </div>
+        <div class="aw-data-table__row"><span>订阅</span><strong><?php echo $num_dy;?></strong><em>—</em><em>—</em><em>—</em></div>
+        <div class="aw-data-table__row"><span>收藏</span><strong><?php echo $score;?></strong><em>—</em><em>—</em><em>—</em></div>
+        <div class="aw-data-table__row"><span>打赏</span><strong>—</strong><em>—</em><em>—</em><em>—</em></div>
+        <div class="aw-data-table__row"><span>月票</span><strong>—</strong><em>—</em><em>—</em><em>—</em></div>
+        <div class="aw-data-table__row"><span>催更</span><strong>—</strong><em>—</em><em>—</em><em>—</em></div>
+        <div class="aw-data-table__row"><span>推荐</span><strong>—</strong><em>—</em><em>—</em><em>—</em></div>
+        <div class="aw-data-table__row"><span>评论</span><strong><?php echo $num_com;?></strong><em>—</em><em>—</em><em>—</em></div>
+    </div>
+    <p class="aw-help">今日、昨日、本月新增及打赏、月票、催更、推荐等日维度数据，需要后台统计表接入后展示。</p>
+</section>
+
+<div class="aw-split aw-section">
+    <section class="aw-card">
+        <div class="aw-card__head">
+            <h2 class="aw-card__title">收入概览</h2>
+            <a class="aw-card__link" href="<?php echo pbcode('member','yc_gf',$page);?>">查看明细 ›</a>
+        </div>
+        <div class="aw-income-grid">
+            <div><span>总稿费</span><strong>¥<?php echo number_format($gf_total,2);?></strong></div>
+            <div><span>本月稿费</span><strong>¥<?php echo number_format($gf_month,2);?></strong></div>
+            <div><span>上月稿费</span><strong>¥<?php echo number_format($gf_last_month,2);?></strong></div>
+            <div><span>今日收入</span><strong>—</strong></div>
+        </div>
+    </section>
+    <section class="aw-card">
+        <div class="aw-card__head">
+            <h2 class="aw-card__title">更新信息</h2>
+            <span class="aw-card__hint">本月</span>
+        </div>
+        <div class="aw-update-grid">
+            <div><strong><?php echo aw_num($num_zs_month);?></strong><span>本月更新字数</span></div>
+            <div><strong><?php echo $num_chapters;?></strong><span>已发布章节</span></div>
+            <div><strong><?php echo $content_update_time;?></strong><span>最近更新时间</span></div>
+        </div>
+        <p class="aw-help">更新日历与每日发布统计需要章节发布时间记录，待后台统计接入后展示。</p>
+    </section>
+</div>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">评论区</h2>
+        <span class="aw-card__hint">共 <?php echo $num_com;?> 条评论</span>
+    </div>
+    <div class="aw-empty">
+        <?php echo aw_icon('comment');?>
+        <span>书评、本章说、段评管理功能待后台评论管理接口接入。</span>
+    </div>
+</section>
+{include file=../../../include/member/pc/footer.html}

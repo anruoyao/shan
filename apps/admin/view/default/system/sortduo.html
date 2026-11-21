@@ -1,0 +1,56 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">批量授权</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">
+                <a href="?p=/Sort/index"><i class="fa fa-home"></i>内容管理</a>
+                &nbsp;&gt;&nbsp;
+                批量授权
+            </div>
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/Sort/duo" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <input type="hidden" name="backurl" value="<?php echo $_SERVER['HTTP_REFERER'];?>">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">基本内容</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">书籍ID</label>
+                                <div class="layui-input-block">
+                                    <textarea name="duo" class="layui-textarea" style="height:300px" placeholder="填写书籍ID，以英文逗号(,)分隔"><?php echo [$idxxx];?></textarea>
+                                    <div style="color:red;padding-top:10px;">注：可在“<a href="?p=/Sort/index" style="color:red;text-decoration:underline;">内容管理</a>”，选择一个或多个内容，点击“批量授权”</div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">授权渠道</label>
+                                    <div class="layui-input-block">
+                                        <?php echo [$sq__];?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">方式</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="status" value="1" title="增加授权" checked="checked">
+                                    <input type="radio" name="status" value="0" title="撤销授权">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit>立即提交</button>
+                                {fun=get_btn_back()}
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

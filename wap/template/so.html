@@ -1,0 +1,57 @@
+<?php require_once(dirname(__FILE__).'/header_index.html');?>
+<div class="home-nav">
+	<a href="./" class="guide-nav-a">
+		<i class="icon icon-home"></i>
+		<h4 class="guide-nav-h">首 页</h4>
+	</a>
+	<a href="<?php echo pbcode('shuku');?>" class="guide-nav-a">
+		<i class="icon icon-sort"></i>
+		<h4 class="guide-nav-h">分 类</h4>
+	</a>
+	<a href="<?php echo pbcode('paihang');?>" class="guide-nav-a">
+		<i class="icon icon-rank"></i>
+		<h4 class="guide-nav-h">排 行</h4>
+	</a>
+	<a href="<?php echo pbcode('quanben');?>" class="guide-nav-a">
+		<i class="icon icon-end"></i>
+		<h4 class="guide-nav-h">全 本</h4>
+	</a>
+	<a href="<?php echo pbcode('member','look','','all');?>" class="guide-nav-a">
+		<i class="icon icon icon-newbook"></i>
+		<h4 class="guide-nav-h">足 迹</h4>
+	</a>
+</div>
+<div class="money">
+	<center>
+		<?php echo axd(29);?>
+	</center>
+</div>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">搜索“<?php echo $key;?>”</h3>
+			<span class="novel-title-desc">共<font id="total">X</font>本</span>
+		</div>
+	</div>
+    <?php
+    $x='
+    <div style="float:left;width:100%;padding:30px 0px 20px;text-align:center;color:red;line-height:2em;font-size:14px;">
+    演示站更新少，只作演示，找不到书是正常-.-
+    <br>
+    搭建好之后，要采集更新
+    <br>
+    三套采集功能：关关采集+后台采集+火车头采集，带采集规则
+    <br>
+    win服务器，或者有宝塔的Linux服务器，可自动采集
+    <br>
+    并且，支持手动发布，或者批量导入整本txt文档
+    </div>
+    ';
+    global $cfg_dbpassword;
+    if(strstr($cfg_dbpassword,'3M8A') || strstr($cfg_dbpassword,'xxxxxx')){
+        echo $x;
+    }
+    ?>
+	<?php echo list4so4author();?>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>

@@ -1,0 +1,77 @@
+{include file='common/head.html'}
+<style>.fftip{display:none}.layui-layout-admin .layui-body {padding-top:0px !important}</style>
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">新增稿费</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="loc">《{$pbarr.title}》</div>
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/Sort/gf/id/{$pbarr.id}&act={$pbarr.act}&idx={$idx}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <input type="hidden" name="backurl" value="<?php echo $_SERVER['HTTP_REFERER'];?>">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">基本内容</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">月份 <span class="layui-text-red">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="yf" value="{$yf}" class="layui-input" required lay-verify="required">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="mc" value="{$yf}" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">发放总金额</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="je" value="{$yf}" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">订阅收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="dy" value="{$yf}" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">渠道收入</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="qd" value="{$yf}" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">平台激励</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="pt" value="{$yf}" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">结算时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="update_time" value="{$update_time}" readonly class="layui-input datetime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            {fun=get_btn_back()}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

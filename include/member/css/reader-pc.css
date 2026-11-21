@@ -1,0 +1,214 @@
+.member-v2 {
+    --aw-line: #e6e8ea;
+    --aw-ink: #292d31;
+    --aw-muted: #767d83;
+    --aw-primary: #bd3d35;
+    --aw-blue: var(--aw-primary);
+    --aw-blue-dark: #a9342d;
+    --aw-blue-soft: #f8e9e7;
+    --aw-radius: 3px;
+    --aw-shadow: none;
+    background: #f5f6f7;
+    color: var(--aw-ink);
+}
+
+.member-v2 .aw-layout {
+    gap: 20px;
+}
+
+.member-v2 .aw-sidebar {
+    border-right: 1px solid var(--aw-line);
+    background: #fff;
+}
+
+.member-v2 .aw-main {
+    max-width: 1180px;
+}
+
+.member-v2 .aw-page-head {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--aw-line);
+}
+
+.member-v2 .aw-title {
+    color: var(--aw-ink);
+    font-size: 27px;
+    letter-spacing: 0;
+}
+
+.member-v2 .aw-subtitle,
+.member-v2 .aw-eyebrow {
+    color: var(--aw-muted);
+}
+
+.member-v2 .aw-card {
+    border: 1px solid var(--aw-line);
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: none;
+}
+
+.member-v2 .aw-card__title {
+    color: var(--aw-ink);
+    font-size: 17px;
+    letter-spacing: 0;
+}
+
+.member-v2 .aw-hero {
+    background: #fff;
+}
+
+.member-v2 .aw-hero__avatar img {
+    border-radius: 50%;
+}
+
+.member-v2 .aw-hero__name {
+    color: var(--aw-ink);
+    letter-spacing: 0;
+}
+
+.member-v2 .aw-metric {
+    border-left: 1px solid var(--aw-line);
+}
+
+.member-v2 .aw-metric strong {
+    color: var(--aw-ink);
+    font-size: 22px;
+}
+
+.member-v2 .aw-quick a {
+    border: 1px solid var(--aw-line);
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: none;
+}
+
+.member-v2 .aw-quick a:hover {
+    transform: none;
+    border-color: #cfd3d6;
+    background: #fafafa;
+    box-shadow: none;
+}
+
+.member-v2 .aw-btn {
+    border-radius: 3px;
+    box-shadow: none;
+}
+
+.member-v2 .aw-btn--primary,
+.member-v2 .aw-main .paybtn {
+    border-color: var(--aw-primary);
+    background: var(--aw-primary);
+}
+
+.member-v2 .aw-main .minlist li,
+.member-v2 .aw-main .biglist > li {
+    border-bottom: 1px solid var(--aw-line);
+}
+
+.member-v2 .aw-main .biglist > li:hover,
+.member-v2 .aw-main .minlist li:hover {
+    background: #fafafa;
+}
+
+.member-v2 .aw-empty {
+    border-radius: 3px;
+    background: #fafafa;
+}
+
+@media (max-width: 720px) {
+    .member-v2 .aw-title {
+        font-size: 23px;
+    }
+}
+
+.member-v2 .reader-shelf-tabs {
+    display: flex;
+    gap: 18px;
+    padding: 0 18px;
+    border: 1px solid var(--aw-line);
+    border-bottom: 0;
+    background: #fff;
+}
+
+.member-v2 .reader-shelf-tabs a {
+    padding: 12px 4px;
+    border-bottom: 2px solid transparent;
+    color: var(--aw-muted);
+}
+
+.member-v2 .reader-shelf-tabs [aria-current] {
+    border-bottom-color: var(--aw-primary);
+    color: var(--aw-primary);
+    font-weight: 600;
+}
+
+.member-v2 .aw-main .reader-shelf .biglist > li {
+    position: relative;
+    min-height: 142px;
+    padding: 15px 10px 15px 92px;
+}
+
+.member-v2 .aw-main .reader-shelf .biglist .d3 img {
+    position: absolute;
+    top: 15px;
+    left: 8px;
+    width: 68px;
+    height: 92px;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+.member-v2 .aw-main .reader-shelf .biglist .d1 a:last-child {
+    opacity: 1;
+}
+
+.member-v2 .aw-main .reader-shelf .biglist .d2 a {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.reader-pay-tab {
+    display: block;
+    padding: 0 14px;
+    color: #ad342e;
+    font-weight: 600;
+}
+
+.reader-subscription.bbox {
+    padding: 18px 20px;
+    border: 1px solid #e6e8ea;
+    background: #fff;
+}
+
+.reader-subscription.bbox h1.bnav {
+    margin: 0;
+    padding-bottom: 11px;
+    border-bottom: 1px solid #e6e8ea;
+    color: #292d31;
+    font-size: 20px;
+}
+
+.reader-subscription .dybtn a {
+    border: 1px solid #bd3d35;
+    border-radius: 2px;
+    background: #bd3d35;
+    color: #fff;
+}
+
+.reader-subscription .dybtn a.czjb {
+    border-color: #d7dadd;
+    background: #fff;
+    color: #484e55;
+}
+
+.member-v2 .aw-nav__cross a {
+    background: #f5f6f7;
+    color: var(--aw-ink);
+}
+
+.member-v2 .aw-nav__cross a:hover {
+    background: var(--aw-blue-soft);
+    color: var(--aw-primary);
+}

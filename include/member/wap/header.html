@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="App-Config" content="fullscreen=yes,useHistoryState=yes,transition=yes" />
+    <meta name=apple-mobile-web-app-capable content=yes />
+    <meta name=apple-touch-fullscreen content=yes />
+    <meta name=format-detection content="telephone=no,email=no" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <?php echo head4pc($scode,$id,$page);?>
+    <base href="<?php echo $pcbase;?>" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="include/member/css/wap.css" />
+    <script type="text/javascript" src="include/member/js/common.js"></script>
+    <script type="text/javascript" src="include/member/js/ajax.js"></script>
+    <script type="text/javascript" src="include/member/js/big5.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="center">
+            <div class="logo">
+                <a href="javascript:window.history.go(-1);">
+                    <img src="include/member/image/back.png">
+                </a>
+            </div>
+            <div class="w">
+                <a href="<?php echo pbcode('member','index');?>">会员中心</a>
+            </div>
+            <div class="navlist">
+                <ul>
+                    <li class="last"><a href="./"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>

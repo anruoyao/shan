@@ -1,0 +1,24 @@
+<?php require_once(dirname(__FILE__).'/header_index.html');?>
+<div class="Layout" style="margin:8px 0px;overflow:hidden">
+	<div class="aaabox noborder">
+		<div class="loc">
+			<a href="./">首页</a>
+			&gt;
+			<a href="<?php echo pbcode('tags');?>">Tags</a>
+			&gt;
+            标签为“<?php echo '<a href="'.pbcode('tags',$ob).'">'.$tag.'</a>';?>”的相关内容
+		</div>
+		<ul class="aaalist">
+            <?php
+			$x=aaalist('tags',$ob,$tag,$page);
+			$arr=explode('{x}',$x);
+			$x01=$arr[0];
+			$x02=$arr[1];
+			$x01=str_replace(' target="_blank"','',$x01);
+			echo $x01;
+			?>
+		</ul>
+		<div class="aaapage"><?php echo $x02;?></div>
+	</div>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>

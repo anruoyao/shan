@@ -1,0 +1,42 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">修改推广</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form action="{url./admin/Tg/edit/id}/{$dtarr->id}" method="post" class="layui-form" id="edit">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">推广编号</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" value="{$dtarr->id}" readonly="readonly" style="background:#f0f0f0;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">推广链接</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="link" required lay-verify="required" class="layui-input" value="{$dtarr->link}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">推广状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="1" title="是" {if([$dtarr->status]==1)} checked="checked"{/if}>
+                            <input type="radio" name="status" value="0" title="否" {if([$dtarr->status]==0)} checked="checked"{/if}>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{APP_THEME_DIR}/js/jscolor.js"></script>
+{include file='common/ueditor.html'}
+{include file='common/foot.html'}

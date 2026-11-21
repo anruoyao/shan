@@ -1,0 +1,48 @@
+{include file='common/head.html'}
+<div class="layui-body">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+        <ul class="layui-tab-title">
+            <li lay-id="t1"><a href="?p=/Member/index">会员列表</a></li>
+            <li lay-id="t2"><a href="?p=/Member/index#tab=t2">会员新增</a></li>
+            <li lay-id="t3"><a href="?p=/Member/author">作者管理</a></li>
+            <li class="layui-this" lay-id="t4"><a href="?p=/Member/tx">提现管理</a></li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form action="?p=/Member/tx/tip/{$dtarr.idx}" method="post" class="layui-form">
+                    <input type="hidden" name="formcheck" value="{$formcheck}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">提现订单</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" value="{$dtarr.ding}" readonly="readonly" style="background:#f0f0f0;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账户</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" value="{$dtarr.id}" readonly="readonly" style="background:#f0f0f0;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">金额/金币</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" value="{$dtarr.je}/{$dtarr.jb}" readonly="readonly" style="background:#f0f0f0;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">异常提示</label>
+                        <div class="layui-input-block">
+                            <textarea name="tip_" class="layui-textarea" style="height:300px">{$dtarr.tip}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit>立即提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='common/foot.html'}

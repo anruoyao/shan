@@ -1,0 +1,23 @@
+<?php require_once(dirname(__FILE__).'/header_index.html');?>
+<div class="Layout" style="margin:8px 0px;overflow:hidden">
+	<div class="aaabox noborder">
+		<h1>Tags标签列表</h1>
+		<div class="aaaorder <?php echo $ob;?>">
+			<a href="<?php echo pbcode('tags','','','','','');?>">按热门排序</a>
+			<a href="<?php echo pbcode('tags','','','','','p2');?>">按内容量排序</a>
+			<a href="<?php echo pbcode('tags','','','','','p3');?>">按时间排序</a>
+		</div>
+		<ul class="aaatags">
+			<?php
+			$x=aaatags('tags',$page,$ob,3,3);
+			$arr=explode('{x}',$x);
+			$x01=$arr[0];
+			$x02=$arr[1];
+			$x01=str_replace(' target="_blank"','',$x01);
+			echo $x01;
+			?>
+		</ul>
+		<div class="aaapage"><?php echo $x02;?></div>
+	</div>
+</div>
+<?php require_once(dirname(__FILE__).'/footer.html');?>

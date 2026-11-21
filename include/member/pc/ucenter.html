@@ -1,0 +1,111 @@
+<?php define('AUTHOR_LAYOUT',1);?>
+{include file=../../../include/member/pc/header.html}
+<?php
+global $dsql,$xxx_time,$xxx_jinbi,$pay_ka;
+$uid=session('pboot_ucode');
+$home=author_home_data();
+$level=author_level_data($home['score'],$home['sign'],$home['author_title'],$home['author_honor']);
+$hasPayKa=!empty($pay_ka);
+?>
+<div class="aw-page-head">
+    <div>
+        <p class="aw-eyebrow">作者中心</p>
+        <h1 class="aw-title">创作工作台</h1>
+        <p class="aw-subtitle">管理作品、章节、数据与稿费，专注讲好你的故事。</p>
+    </div>
+    <div class="aw-page-actions">
+        <?php
+        if($xxx_time && $xxx_jinbi){
+            $adRow=$dsql->one("select id from ay_content where status=1 limit 1",1);
+            $adId=$adRow[id];
+            if($adId){
+                $adHash=md5($adId.$xxx_jinbi);
+                $adType=file_exists(ROOT_PATH.'/include/chapter_pbcode_xyz/index.php')?'book':'content';
+                $adUrl=pbcode($adType,$adId).'#'.$adHash;
+                echo '<a class="aw-btn" href="'.$adUrl.'" target="_blank">'.aw_icon('coin').'看广告赚金币</a>';
+            }
+        }
+        ?>
+        <a class="aw-btn aw-btn--primary" href="<?php echo pbcode('member','yc_add');?>"><?php echo aw_icon('plus');?>发布新书</a>
+    </div>
+</div>
+
+<div class="aw-action-grid aw-section">
+    <a class="aw-action-card" href="<?php echo $pcbase;?>jieshao.html">
+        <span class="aw-action-card__icon"><?php echo aw_icon('spark');?></span>
+        <span class="aw-action-card__body">
+            <strong>作家福利</strong>
+            <em>查看扶持计划、全勤与激励</em>
+        </span>
+        <?php echo aw_icon('arrow');?>
+    </a>
+    <a class="aw-action-card" href="<?php echo $pcbase;?>connect.html">
+        <span class="aw-action-card__icon"><?php echo aw_icon('comment');?></span>
+        <span class="aw-action-card__body">
+            <strong>联系编辑</strong>
+            <em>签约、作品与创作问题咨询</em>
+        </span>
+        <?php echo aw_icon('arrow');?>
+    </a>
+</div>
+
+<section class="aw-card aw-author-card aw-section">
+    <div class="aw-author-avatar">
+        <img crs="<?php echo $home['headpic'];?>" src="template/tpl/image/blank.gif" onerror="this.src=&#39;uploads/empty.jpg&#39;" alt="<?php echo $home['nickname'];?>">
+    </div>
+    <div class="aw-author-main">
+        <div class="aw-author-name">
+            <?php echo $home['nickname'];?>
+            <span class="aw-lv">Lv<?php echo $level['level'];?></span>
+            <span class="aw-badge <?php echo $home['sign_class'];?>"><?php echo $home['sign_label'];?></span>
+            <?php if($level['title']):?><span class="aw-badge is-title"><?php echo $level['title'];?></span><?php endif;?>
+            <?php foreach($level['honors'] as $honor):?><span class="aw-badge is-honor"><?php echo $honor;?></span><?php endforeach;?>
+        </div>
+        <?php if($home['author_bio']):?>
+        <p class="aw-author-bio"><?php echo $home['author_bio'];?></p>
+        <?php endif;?>
+        <p class="aw-author-stats">
+            已创作 <strong><?php echo $home['days'];?></strong> 天，
+            <strong><?php echo $home['works'];?></strong> 部作品，
+            <strong><?php echo aw_num($home['words']);?></strong> 字，
+            <strong><?php echo aw_num($home['fans']);?></strong> 粉丝
+        </p>
+        <div class="aw-author-links">
+            <a href="<?php echo pbcode('member','info');?>"><?php echo aw_icon('edit');?>修改资料</a>
+            <a href="<?php echo pbcode('member','author_level');?>"><?php echo aw_icon('star');?>作家等级</a>
+            <a href="<?php echo pbcode('member','gf');?>"><?php echo aw_icon('wallet');?>查看稿费</a>
+            <a href="<?php echo pbcode('member','yc_add');?>"><?php echo aw_icon('plus');?>发布新书</a>
+        </div>
+    </div>
+</section>
+
+<div class="aw-notice-rows aw-section">
+    <a class="aw-notice-row" href="<?php echo pbcode('member','tg');?>">
+        <span class="aw-notice-row__icon"><?php echo aw_icon('bell');?></span>
+        <span class="aw-notice-row__body"><strong>通知</strong><em>签约、审核与系统消息</em></span>
+        <?php echo aw_icon('arrow');?>
+    </a>
+    <a class="aw-notice-row" href="<?php echo pbcode('member','tg');?>">
+        <span class="aw-notice-row__icon"><?php echo aw_icon('comment');?></span>
+        <span class="aw-notice-row__body"><strong>公告</strong><em>平台公告与创作活动</em></span>
+        <?php echo aw_icon('arrow');?>
+    </a>
+</div>
+
+<section class="aw-card aw-section">
+    <div class="aw-card__head">
+        <h2 class="aw-card__title">我的作品</h2>
+        <a class="aw-card__link" href="<?php echo pbcode('member','yc');?>">更多 ›</a>
+    </div>
+    <?php $worksHtml=author_recent_works($uid,10,true);?>
+    <?php if($worksHtml):?>
+        <?php echo $worksHtml;?>
+    <?php else:?>
+    <div class="aw-empty">
+        <?php echo aw_icon('book');?>
+        <span>还没有作品，发布第一部作品吧。</span>
+        <a class="aw-btn aw-btn--primary aw-btn--sm" href="<?php echo pbcode('member','yc_add');?>"><?php echo aw_icon('plus');?>发布新书</a>
+    </div>
+    <?php endif;?>
+</section>
+{include file=../../../include/member/pc/footer.html}

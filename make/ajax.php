@@ -1,0 +1,55 @@
+<?php
+if(!isset($dsql)){
+	define('IS_INDEX',true);
+	define('URL_BIND','pbcode');
+	define('PB_FILE',$_SERVER['SCRIPT_FILENAME']);
+	require_once('../core/start.php');
+}
+require_once('base.inc.php');
+$my=gpvar('my');
+if($my=='base'){
+	$djt=gpvar('djt');
+	$xxx=setdjt($djt);
+}
+if($my=='conBox'){
+	$xxx=conBox();
+}
+if($my=='doBox'){
+	$xxx=doBox();
+}
+if($my=='Ready'){
+	$obj=gpvar('obj');
+	$xxx=Ready($obj);
+}
+if($my=='go'){
+	$x2x=gpvar('x2x');
+	$page=gpvar('page');
+	$total=gpvar('total');
+	$single=gpvar('single');
+	$xxx=gomk($x2x,$page,$total,$single);
+}
+if($my=='SET_MAKE_NUM'){
+	$id=gpvar('id');
+	$xxx=SET_MAKE_NUM($id);
+}
+if($my=='GET_MAKE_NUM'){
+	$xxx=$MAKE_NUM;
+}
+if($my=='seo'){
+	$xxx=seo();
+}
+if($my=='seotxt'){
+	$txt=gpvar('txt');
+	$domain=gpvar('domain');
+	$xxx=seotxt($domain,$txt);
+}
+if($my=='cfgtxt'){
+	$cfg=gpvar('cfg');
+	$xxx=cfgtxt($cfg);
+}
+if($my=='auto2dede'){
+	$djt=gpvar('djt');
+	$xxx=auto2dede($djt);
+}
+echo $xxx;
+?>
