@@ -29,6 +29,22 @@ class MemberController extends Controller
         $this->model=new MemberModel();
         $this->parser=new ParserController();
         $this->htmldir=$this->config('tpl_html_dir') ? $this->config('tpl_html_dir') . '/' : '';
+
+        global $dsql;
+        $uid=session('pboot_ucode');
+        if($uid){
+            $member=$dsql->one("select autologin from ay_member where ucode=$uid limit 1",1);
+            if(!empty($member['autologin'])){
+                $this->clearMemberSession();
+            }
+        }
+    }
+
+    private function clearMemberSession()
+    {
+        foreach(array('pboot_uid','pboot_ucode','pboot_username','pboot_useremail','pboot_usermobile','pboot_gid','pboot_gcode','pboot_gname') as $key){
+            session($key,'');
+        }
     }
 
     // 会员登录页面
@@ -153,26 +169,7 @@ class MemberController extends Controller
                 alert_back('账号密码错误，请核对后重试！', 0);
             }
         } else {
-            $x='QUERY_STRING';
-            $x=$_SERVER[ $x ];
-            $x=str_replace('member/','',$x);
-            $arr=explode('/',$x);
-            $auto=$arr[1];
-            if($auto=='auto'){
-                autologin();
-                $uid=session('pboot_ucode');
-                if($uid){
-                    $x='游客登录成功！';
-                    $url=pbcode('member','ucenter');
-                    success($x,$url,3);
-                }else{
-                    $x='游客登录失败，稍后重试！<br>';
-                    $url=pbcode('member','ucenter');
-                    error($x,$url,3);
-                }
-            }else{
-                $this->tpl(__FUNCTION__);
-            }
+            $this->tpl(__FUNCTION__);
         }
     }
 
@@ -391,6 +388,12 @@ class MemberController extends Controller
     // 用户中心
     public function ucenter()
     {
+        $uid=session('pboot_ucode');
+        if(!$uid){
+            $x='未登录！';
+            $url=pbcode('member','login','','all');
+            error($x,$url,3);
+        }
         $this->tpl(__FUNCTION__);
     }
 

@@ -1,42 +1,39 @@
 <?php
 if($my=='pc'){
-  if($autologin){
-    $xxx='
-    <a href="'.pbcode('member','ucenter').'" target="_blank"><img src="'.$headpic.'" />'.$nickname.'</a>
-    <a href="'.pbcode('member','login').'" target="_blank">注册/登录</a>';
-  }else{
-    $xxx='
-    <details class="pc-userdrop">
-      <summary class="pc-userdrop__trigger" title="个人中心">
+  $xxx='
+    <div class="pc-userdrop">
+      <a class="pc-userdrop__trigger" href="'.pbcode('member','index').'" title="个人中心">
         <img src="'.$headpic.'" alt="'.$nickname.'" />
         <span class="pc-userdrop__name">'.$nickname.'</span>
-        <i class="pc-userdrop__caret"></i>
-      </summary>
-      <div class="pc-userdrop__mask" onclick="this.parentNode.removeAttribute(&#39;open&#39;)"></div>
-      <div class="pc-userdrop__menu">
-        <a href="'.pbcode('member','index').'">个人中心</a>
-        <a href="'.pbcode('member','ucenter').'">作者中心</a>
-        <a href="'.pbcode('member','logout').'" onclick="return nav_logout();">退出登录</a>
-      </div>
-    </details>
+      </a>
+      <details class="pc-userdrop__more">
+        <summary class="pc-userdrop__toggle" title="更多账号操作"><i class="pc-userdrop__caret"></i></summary>
+        <div class="pc-userdrop__mask" onclick="this.parentNode.removeAttribute(&#39;open&#39;)"></div>
+        <div class="pc-userdrop__menu">
+          <a href="'.pbcode('member','ucenter').'">作者中心</a>
+          <a href="'.pbcode('member','logout').'" onclick="return nav_logout();">退出登录</a>
+        </div>
+      </details>
+    </div>
     <style>
     #loginInfo{overflow:visible}
-    #loginInfo .pc-userdrop{position:relative;z-index:1000}
-    #loginInfo .pc-userdrop__trigger{position:relative;z-index:1001;display:flex;align-items:center;float:none;max-width:none;overflow:visible;margin-right:0;line-height:1.2;list-style:none;cursor:pointer}
-    #loginInfo .pc-userdrop__trigger::-webkit-details-marker{display:none}
-    #loginInfo .pc-userdrop__trigger::marker{content:""}
+    #loginInfo .pc-userdrop{position:relative;z-index:1000;display:flex;align-items:center}
+    #loginInfo .pc-userdrop__trigger{position:relative;z-index:1001;display:flex;align-items:center;float:none;max-width:none;overflow:visible;margin-right:0;line-height:1.2;cursor:pointer}
     #loginInfo .pc-userdrop__trigger img{width:28px;height:28px;margin-right:6px;border-radius:50%}
     #loginInfo .pc-userdrop__name{max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    #loginInfo .pc-userdrop__caret{display:inline-block;width:0;height:0;margin-left:5px;border-top:5px solid #999;border-right:4px solid transparent;border-left:4px solid transparent;transition:transform .2s}
-    #loginInfo .pc-userdrop:hover .pc-userdrop__caret,#loginInfo .pc-userdrop[open] .pc-userdrop__caret{transform:rotate(180deg)}
+    #loginInfo .pc-userdrop__more{position:relative}
+    #loginInfo .pc-userdrop__toggle{display:flex;align-items:center;justify-content:center;width:24px;height:32px;cursor:pointer;list-style:none}
+    #loginInfo .pc-userdrop__toggle::-webkit-details-marker{display:none}
+    #loginInfo .pc-userdrop__toggle::marker{content:""}
+    #loginInfo .pc-userdrop__caret{display:inline-block;width:0;height:0;border-top:5px solid #999;border-right:4px solid transparent;border-left:4px solid transparent;transition:transform .2s}
+    #loginInfo .pc-userdrop__more[open] .pc-userdrop__caret{transform:rotate(180deg)}
     #loginInfo .pc-userdrop__menu{display:none;position:absolute;top:100%;right:0;min-width:132px;padding:6px 0;background:#fff;border:1px solid #eee;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:1001}
     #loginInfo .pc-userdrop__mask{display:none}
-    #loginInfo .pc-userdrop[open] .pc-userdrop__mask{display:block;position:fixed;left:0;top:0;right:0;bottom:0;z-index:999;background:transparent}
-    #loginInfo .pc-userdrop:hover .pc-userdrop__menu,#loginInfo .pc-userdrop[open] .pc-userdrop__menu{display:block}
+    #loginInfo .pc-userdrop__more[open] .pc-userdrop__mask{display:block;position:fixed;left:0;top:0;right:0;bottom:0;z-index:999;background:transparent}
+    #loginInfo .pc-userdrop__more:hover .pc-userdrop__menu,#loginInfo .pc-userdrop__more[open] .pc-userdrop__menu{display:block}
     #loginInfo .pc-userdrop__menu a{display:block;float:none;max-width:none;overflow:visible;margin-right:0;padding:8px 16px;font-size:14px;line-height:22px;color:#333;white-space:nowrap}
     #loginInfo .pc-userdrop__menu a:hover{background:#f7f8fa;color:#ff647c}
     </style>';
-  }
   $xxx.='
   <script>if(typeof(tap1)=="undefined"){tap1="";}var uid="'.$uid.'";var username="'.$username.'";var d=document.createElement("div");d.id=d.className="tingbox";var b=$id("bodybox");var urls="";b?b.parentNode.insertBefore(d,b):"";var tap2="sogou";if(typeof(ting_api)=="undefined"){var ting_api="";var t_r="";}else{var t_r="1";}ting_api="//"+tap1+"."+tap2+".com/reven"+"tondc/synt"+"hesis"+ting_api;var src1="//tts.697code.com/text2audio?tex=";if(t_r=="1"){tingready();}function audioid(){var x=urls.split("{697}");var x1=x.length;var x2=srcArr.length;var xxx=x1-x2;var xxx=xxx-1;return xxx;}var register_time="'.$register_time.'";var src2="&cuid=dict&lan=ZH&ctp=2&pdt=30&vol=9";</script>
   <style>#qcc,#quick{display:none}</style>';

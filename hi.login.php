@@ -9,17 +9,13 @@ header("Content-type:application/javascript");
 $my=$_GET['my'];
 $uid=session('pboot_ucode');
 if(!$uid){
-	autologin();
-	$uid=session('pboot_ucode');
-}
-if(!$uid){
 	$template='login_none.html';
 }else{
 	$x=$dsql->one("select status,username,nickname,register_time,headpic,validdate,score,autologin from ay_member where ucode=$uid limit 1",1);
 	$status=$x[status];
 	$username=$x[username];
 	$autologin=$x[autologin];
-	if(!$username || !$status){
+	if(!$username || !$status || $autologin){
 		$template='login_none.html';
         session('pboot_uid','');
         session('pboot_ucode','');

@@ -523,7 +523,7 @@ function hb($my=1){
 	global $dsql,$is4wap;
 	$uid=session('pboot_ucode');
 	if($uid){
-		$x=$dsql->one("select * from ay_member where ucode=$uid limit 1",1);
+		$x=$dsql->one("select username,nickname,headpic,score,jinbi,register_time,last_login_time,gid,sign from ay_member where ucode=$uid limit 1",1);
 		$username=$x[username];
 		$nickname=$x[nickname];
 		$headpic=$x[headpic];
@@ -534,10 +534,6 @@ function hb($my=1){
 		$last_login_time=$x[last_login_time];
 		$gid=$x[gid];
 		$sign=$x[sign];
-		$autologin=$x[autologin];
-		if($autologin){
-			$autologin='<div class="autologin">您当前是游客登录状态！数据仅能临时保存！会员<a href="'.pbcode('member','login').'">注册/登录</a></div>';
-		}
 		if($sign==1){
 			$qian='<font>待审作者</font>';
 		}else if($sign==2){
@@ -592,9 +588,6 @@ function hb($my=1){
 		}else{
 			$card.='<div class="aw-profile-actions"><a href="'.pbcode('member','login').'">登录</a><a href="'.pbcode('member','register').'">注册</a></div>';
 		}
-		if(!empty($autologin)){
-			$card.='<div class="aw-profile-note">您当前是游客登录状态，数据仅临时保存。<a href="'.pbcode('member','login').'">注册/登录</a></div>';
-		}
 		$card.='</div>';
 		return $card;
 	}
@@ -619,7 +612,6 @@ function hb($my=1){
 		        <p><a href="'.pbcode('member','pay').'">充值</a><a href="'.pbcode('member','umodify').'">修改资料</a></p>
 		    </div>';
 		}
-		$xxx.=$autologin;
 	}else{
 		$url=pbcode('member','umodify');
 		$xxx='
@@ -636,7 +628,6 @@ function hb($my=1){
             <p><span>注册时间:</span>'.$register_time.'</p>
             <p><span>最近登录:</span>'.$last_login_time.'</p>
         </div>';
-        $xxx.=$autologin;
 	}
 	return $xxx;
 }
