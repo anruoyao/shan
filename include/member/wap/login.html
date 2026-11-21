@@ -1,12 +1,29 @@
 {include file=../../../include/member/wap/header.html}
 <div class="main">
     <div class="center">
-        <div class="logbox" id="logbox">
-            <h1>会员登录</h1>
-            <div class="qc">
-                <?php echo quicklogin();?>
-            </div>
-            <form class="logform" onsubmit="return log(this);">
+        <div class="auth-page">
+            <div class="auth-layout">
+                <aside class="auth-aside">
+                    <a class="auth-brand" href="./"><img src="template/tpl/image/logo.png" alt="SHBOOK.TOP 网文自留地"></a>
+                    <div class="auth-aside__copy">
+                        <p class="auth-eyebrow">READING COMMUNITY</p>
+                        <h2>书页之间，<br>故事正好开始。</h2>
+                        <p>回到你的书架，继续阅读；也来发现下一本喜欢的作品。</p>
+                    </div>
+                    <p class="auth-aside__foot">让每一次翻页，都有新的相遇。</p>
+                </aside>
+                <section class="auth-content" id="logbox">
+                    <div class="auth-heading">
+                        <span class="auth-kicker">账号登录</span>
+                        <h1>欢迎回来</h1>
+                        <p>登录后继续你的阅读旅程</p>
+                    </div>
+                    <div class="auth-social">
+                        <p class="auth-social__label">使用社交账号登录</p>
+                        <div class="qc"><?php echo quicklogin();?></div>
+                    </div>
+                    <div class="auth-divider"><span>或使用账号密码</span></div>
+                    <form class="logform" onsubmit="return log(this);">
                 {pboot:if({pboot:loginstatus})}
                 <?php
                 $x1=$_SERVER['HTTP_REFERER'];
@@ -25,23 +42,19 @@
                 ?>
                 <div class="box">
                     <dl>
-                        <dd>账号：</dd>
-                        <dt>
-                            <input type="text" name="username" id="username" required maxlength="25" placeholder="账号">
-                        </dt>
+                        <dd><label for="username">账号</label></dd>
+                        <dt><input type="text" name="username" id="username" required maxlength="25" placeholder="请输入账号" autocomplete="username"></dt>
                     </dl>
                     <dl>
-                        <dd>密码：</dd>
-                        <dt>
-                            <input type="password" name="password" id="password" required maxlength="25" placeholder="密码">
-                        </dt>
+                        <dd><label for="password">密码</label></dd>
+                        <dt><input type="password" name="password" id="password" required maxlength="25" placeholder="请输入密码" autocomplete="current-password"></dt>
                     </dl>
                     {pboot:2if({pboot:logincodestatus})}
                     <dl>
-                        <dd>验证码：</dd>
+                        <dd><label for="checkcode">验证码</label></dd>
                         <dt>
-                            <input type="text" name="checkcode" id="checkcode" required class="regcode" maxlength="4" placeholder="验证码">
-                            <img src="{pboot:sitepath}/core/code.php" onclick="this.src='{pboot:sitepath}/core/code.php?t='+(new Date).getTime()" width="84" height="33">
+                            <input type="text" name="checkcode" id="checkcode" required class="regcode" maxlength="4" placeholder="请输入验证码" autocomplete="off">
+                            <img id="codeimg" src="{pboot:sitepath}/core/code.php" alt="验证码，点击刷新" title="点击刷新验证码" role="button" tabindex="0" onclick="this.src='{pboot:sitepath}/core/code.php?t='+(new Date).getTime()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" width="84" height="33">
                         </dt>
                     </dl>
                     {/pboot:2if}
@@ -56,8 +69,10 @@
                 sectime('./');
                 </script>
                 {/pboot:if}
-            </form>
-            <div class="logreg">还没有账号？立马<a href="<?php echo pbcode('member','register').$bu2;?>">注册</a>一个！</div>
+                    </form>
+                    <div class="logreg">还没有账号？<a href="<?php echo pbcode('member','register').$bu2;?>">立即注册</a></div>
+                </section>
+            </div>
         </div>
     </div>
 </div>

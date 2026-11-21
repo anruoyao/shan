@@ -1,11 +1,27 @@
 {include file=../../../include/member/pc/header.html}
-<style>.main .center{background:#fff}</style>
-<div class="logbox" id="logbox">
-    <h1>会员注册</h1>
-    <div class="qc">
-        <?php echo quicklogin();?>
-    </div>
-    <form class="logform" onsubmit="return reg(this);">
+<div class="auth-page">
+    <div class="auth-layout">
+        <aside class="auth-aside">
+            <a class="auth-brand" href="./"><img src="template/tpl/image/logo.png" alt="SHBOOK.TOP 网文自留地"></a>
+            <div class="auth-aside__copy">
+                <p class="auth-eyebrow">READING COMMUNITY</p>
+                <h2>书页之间，<br>故事正好开始。</h2>
+                <p>收藏喜欢的作品，记录每一次阅读，也分享你自己的故事。</p>
+            </div>
+            <p class="auth-aside__foot">让每一次翻页，都有新的相遇。</p>
+        </aside>
+        <section class="auth-content" id="logbox">
+            <div class="auth-heading">
+                <span class="auth-kicker">创建账号</span>
+                <h1>加入书海</h1>
+                <p>注册一个账号，开启你的阅读旅程</p>
+            </div>
+            <div class="auth-social">
+                <p class="auth-social__label">也可以使用社交账号登录</p>
+                <div class="qc"><?php echo quicklogin();?></div>
+            </div>
+            <div class="auth-divider"><span>或创建新账号</span></div>
+            <form class="logform" onsubmit="return reg(this);">
         {pboot:if({pboot:registerstatus})}
         <?php
         $bu=gpvar('bu');
@@ -19,29 +35,23 @@
         ?>
         <div class="box">
             <dl>
-                <dd>账号：</dd>
-                <dt>
-                    <input type="text" name="username" id="username" required maxlength="25" placeholder="请输入账号">
-                </dt>
+                <dd><label for="username">账号</label></dd>
+                <dt><input type="text" name="username" id="username" required maxlength="25" placeholder="请输入账号" autocomplete="username"></dt>
             </dl>
             <dl>
-                <dd>密码：</dd>
-                <dt>
-                    <input type="password" name="password" id="password" required maxlength="25" placeholder="请输入密码">
-                </dt>
+                <dd><label for="password">密码</label></dd>
+                <dt><input type="password" name="password" id="password" required maxlength="25" placeholder="请设置密码" autocomplete="new-password"></dt>
             </dl>
             <dl>
-                <dd>确认密码：</dd>
-                <dt>
-                    <input type="password" name="rpassword" id="rpassword" required maxlength="25" placeholder="请重复密码">
-                </dt>
+                <dd><label for="rpassword">确认密码</label></dd>
+                <dt><input type="password" name="rpassword" id="rpassword" required maxlength="25" placeholder="请再次输入密码" autocomplete="new-password"></dt>
             </dl>
             {pboot:2if({pboot:registercodestatus}==1)}
             <dl>
-                <dd>验证码：</dd>
+                <dd><label for="checkcode">验证码</label></dd>
                 <dt>
-                    <input type="text" name="checkcode" id="checkcode" required class="regcode" maxlength="4" placeholder="请输入验证码">
-                    <img src="{pboot:sitepath}/core/code.php" onclick="this.src='{pboot:sitepath}/core/code.php?t='+(new Date).getTime()" width="84" height="33">
+                    <input type="text" name="checkcode" id="checkcode" required class="regcode" maxlength="4" placeholder="请输入验证码" autocomplete="off">
+                    <img id="codeimg" src="{pboot:sitepath}/core/code.php" alt="验证码，点击刷新" title="点击刷新验证码" role="button" tabindex="0" onclick="this.src='{pboot:sitepath}/core/code.php?t='+(new Date).getTime()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" width="84" height="33">
                 </dt>
             </dl>
             {/pboot:2if}
@@ -56,16 +66,17 @@
         sectime('./');
         </script>
         {/pboot:if}
-    </form>
-    <div class="logreg">
-        <input type="checkbox" id="deal" style="position:relative;top:2px;">
-        <label for="deal" class="ui-checkbox"></label>
-        <label for="deal">我已阅读并同意 </label>
-        <a href="<?php echo pbcode('member','service','fu');?>">《用户服务协议》</a>
-        <label>和</label>
-        <a href="<?php echo pbcode('member','service','ys');?>">《隐私政策》</a>
+            </form>
+            <div class="auth-legal">
+                <input type="checkbox" id="deal">
+                <label for="deal">我已阅读并同意</label>
+                <a href="<?php echo pbcode('member','service','fu');?>">《用户服务协议》</a>
+                <span>和</span>
+                <a href="<?php echo pbcode('member','service','ys');?>">《隐私政策》</a>
+            </div>
+            <div class="logreg">已经有账号？<a href="<?php echo pbcode('member','login','reg').$bu2;?>">立即登录</a></div>
+        </section>
     </div>
-    <div class="logreg">已经有账号啦？立马<a href="<?php echo pbcode('member','login','reg').$bu2;?>">登录</a>吧！</div>
 </div>
 <script type="text/javascript" src="{pboot:sitetplpath}/js/jquery-1.12.4.min.js"></script>
 <script>
