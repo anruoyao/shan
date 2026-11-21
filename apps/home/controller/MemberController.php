@@ -63,6 +63,7 @@ class MemberController extends Controller
                 location(pbcode('member','ucenter','','all'));
             }
         }
+        $home_url=pcbase('all');
         $log_url=$_SERVER['HTTP_REFERER'];
         if(!strstr($log_url,'login') && !strstr($log_url,'register')){
             session('log_url',$log_url);
@@ -75,16 +76,16 @@ class MemberController extends Controller
             $x=strstr($x,'/');
             $x=ltrim($x,'/');
             if(!$x){
-                $log_url=pbcode('member','ucenter','','all');
+                $log_url=$home_url;
             }else{
                 $x=trim($x,'/');
                 $x='/'.$x.'/';
                 if($x==pcbase()){
-                    $log_url=pbcode('member','ucenter','','all');
+                    $log_url=$home_url;
                 }
             }
         }else{
-            $log_url=pbcode('member','ucenter','','all');
+            $log_url=$home_url;
         }
         // 执行登录验证
         if($_POST){
