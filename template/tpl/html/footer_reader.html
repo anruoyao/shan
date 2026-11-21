@@ -99,6 +99,13 @@ if (trim($sh_bottomad)) {
 <a href="javascript:window.scrollTo(0,0);" class="pageScroll" id="pageScroll">Top</a>
 <div class="TIP" id="TIP"></div>
 <div class="MAK" id="MAK"></div>
+<div class="sh-auth-modal" id="shAuthModal" hidden aria-hidden="true" data-login-url="<?php echo sh_e(pbcode('member','login','','all'));?>" data-register-url="<?php echo sh_e(pbcode('member','register','','all'));?>">
+	<button class="sh-auth-modal__backdrop" type="button" data-auth-modal-close aria-label="关闭登录弹窗" tabindex="-1"></button>
+	<section class="sh-auth-modal__dialog" role="dialog" aria-modal="true" aria-label="登录或注册">
+		<button class="sh-auth-modal__close" type="button" data-auth-modal-close aria-label="关闭">×</button>
+		<iframe class="sh-auth-modal__frame" id="shAuthModalFrame" title="账号登录或注册" src="about:blank"></iframe>
+	</section>
+</div>
 <div id="loginData" style="display:none;">
 	<script>
 	document.write("<script src='hi.login.php?my=pc&t=" + (new Date).getTime() + "'></s" + "cript>")
@@ -140,6 +147,7 @@ if(BookID && temp != 'category'){
 }
 </script>
 <?php echo axd(56);?>
+<script type="text/javascript" src="template/tpl/js/auth-modal.js?v=20261121b"></script>
 <script type="text/javascript" src="template/tpl/js/reader.js?v=20261121b"></script>
 </body>
 </html>

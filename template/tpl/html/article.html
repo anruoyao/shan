@@ -163,7 +163,8 @@ var xid = "<?php echo $sh_xid;?>";
 			function cgSubmit() {
 				if (uid == 0 || !uid) {
 					alert("抱歉，登录会员才能评论哦！");
-					location.href = "<?php echo pbcode('member','login');?>";
+					if (typeof openAuthModal === 'function') openAuthModal('login');
+					else location.href = "<?php echo pbcode('member','login');?>";
 					return false;
 				}
 				if (!$id("idx").value) {

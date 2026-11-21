@@ -85,7 +85,8 @@ function x_get(URL, OBJ, XID, ELSE, OTHER) {
                     if (cDATA == 'login') {
                         alert('登录才可收藏哦！');
                         var url = '?member/login/';
-                        location.href = url;
+                        if (typeof openAuthModal === 'function') openAuthModal('login');
+                        else location.href = url;
                     } else if (cDATA == 'ok') {
                         alert('成功收藏啦！');
                     }
@@ -233,7 +234,8 @@ function x_get(URL, OBJ, XID, ELSE, OTHER) {
                 if(XID=='sutodychapter'){
                     if(cDATA=='login'){
                         var url='?member/login/';
-                        location.href=url;
+                        if (typeof openAuthModal === 'function') openAuthModal('login');
+                        else location.href=url;
                     }else if(cDATA=='ok'){
                         location.reload();
                     }else if(cDATA.indexOf('pay,http')>-1){
@@ -665,7 +667,8 @@ function hf(id, re, go) {
         var x = recombtn.value;
         if (x == '未登录' || !uid) {
             var url = '?member/login/';
-            location.href = url;
+            if (typeof openAuthModal === 'function') openAuthModal('login');
+            else location.href = url;
             return false;
         } else if (x != '提交回复') {
             return false;

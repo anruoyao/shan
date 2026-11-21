@@ -115,6 +115,12 @@ function reg(obj) {
         success: function(response, status) {
             if (response.code) {
                 var url = response.tourl;
+                if (document.body.classList.contains('auth-popup')) {
+                    var registerMessage = {type: 'sh-auth-switch', mode: 'login', message: response.data || '注册成功，请登录'};
+                    if (window.shAuthPostMessage) window.shAuthPostMessage(registerMessage);
+                    else window.parent.postMessage(registerMessage, window.location.origin);
+                    return;
+                }
                 x = '<div class="wait-box"><img src="include/member/image/loading.gif">注册成功~.~</div>';
                 $id('logbox').innerHTML = x;
                 top.location.href = url;

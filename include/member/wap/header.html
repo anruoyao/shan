@@ -14,13 +14,15 @@
     <base href="<?php echo $pcbase;?>" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="include/member/css/wap.css" />
-    <link rel="stylesheet" type="text/css" href="include/member/css/auth.css?v=20261121" />
+    <link rel="stylesheet" type="text/css" href="include/member/css/auth.css?v=20261121b" />
+    <link rel="stylesheet" type="text/css" href="template/tpl/css/auth-modal.css?v=20261121b" />
     <script type="text/javascript" src="include/member/js/common.js"></script>
     <script type="text/javascript" src="include/member/js/ajax.js"></script>
     <script type="text/javascript" src="include/member/js/big5.js"></script>
+    <script type="text/javascript" src="template/tpl/js/auth-modal.js?v=20261121b" defer></script>
 </head>
 
-<body>
+<body class="<?php echo isset($_GET['auth_modal']) && $_GET['auth_modal']==='1'?'auth-popup':'';?>">
     <div class="header">
         <div class="center">
             <div class="logo">

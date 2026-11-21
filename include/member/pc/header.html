@@ -1,6 +1,7 @@
 <?php $isAuthorLayout=defined('AUTHOR_LAYOUT');?>
 <?php $isMemberLayout=defined('MEMBER_LAYOUT');?>
 <?php $isFlatLayout=$isAuthorLayout || $isMemberLayout;?>
+<?php $isAuthPopup=isset($_GET['auth_modal']) && $_GET['auth_modal']==='1';?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 
@@ -11,7 +12,8 @@
     <base href="<?php echo $pcbase;?>" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="include/member/css/pc.css?v=20261117" />
-    <link rel="stylesheet" type="text/css" href="include/member/css/auth.css?v=20261121" />
+    <link rel="stylesheet" type="text/css" href="include/member/css/auth.css?v=20261121b" />
+    <link rel="stylesheet" type="text/css" href="template/tpl/css/auth-modal.css?v=20261121b" />
     <?php if($isFlatLayout):?>
     <link rel="stylesheet" type="text/css" href="include/member/css/author.css?v=20261119" />
     <?php endif;?>
@@ -20,9 +22,10 @@
     <?php endif;?>
     <script type="text/javascript" src="include/member/js/common.js?v=20261117"></script>
     <script type="text/javascript" src="include/member/js/ajax.js?v=20261117"></script>
+    <script type="text/javascript" src="template/tpl/js/auth-modal.js?v=20261121b" defer></script>
 </head>
 
-<body class="<?php echo $isFlatLayout?'author-v2':'';?> <?php echo $isMemberLayout?'member-v2':'';?>">
+<body class="<?php echo $isFlatLayout?'author-v2':'';?> <?php echo $isMemberLayout?'member-v2':'';?> <?php echo $isAuthPopup?'auth-popup':'';?>">
 <?php if($isFlatLayout):?>
     <?php echo author_topbar($isMemberLayout?'member':'author');?>
     <div class="aw-layout">
