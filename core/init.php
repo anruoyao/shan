@@ -41,6 +41,10 @@ define('ROOT_PATH',$file_path);
 define('DOC_PATH',preg_replace('{'.SITE_DIR.'$}i','',ROOT_PATH));
 $_SERVER['DOCUMENT_ROOT']=DOC_PATH;
 require_once(ROOT_PATH.'/b'.'as'.'e.'.''.$ichp);
+$pbFile=defined('PB_FILE') ? str_replace('\\','/',PB_FILE) : '';
+if(strpos($pbFile,ROOT_PATH.'/api/')!==0){
+	$AUTO_STATIC='0'; // 站点页面固定动态渲染；外部内容 API 保留原有模式。
+}
 define('CORE_DIR',SITE_DIR.'/'.basename(__DIR__));
 define('CORE_PATH',DOC_PATH.CORE_DIR);
 define('APP_PATH',ROOT_PATH.'/apps');

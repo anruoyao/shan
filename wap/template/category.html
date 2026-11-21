@@ -51,11 +51,4 @@
 <script type="text/javascript">
 fnav(2);
 $id('fnav').style.display='block';
-var as='<?php echo $AUTO_STATIC;?>';
-var t01=parseInt('<?php echo time()+$MAKE_HTML_TIME;?>');
-var t02=new Date().getTime();
-t02=Math.round(t02/1000);
-if(t02>t01 && as!='0'){
-    mk('<?php echo $scode;?>','<?php echo $filename;?>');
-}
 </script>

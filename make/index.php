@@ -33,9 +33,9 @@ echo '
 <base href="'.$pcbase.'" />
 <link rel="stylesheet" type="text/css" href="make/css/common.css" />
 <script type="text/javascript">
-'.$djtArr.'var x2x="index";var page=1;var total=1;var auto='.$auto.';
+'.$djtArr.'var x2x="sitemap";var page=1;var total=1;var auto='.$auto.';
 </script>
-<script type="text/javascript" src="make/js/common.js"></script>
-<script type="text/javascript" src="make/js/ajax.js"></script>
+<script type="text/javascript" src="make/js/common.js?v=20261121a"></script>
+<script type="text/javascript" src="make/js/ajax.js?v=20261121b"></script>
 <div id="conBox"'.$class.'><script type="text/javascript">conBox();</script></div>';
 ?>

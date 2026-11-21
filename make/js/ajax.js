@@ -18,7 +18,7 @@ function x_get(URL00, OBJ, XID, ELSE, OTHER) {
                     if (cDATA == 'ok') {
                         setcookie('sitemap', '');
                         setcookie('make_html', '');
-                        var ss = '<ss class="red">ok，请在下方更新页面或配置伪静态规则</ss>';
+                        var ss = '<ss class="red">动态模式已固定，页面无需生成</ss>';
                     } else {
                         var ss = '<ss class="red">操作失败，稍后重试</ss>';
                     }
@@ -238,6 +238,9 @@ function x_get(URL00, OBJ, XID, ELSE, OTHER) {
 }
 
 function base(djt) {
+    if (djt != '0') {
+        return false;
+    }
     var yes_ok = '';
     if (djt == '1') {
         var yes_ok = "【静态模式】：\n需要更新“首页、栏目页、书页、目录页、内容页”静态页面  ！！！\n需要更新“首页、栏目页、书页、目录页、内容页”静态页面  ！！！\n----->否则网站无法访问<-----\n----->否则网站无法访问<-----\n----->否则网站无法访问<-----\n确定启用静态模式吗？";

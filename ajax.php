@@ -12,32 +12,8 @@ if(strstr($x,'spider') || strstr($x,'robot')){
 }
 $my=gpvar('my');
 if($my=='mk'){
-	if($Thumb_AUTO){
-		require_once('make/base.inc.php');
-		gomk('rethumb',1,1);
-	}
-	if(!$Thumb_AUTO){
-		require_once('make/base.inc.php');
-	}
-	$scode=gpvar('scode');
-	$fn=gpvar('fn');
-	if($scode=='0'){
-		$x='pc.html';
-		$x=filemtime($x);
-		$x=$x+$MAKE_HTML_TIME;
-		$x=time()-$x;
-		if($x>0){
-			gomk('index',1,1);
-		}
-	}else{
-		$x=$fn.'/index.html';
-		$x=filemtime($x);
-		$x=$x+$MAKE_HTML_TIME;
-		$x=time()-$x;
-		if($x>0){
-			gomk('category'.$scode,1,1);
-		}
-	}
+	http_response_code(410);
+	exit('当前为动态模式，无需生成页面');
 }
 if($my=='sitemap'){
 	sitemap(1);

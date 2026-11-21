@@ -1,17 +1,4 @@
 <?php
-$qs=$_SERVER['QUERY_STRING'];
-if(!$qs){
-	$f='wap.html';
-	if(file_exists($f)){
-	    $x=filesize($f);
-	    if($x>1515){
-	    	require_once('include/abc.seo.php');
-	    	require_once('../include/rep.fun.php');
-	        reptkd($f,'','','','wap');
-	        exit;
-	    }
-	}
-}
 if(!isset($dsql)){
 	define('IS_INDEX',true);
 	define('URL_BIND','pbcode');

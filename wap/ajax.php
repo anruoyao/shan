@@ -14,29 +14,8 @@ if(strstr($x,'spider') || strstr($x,'robot')){
 }
 $my=gpvar('my');
 if($my=='mk'){
-	// if(!maindomain()){
-	// 	exit;
-	// }
-	require_once('../make/base.inc.php');
-	$scode=gpvar('scode');
-	$fn=gpvar('fn');
-	if($scode=='0'){
-		$x='/wap.html';
-		$x=filemtime($x);
-		$x=$x+$MAKE_HTML_TIME;
-		$x=time()-$x;
-		if($x>0){
-			gomk('index_wap',1,1);
-		}
-	}else{
-		$x=$fn.'/index.html';
-		$x=filemtime($x);
-		$x=$x+$MAKE_HTML_TIME;
-		$x=time()-$x;
-		if($x>0){
-			gomk('category_wap'.$scode,1,1);
-		}
-	}
+	http_response_code(410);
+	exit('当前为动态模式，无需生成页面');
 }
 if($my=='sitemap'){
 	$xxx=sitemap(1,1);

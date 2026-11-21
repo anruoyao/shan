@@ -1,6 +1,6 @@
 <?php
 global $staticArr;
-$staticArr=array('0'=>'动态','1'=>'静态','2'=>'伪静态','3'=>'半静态','4'=>'半伪静态');
+$staticArr=array('0'=>'动态');
 function conBox(){
 	global $sitetitle,$cfg_dbpassword;
 	$dir=ROOT_PATH.'/data/version.txt';
@@ -10,24 +10,20 @@ function conBox(){
 		<img src="template/tpl/image/logo.png">
 		'.$sitetitle.'<font>（ 源码版本 : <ii class="red">'.$bb.'</ii>；<a rel="nofollow" href="//update.669977.net/" target="_blank">获取最新版</a> ）</font>
 		<br>
-		<span>页面更新、页面管理、常用工具</span>
+		<span>动态页面与站点维护</span>
 	</h1>
 	<p>
-	五种URL模式：动态、静态、伪静态、半静态、半伪静态<span style="font-size:12px;" onclick="closeMe(\'hid-box\')">（<font id="more-2" style="text-decoration:underline;cursor:pointer;color:red">展开详情</font>有说明）</span><br>
+		当前固定为动态模式：首页、栏目、作品和章节均使用最新模板实时渲染，修改后刷新即可，无需生成静态页面。<br>
 	'.getdjt().'
 	</p>
 	<div class="hid-box" id="hid-box">
 		<span class="more" id="more" onclick="closeMe(\'hid-box\')">展开详情</span>
 		<p class="tip">
 		+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++<br>
-		一、动&nbsp;&nbsp;&nbsp;态：首页是静态，需要更新首页；其它页面是动态，不需要更新<br>
-		二、静&nbsp;&nbsp;&nbsp;态：首页、栏目页、内容页，这几个是静态，需要更新；其它页面是动态，不需要更新<br>
-		三、伪静态：首页、栏目页，这两个是静态，需要更新；其它页面是<span class="red">伪静态</span>，不需要更新，但是<span class="red">需要配置伪静态规则</span><br>
-		四、半静态：首页、栏目页、书页、目录页，这四个是静态，需要更新；其它页面是动态，不需要更新<br>
-		五、半伪静态：首页、栏目页、书页、目录页，这四个是静态，需要更新；其它页面是伪静态，不需要更新，但是<span class="red">需要配置伪静态规则</span><br>
+		首页、栏目、作品和章节页面每次访问均读取当前模板与数据，不使用静态页面缓存。<br>
 		+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++<br>
 		<span class="brown">
-		[注]上述4条中的静态页面：默认每隔1小时自动更新页面，也可在当前页面中手动更新，更新后才会显示新内容<br>
+		修改模板或资源后重新载入页面即可查看更新，不需要运行页面生成任务。<br>
 		</span>
 		+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		</p>
@@ -39,17 +35,13 @@ function conBox(){
 		<span class="red b">售后服务：</span>pc + wap +app ，包安装，并且，源码的问题都免费处理
 		</p>
 	</div>
-	<p class="h bg-black">[可更新项目]：<span class="yellow">不同模式下，显示的更新项目不同</span></p>
+		<p class="h bg-black">[站点维护]：<span class="yellow">地图与采集工具</span></p>
 	<div id="doBox"></div>
 	<p id="timeBox">用时：<span id="time">0</span> 秒</p>
 	<p id="goBox"><span class="xw-box" id="xw-box"></p>
 	<p><span class="go" id="go" onclick="go(1)">开始更新</span><a class="seo" id="seo" onclick="seo()">SEO设置</a></p>
 	<p class="t" id="t-con">
-	[注1]不同模式下，需要更新的项目不同，可“<span style="color:red">展开详情</span>”查看说明<br>
-	[注2]首页、栏目页：默认每隔1小时自动更新，也可在当前页面中手动更新，更新后才会显示新内容<br>
-	[注3]书页、目录页、章节页：前台页面每次访问，自动更新10个页面，自动速度跟不上时，需要在此页面中手动更新<br>
-	[注4]使用“静态”模式时注意：小说站章节量太大，生成静态页面花时间会很多，并且生成的页面会占用大量硬盘空间<br>
-	[注5]<span style="color:blue">更新时，若长时间没反应，可刷新页面重新更新</span><br>
+		地图可按需更新；采集缓存、转码和字数维护工具不影响动态页面模式。<br>
 	[注6]<span style="color:red">重置字数：</span>字数是采集的，若目标站未标字数，采来就是0字数，你站每次访问自动统计一本小说的字数，也可在此页面手动重置字数<br>
 	[注7]<span style="color:blue;font-weight:bold">关关缓存</span>：<span style="color:red">关关采集</span>、<span style="color:red">火车头采集</span>、<span style="color:red">后台网页采集</span>，三种采集方式，如果使用关关采集器采集的，那么，采集之后，需要更新缓存，你站才会显示那些内容<br>
 	[注8]<span style="color:blue">转码本地化：后台网页版采集是转码，若目标站关站，将无法获取内容，可将转码本地化，摆脱目标站的影响</span><br>
@@ -64,11 +56,11 @@ function getdjt(){
 		$static='<del>未知</del>';
 	}
 	foreach ($staticArr as $key => $value){
-		$xxx.='<a id="base'.$key.'" href="javascript:base(\''.$key.'\');">'.$value.'</a>、';
+		$xxx.='<span id="base'.$key.'">'.$value.'</span>、';
 	}
 	$xxx=rtrim($xxx,'、');
 	$xxx='
-	当前模式：<span class="red" id="base">'.$static.'</span> / 可设置模式：'.$xxx.'<span class="stip">（点击后有弹框提示，一定要看！相当相当重要！）</span>';
+	当前固定模式：<span class="red" id="base">'.$static.'</span>';
 	return $xxx;
 }
 function doBox(){
@@ -100,12 +92,9 @@ function doBox(){
 	</p>
 	<div class="hh">二、电脑版</div>
 	<p>
-	更新项目一：
-	<label for="index">
-	<input type="radio" id="index" name="do" value="index" checked="checked">首页
-	</label>
+	地图维护：
 	<label for="sitemap">
-	<input type="radio" id="sitemap" name="do" value="sitemap">地图
+	<input type="radio" id="sitemap" name="do" value="sitemap" checked="checked">更新站点地图
 	</label>
 	</p>';
 	if($AUTO_STATIC=='1' || $AUTO_STATIC=='2' || $AUTO_STATIC=='3' || $AUTO_STATIC=='4'){
@@ -180,12 +169,9 @@ function doBox(){
 	<div class="wap-box">
 	<div class="hh">三、手机版</div>
 	<p>
-	更新项目一：
-	<label for="index_wap">
-	<input type="radio" id="index_wap" name="do" value="index_wap">首页
-	</label>
+	地图维护：
 	<label for="sitemap_wap">
-	<input type="radio" id="sitemap_wap" name="do" value="sitemap_wap">地图
+	<input type="radio" id="sitemap_wap" name="do" value="sitemap_wap">更新手机版站点地图
 	</label>
 	</p>';
 	if($AUTO_STATIC=='1' || $AUTO_STATIC=='2' || $AUTO_STATIC=='3' || $AUTO_STATIC=='4'){
@@ -320,6 +306,9 @@ function reph($h=null){
 }
 function gomk($x2x=null,$Page=null,$total=null,$single=null){
 	global $dsql,$PC_URL,$WAP_URL,$f,$HTTP_HOST,$pcbaseall;
+	if(preg_match('/^(index|index_wap|category(?:_wap)?\d*|content[12](?:Ready)?(?:_wap)?|single[12](?:Title|ID)(?:_wap)?)$/',$x2x)){
+		return 'error';
+	}
 	$PC_URL_00=$PC_URL;
 	$WAP_URL_00=$WAP_URL;
 	$localBase=false;
@@ -1533,23 +1522,6 @@ function SET_MAKE_NUM($id=null){
 	}
 }
 function setdjt($djt=null){
-	if(!$djt && $djt!='0'){
-		return 'error';
-	}
-	$base=ROOT_PATH.'/base.inc.php';
-	$h=xxx_url($base);
-	$x='AUTO_STATIC';
-	$x01=strstr($h,"\$$x");
-	$arr=explode(';',$x01);
-	$x01=$arr[0];
-	$x02="\$$x='$djt'";
-	$h=str_replace($x01,$x02,$h);
-	file_put_contents($base,$h);
-	$h=xxx_url($base);
-	if(strstr($h,$x02)){
-		return 'ok';
-	}else{
-		return 'error';
-	}
+	return (string)$djt==='0' ? 'ok' : 'error';
 }
 ?>
