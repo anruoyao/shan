@@ -1,25 +1,25 @@
 <?php define('MEMBER_LAYOUT',1); global $my; $my='look';?>
 {include file=../../../include/member/wap/header.html}
-<div class="main reader-history">
+<div class="main reader-shelf">
     <div class="center">
-        <header class="reader-history__topbar">
-            <a class="reader-history__back" href="javascript:window.history.go(-1);" aria-label="返回">&#8249;</a>
-            <div class="reader-history__heading">
+        <header class="reader-shelf__topbar">
+            <a class="reader-shelf__back" href="javascript:window.history.go(-1);" aria-label="返回">&#8249;</a>
+            <div class="reader-shelf__heading">
                 <span>MY READING</span>
                 <h1>阅读足迹</h1>
             </div>
-            <a class="reader-history__store" href="<?php echo pbcode('shuku');?>">逛书城</a>
+            <a class="reader-shelf__store" href="<?php echo pbcode('shuku');?>">逛书城</a>
         </header>
-        <nav class="reader-history__tabs" aria-label="我的阅读">
+        <nav class="reader-shelf__tabs" aria-label="我的阅读">
             <a href="<?php echo pbcode('member','fav');?>">我的书架</a>
             <a href="<?php echo pbcode('member','look');?>" aria-current="page">阅读记录</a>
         </nav>
-        <section class="reader-history__section" aria-labelledby="readerHistoryListTitle">
-            <div class="reader-history__section-head">
-                <h2 id="readerHistoryListTitle">最近读过</h2>
+        <section class="reader-shelf__section" aria-labelledby="readerShelfListTitle">
+            <div class="reader-shelf__section-head">
+                <h2 id="readerShelfListTitle">最近读过</h2>
                 <span>继续上次的阅读</span>
             </div>
-            <div class="reader-history__list" id="biglist">
+            <div class="reader-shelf__list" id="biglist">
                 <?php echo biglist();?>
             </div>
         </section>

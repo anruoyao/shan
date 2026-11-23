@@ -1,14 +1,28 @@
+<?php define('MEMBER_LAYOUT',1); global $my; $my='fav';?>
 {include file=../../../include/member/wap/header.html}
-<div class="main">
+<div class="main reader-shelf">
     <div class="center">
-        <div class="bnav nfl">
-            <a href="<?php echo pbcode('member','ucenter');?>">会员中心</a>
-            &gt;&gt;
-            <a href="<?php echo pbcode('member','fav');?>">收藏</a>
-        </div>
-        <div class="mbox" id="biglist">
-            <?php echo biglist();?>
-        </div>
+        <header class="reader-shelf__topbar">
+            <a class="reader-shelf__back" href="javascript:window.history.go(-1);" aria-label="返回">&#8249;</a>
+            <div class="reader-shelf__heading">
+                <span>MY LIBRARY</span>
+                <h1>我的书架</h1>
+            </div>
+            <a class="reader-shelf__store" href="<?php echo pbcode('shuku');?>">逛书城</a>
+        </header>
+        <nav class="reader-shelf__tabs" aria-label="我的阅读">
+            <a href="<?php echo pbcode('member','fav');?>" aria-current="page">我的书架</a>
+            <a href="<?php echo pbcode('member','look');?>">阅读记录</a>
+        </nav>
+        <section class="reader-shelf__section" aria-labelledby="readerShelfListTitle">
+            <div class="reader-shelf__section-head">
+                <h2 id="readerShelfListTitle">收藏作品</h2>
+                <span>按收藏时间排序</span>
+            </div>
+            <div class="reader-shelf__list" id="biglist">
+                <?php echo biglist();?>
+            </div>
+        </section>
     </div>
 </div>
 {include file=../../../include/member/wap/footer.html}

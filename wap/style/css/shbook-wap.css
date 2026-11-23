@@ -446,7 +446,7 @@ html, body { background: var(--sh-paper); }
 .sh-wap-sex-switch {
     position: absolute;
     top: .75rem;
-    left: 7.3rem;
+    left: 50%;
     display: flex;
     width: 5.5rem;
     height: 1.75rem;
@@ -455,6 +455,7 @@ html, body { background: var(--sh-paper); }
     padding: .12rem;
     border-radius: 1rem;
     background: #f0f0f2;
+    transform: translateX(-50%);
     z-index: 2;
 }
 .sh-wap-sex-switch a {
@@ -559,7 +560,7 @@ html, body { background: var(--sh-paper); }
     .sh-wap-header .logo-a { left: .5rem; gap: .25rem; }
     .sh-wap-header .logo-a img { width: 1.8rem; height: 1.8rem; }
     .sh-wap-brand { font-size: .8rem; }
-    .sh-wap-sex-switch { left: 6.15rem; width: 5.25rem; }
+    .sh-wap-sex-switch { left: 50%; width: 5.25rem; }
     .sh-wap-sex-switch a { font-size: .6rem; }
     .sh-wap-header .LoginBox { width: 2.1rem; }
     .sh-wap-header .LoginBox a {
