@@ -189,3 +189,174 @@ a { transition: color .18s ease, background-color .18s ease, border-color .18s e
     .sh-wap-hero { padding-right: calc((100vw - 680px) / 2 + 1.2rem); padding-left: calc((100vw - 680px) / 2 + 1.2rem); }
     .sh-wap-library-hero { padding-right: 1.2rem; padding-left: 1.2rem; }
 }
+
+/* Light reading-shelf skin. The WAP reference uses a white chrome and a single red action color. */
+:root {
+    --sh-ink: #26242a;
+    --sh-ink-deep: #fff;
+    --sh-teal: #6d928d;
+    --sh-coral: #ed424b;
+    --sh-paper: #f7f7f8;
+    --sh-line: #ececef;
+    --sh-muted: #8a8c93;
+    --sh-text: #2f3035;
+}
+
+html, body { background: var(--sh-paper); }
+.sh-wap-header {
+    height: 3.25rem;
+    background: #fff;
+    color: var(--sh-text);
+    border-bottom: 1px solid var(--sh-line);
+    box-shadow: 0 1px 8px rgba(32, 28, 31, .04);
+}
+.sh-wap-header .logo-a {
+    top: .35rem;
+    left: .7rem;
+    height: 2.55rem;
+    display: flex;
+    align-items: center;
+    gap: .38rem;
+    padding: 0;
+}
+.sh-wap-header .logo-a img {
+    width: 2.1rem;
+    height: 2.1rem;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    filter: none;
+}
+.sh-wap-brand { color: #242329; font-size: .95rem; font-weight: 650; letter-spacing: .02em; white-space: nowrap; }
+.sh-wap-header .header-operate { top: .4rem; right: .35rem; bottom: .35rem; gap: .08rem; }
+.sh-wap-header .LoginBox, .sh-wap-header .LoginBox a { height: 2.4rem; }
+.sh-wap-header .LoginBox a {
+    padding: 0 .55rem 0 1.75rem;
+    line-height: 2.4rem;
+    background-position: .42rem center;
+    background-size: 1.05rem;
+    color: var(--sh-coral);
+    font-size: .75rem;
+}
+.sh-wap-header .icon-more, .sh-wap-header .sobtn { width: 2.35rem; height: 2.4rem; opacity: 1; }
+.sh-wap-header a.icon-more:empty::after, .sh-wap-header a.icon-more:empty::before { border-color: var(--sh-text); }
+.sh-wap-header .sobtn { background-size: 1.05rem; filter: none; }
+.sh-wap-header .nav-back {
+    padding-left: 2.15rem;
+    line-height: 3.25rem;
+    max-width: 45%;
+    overflow: hidden;
+    color: var(--sh-text);
+    font-size: .86rem;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: none;
+}
+.sh-wap-header .nav-back::before {
+    position: absolute;
+    left: .7rem;
+    top: .6rem;
+    content: '‹';
+    color: var(--sh-text);
+    font: 2rem/.95 Georgia, serif;
+}
+.sh-wap-header + .nav { background: #fff; border-bottom: 1px solid var(--sh-line); }
+.sh-wap-header + .nav a { border-color: var(--sh-line); color: var(--sh-text); font-size: .8rem; }
+.sh-wap-header + .nav ul li { height: 2.3rem; line-height: 2.3rem; }
+.sh-wap-header ~ .search-container { padding: .58rem .75rem .65rem; background: #fff; }
+.sh-wap-header ~ .search-container .search-guide { background: #f2f2f4; color: var(--sh-muted); }
+.sh-wap-header ~ .search-container input { color: var(--sh-text); }
+
+.sh-wap-main { padding-bottom: 4.5rem; }
+.sh-wap-hero {
+    min-height: 11.6rem;
+    padding: 1.2rem 1rem 1rem;
+    background: #fff8f6;
+    color: var(--sh-text);
+    border-bottom: 1px solid #f2dfdb;
+}
+.sh-wap-hero::before { right: -4rem; top: -6rem; border-color: rgba(237,66,75,.12); }
+.sh-wap-hero::after { right: 2rem; bottom: -7rem; border-color: rgba(109,146,141,.13); }
+.sh-wap-hero__copy { max-width: 70%; }
+.sh-wap-eyebrow, .sh-wap-kicker { color: var(--sh-coral); letter-spacing: .1em; }
+.sh-wap-hero h1 { margin-top: .48rem; color: var(--sh-text); font-size: 1.4rem; }
+.sh-wap-hero p { color: #76777d; }
+.sh-wap-button--light { background: var(--sh-coral); color: #fff; }
+.sh-wap-hero__link { color: var(--sh-text); }
+.sh-wap-hero__link span { color: var(--sh-coral); }
+.sh-wap-hero__book { right: .8rem; bottom: .95rem; color: var(--sh-text); }
+.sh-wap-hero__book img { box-shadow: .25rem .3rem 0 rgba(237,66,75,.14), 0 6px 14px rgba(32,28,31,.16); }
+.sh-wap-hero__book small { color: var(--sh-muted); }
+
+.sh-wap-quick { margin: .65rem 0; padding: .72rem .25rem; border-color: var(--sh-line); border-radius: 0; box-shadow: 0 1px 4px rgba(32,28,31,.02); }
+.sh-wap-quick__icon { border-radius: .45rem; background: #fff0f0; color: var(--sh-coral); }
+.sh-wap-quick a:nth-child(2) .sh-wap-quick__icon { background: #f3efff; color: #8168c7; }
+.sh-wap-quick a:nth-child(3) .sh-wap-quick__icon { background: #edf8f2; color: #43a373; }
+.sh-wap-quick a:nth-child(4) .sh-wap-quick__icon { background: #fff5df; color: #c48b37; }
+.sh-wap-section, .sh-wap-detail-section { margin: .6rem 0; padding: .95rem 0; border: 0; border-top: 1px solid var(--sh-line); border-bottom: 1px solid var(--sh-line); border-radius: 0; background: #fff; }
+.sh-wap-section__head, .sh-wap-detail-head { margin: 0 .85rem .65rem; padding-bottom: .52rem; }
+.sh-wap-section__head h2, .sh-wap-detail-head h2 { color: var(--sh-text); }
+.sh-wap-section__head > a, .sh-wap-detail-head > a { color: var(--sh-muted); }
+.sh-wap-genres { padding: 0 .85rem; }
+.sh-wap-genres a span { border-radius: .25rem; background: #fff0f0; color: var(--sh-coral); }
+.sh-wap-genres a:nth-child(3n) span { background: #edf8f2; color: #438f70; }
+.sh-book { padding-right: .85rem; padding-left: .85rem; }
+.sh-book__state { background: rgba(237,66,75,.9); }
+.sh-book__state--over { background: rgba(92,151,124,.92); }
+.sh-book__title a { color: var(--sh-text); }
+.sh-book__meta, .sh-book__meta a { color: #9b6570; }
+.sh-hotlist { padding: 0 .85rem; }
+.sh-hotlist__rank.is-top { color: var(--sh-coral); }
+
+.sh-wap-book-hero, .sh-wap-library-hero, .sh-wap-chapter-hero {
+    margin-right: -.75rem;
+    margin-left: -.75rem;
+    background: #fff;
+    color: var(--sh-text);
+    border-bottom: 1px solid var(--sh-line);
+}
+.sh-wap-book-hero { padding: 1.1rem .9rem .8rem; }
+.sh-wap-book-hero__blur { display: none; }
+.sh-wap-book-hero__cover img { box-shadow: .25rem .3rem 0 rgba(237,66,75,.12), 0 6px 14px rgba(32,28,31,.15); }
+.sh-wap-book-hero__copy .sh-wap-eyebrow { color: var(--sh-coral); }
+.sh-wap-book-hero h1 { color: var(--sh-text); }
+.sh-wap-book-hero__author { color: var(--sh-muted); }
+.sh-wap-book-hero__author a, .sh-wap-book-hero__latest a { color: #ae5964; }
+.sh-wap-book-hero__stats { color: var(--sh-muted); }
+.sh-wap-book-hero__stats b { color: var(--sh-text); }
+.sh-wap-book-hero__badge { color: var(--sh-coral); }
+.sh-wap-book-actions .sh-wap-button--outline { border-color: #e4e4e7; background: #fff; color: var(--sh-text); }
+.sh-wap-book-hero__latest { color: var(--sh-muted); }
+.sh-wap-detail-section { padding-top: .95rem; padding-bottom: .95rem; }
+.sh-wap-intro > p { color: #666870; }
+.sh-wap-tags a { border-color: #f3d8da; color: #b55f68; }
+.sh-wap-similar { padding: 0 .85rem; }
+.sh-minibook { background: #fafafa; border: 1px solid #f0f0f2; }
+.sh-wap-fixed-read a { background: var(--sh-coral); box-shadow: 0 4px 14px rgba(237,66,75,.22); }
+
+.sh-wap-library-hero, .sh-wap-chapter-hero { padding: 1.05rem 1rem .9rem; }
+.sh-wap-library-hero h1, .sh-wap-chapter-hero h1 { color: var(--sh-text); font-size: 1.3rem; }
+.sh-wap-chapter-hero h1 a { color: var(--sh-text); }
+.sh-wap-library-hero p, .sh-wap-chapter-hero p { color: var(--sh-muted); }
+.sh-wap-sort { border-bottom-color: var(--sh-line); }
+.sh-wap-sort a[aria-current="page"] { border-color: var(--sh-coral); color: var(--sh-coral); }
+.sh-wap-library-list { margin-top: .6rem; }
+.sh-wap-chapter-page-list { padding: 0 .85rem; }
+.sh-wap-chapter-page-list .novel-text-list li { border-color: var(--sh-line); }
+.sh-wap-chapter-page-list .novel-text-list li a { color: var(--sh-text); }
+.sh-wap-chapter-page-list .novel-text-list li.vip a { color: var(--sh-coral); }
+.sh-wap-chapter-page-list .page .cur { border-color: var(--sh-coral); background: var(--sh-coral); }
+.sh-wap-chapter-tip { clear: both; margin-right: .85rem; margin-left: .85rem; overflow: hidden; }
+.sh-wap-chapter-tip .tip_, .sh-wap-chapter-tip .box_ { float: none; width: auto; margin-right: 0; margin-left: 0; }
+.sh-wap-chapter-tip .box_ { margin-bottom: 0; padding: .75rem; text-align: center; }
+.sh-wap-chapter-list-section { clear: both; }
+.sh-wap-section .sh-updates { padding: 0 .85rem; }
+.sh-updates__book { color: var(--sh-text); }
+.sh-updates__meta a { color: #a96870; }
+.footer { background: #fff; }
+
+@media (min-width: 600px) {
+    .sh-wap-hero, .sh-wap-library-hero, .sh-wap-chapter-hero, .sh-wap-header ~ .search-container { margin-right: calc((680px - 100vw) / 2); margin-left: calc((680px - 100vw) / 2); }
+    .sh-wap-hero { padding-right: calc((100vw - 680px) / 2 + 1rem); padding-left: calc((100vw - 680px) / 2 + 1rem); }
+}
