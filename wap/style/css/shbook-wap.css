@@ -367,8 +367,19 @@ html, body { background: var(--sh-paper); }
 .sh-wap-banner__track a { display: block; min-width: calc(100% - .15rem); overflow: hidden; border-radius: .42rem; scroll-snap-align: start; box-shadow: 0 3px 12px rgba(30, 31, 35, .12); }
 .sh-wap-banner__track img { display: block; width: 100%; aspect-ratio: 5.333; object-fit: cover; }
 .sh-wap-banner__dots { display: flex; justify-content: center; gap: .25rem; padding-top: .15rem; }
-.sh-wap-banner__dots i { display: block; width: .3rem; height: .3rem; border-radius: 50%; background: #d7d8dc; }
-.sh-wap-banner__dots i:first-child { width: .85rem; border-radius: .3rem; background: var(--sh-coral); }
+.sh-wap-banner__dots button {
+    display: block;
+    width: .3rem;
+    height: .3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #d7d8dc;
+    appearance: none;
+    cursor: pointer;
+    transition: width .18s ease, background-color .18s ease;
+}
+.sh-wap-banner__dots button[aria-current="true"] { width: .85rem; border-radius: .3rem; background: var(--sh-coral); }
 .sh-wap-quick--six { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .05rem; }
 .sh-wap-quick--six .sh-wap-quick__icon { width: 1.85rem; height: 1.85rem; font-size: .78rem; }
 .sh-wap-quick--six b { font-size: .68rem; white-space: nowrap; }
@@ -434,16 +445,17 @@ html, body { background: var(--sh-paper); }
 
 .sh-wap-sex-switch {
     position: absolute;
-    top: .72rem;
-    left: 45%;
+    top: .75rem;
+    left: 7.3rem;
     display: flex;
-    width: 5.4rem;
-    height: 1.8rem;
+    width: 5.5rem;
+    height: 1.75rem;
     box-sizing: border-box;
     align-items: center;
     padding: .12rem;
     border-radius: 1rem;
     background: #f0f0f2;
+    z-index: 2;
 }
 .sh-wap-sex-switch a {
     display: flex;
@@ -461,6 +473,7 @@ html, body { background: var(--sh-paper); }
 .sh-wap-banner { margin: .65rem 0 .75rem; background: transparent; }
 .sh-wap-banner__track { gap: .5rem; padding: 0 .7rem .35rem; }
 .sh-wap-banner__track a { min-width: 100%; border-radius: .4rem; }
+.sh-wap-banner__track { scroll-behavior: smooth; }
 .sh-wap-banner__track img { aspect-ratio: 4.2; }
 .sh-wap-banner__dots { padding-top: .05rem; }
 
@@ -533,13 +546,40 @@ html, body { background: var(--sh-paper); }
 @media (max-width: 360px) {
     .sh-wap-header .LoginBox a { padding-right: .3rem; padding-left: 1.45rem; font-size: .68rem; }
     .sh-wap-header .icon-more { width: 2rem; }
-    .sh-wap-sex-switch { left: 40%; width: 4.65rem; }
 }
 
 @media (max-width: 360px) {
     .sh-wap-header .logo-a { left: .5rem; gap: .25rem; }
     .sh-wap-header .logo-a img { width: 1.8rem; height: 1.8rem; }
     .sh-wap-brand { font-size: .8rem; }
-    .sh-wap-sex-switch { left: 42%; width: 4.8rem; }
+    .sh-wap-sex-switch { left: 6.15rem; width: 5.25rem; }
     .sh-wap-sex-switch a { font-size: .6rem; }
+    .sh-wap-header .LoginBox { width: 2.1rem; }
+    .sh-wap-header .LoginBox a {
+        width: 2.1rem;
+        box-sizing: border-box;
+        padding: 0;
+        overflow: hidden;
+        font-size: 0;
+        background-position: center;
+    }
 }
+
+.sh-wap-feature-refresh {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    padding: .15rem 0 .15rem .35rem;
+    border: 0;
+    background: transparent;
+    color: var(--sh-muted);
+    font: inherit;
+    font-size: .7rem;
+    cursor: pointer;
+}
+.sh-wap-feature-refresh i { color: var(--sh-coral); font-size: 1rem; font-style: normal; }
+.sh-wap-feature-refresh:disabled { opacity: .65; cursor: wait; }
+.sh-wap-feature-refresh.is-loading i { animation: sh-wap-spin .7s linear infinite; }
+.sh-wap-cover-shelf__grid { transition: opacity .16s ease; }
+.sh-wap-cover-shelf__grid.is-refreshing { opacity: .55; }
+@keyframes sh-wap-spin { to { transform: rotate(360deg); } }
