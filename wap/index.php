@@ -63,12 +63,6 @@ if($x1=='member'){
 			exit;
 		}
 	}
-	$index='wap.html';
-	$filesize=filesize($index);
-	if(!isset($_GET['upcache']) && $filesize>1515){
-		reptkd($index,'','','','wap');
-		exit;
-	}
 	$tpl='template';
 	$template='index.html';
 }
