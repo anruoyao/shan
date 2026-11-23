@@ -7,6 +7,7 @@ if(!isset($dsql)){
 }
 require_once('include/abc.seo.php');
 require_once('include/wap.fun.php');
+require_once('../include/reader.fun.php');
 $cs=$_SERVER["QUERY_STRING"];
 $path=explode('/',$cs);
 $x1=$path[0];
@@ -25,7 +26,7 @@ if($x1=='member'){
 	require_once('include/member/index.php');
 }else if($x1=='pbcode'){
 	require_once('include/'.$x2.'/index.php');
-}else if(is_numeric($x1) && !$x2){
+}else if(is_numeric($x1) && (!$x2 || (isset($x2[0]) && ($x2[0]=='&' || $x2[0]=='?')))){
 	require_once('include/category/index.php');
 }else if($x1=='login'){
 	$uid=$path[1];

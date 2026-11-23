@@ -746,11 +746,16 @@ function sh_chapter_count($id)
     return $row ? intval($row['c']) : 0;
 }
 
-function sh_chapter_list($id)
+function sh_chapter_list($id, $limit = 0)
 {
     global $dsql;
     $id = intval($id);
-    $rows = $dsql->all("select xid,xtitle from ay_article where status=1 and id=$id order by xid asc", 1);
+    $limit = intval($limit);
+    $sql = "select xid,xtitle from ay_article where status=1 and id=$id order by xid asc";
+    if ($limit > 0) {
+        $sql .= " limit 0," . $limit;
+    }
+    $rows = $dsql->all($sql, 1);
     $html = '';
     $i = 0;
     foreach ($rows as $r) {
