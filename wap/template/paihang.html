@@ -1,57 +1,39 @@
 <?php require_once(dirname(__FILE__).'/header_inner.html');?>
-<div class="home-nav">
-	<a href="./" class="guide-nav-a">
-		<i class="icon icon-home"></i>
-		<h4 class="guide-nav-h">首 页</h4>
-	</a>
-	<a href="<?php echo pbcode('shuku');?>" class="guide-nav-a">
-		<i class="icon icon-sort"></i>
-		<h4 class="guide-nav-h">分 类</h4>
-	</a>
-	<a href="<?php echo pbcode('quanben');?>" class="guide-nav-a">
-		<i class="icon icon-end"></i>
-		<h4 class="guide-nav-h">全 本</h4>
-	</a>
-	<a href="<?php echo pbcode('paihang');?>" class="guide-nav-a">
-		<i class="icon icon-rank"></i>
-		<h4 class="guide-nav-h">排 行</h4>
-	</a>
-	<a href="<?php echo pbcode('member','look','','all');?>" class="guide-nav-a">
-		<i class="icon icon icon-newbook"></i>
-		<h4 class="guide-nav-h">足 迹</h4>
-	</a>
-</div>
-<div class="novel tred">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title">点击排行</h3><span> TOP 8</span>
-		</div>
-		<div class="novel-header-r"><a href="<?php echo pbcode('shuku');?>">更多</a></div>
-	</div>
-	<ol class="novel-text-list">
-		<?php echo paihang('visits',8);?>
-	</ol>
-</div>
-<div class="novel tred">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title">收藏排行</h3><span> TOP 8</span>
-		</div>
-		<div class="novel-header-r"><a href="<?php echo pbcode('shuku');?>">更多</a></div>
-	</div>
-	<ol class="novel-text-list">
-		<?php echo paihang('fav',8);?>
-	</ol>
-</div>
-<div class="novel tred">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title">本全排行</h3><span> TOP 8</span>
-		</div>
-		<div class="novel-header-r"><a href="<?php echo pbcode('shuku');?>">更多</a></div>
-	</div>
-	<ol class="novel-text-list">
-		<?php echo paihang('quanben',8);?>
-	</ol>
-</div>
+<?php
+$sh_wap_rank_groups = array(
+    array('title' => '点击排行', 'sub' => '按阅读热度排序', 'rows' => sh_books('', 'visits desc,id desc', 8), 'metric' => 'visits', 'unit' => '阅读'),
+    array('title' => '收藏排行', 'sub' => '读者收藏最多的作品', 'rows' => sh_rank_rows('fav', 'all', 8), 'metric' => 'fav_count', 'unit' => '收藏'),
+    array('title' => '完本排行', 'sub' => '已完结作品人气榜', 'rows' => sh_books(" and subtitle='1'", 'visits desc,id desc', 8), 'metric' => 'visits', 'unit' => '阅读')
+);
+?>
+<main class="sh-wap-main sh-wap-rank-page">
+    <section class="sh-wap-rank-hero">
+        <span class="sh-wap-eyebrow">BOOK RANKING</span>
+        <h1>排行榜</h1>
+        <p>从热度、收藏和完本作品中，找到正在被读者关注的故事。</p>
+    </section>
+    <div class="sh-wap-rank-list">
+        <?php foreach ($sh_wap_rank_groups as $sh_wap_rank_group) { ?>
+        <section class="sh-wap-rank-group" aria-labelledby="rank-<?php echo htmlspecialchars($sh_wap_rank_group['title'], ENT_QUOTES, 'UTF-8');?>">
+            <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">TOP STORIES</span><h2 id="rank-<?php echo htmlspecialchars($sh_wap_rank_group['title'], ENT_QUOTES, 'UTF-8');?>"><?php echo sh_e($sh_wap_rank_group['title']);?></h2><p><?php echo sh_e($sh_wap_rank_group['sub']);?></p></div><a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>">更多 <i>›</i></a></header>
+            <ol class="sh-wap-rank-books">
+                <?php $sh_wap_rank_no = 0; foreach ($sh_wap_rank_group['rows'] as $sh_wap_rank_book) { $sh_wap_rank_no++; $sh_wap_rank_cat = sh_cat($sh_wap_rank_book['scode']); ?>
+                <li class="sh-wap-rank-book">
+                    <span class="sh-wap-rank-book__no<?php echo $sh_wap_rank_no <= 3 ? ' is-top' : '';?>"><?php echo str_pad($sh_wap_rank_no, 2, '0', STR_PAD_LEFT);?></span>
+                    <a class="sh-wap-rank-book__cover" href="<?php echo htmlspecialchars(sh_book_url($sh_wap_rank_book['id']), ENT_QUOTES, 'UTF-8');?>"><?php echo sh_cover_img($sh_wap_rank_book['ico'], $sh_wap_rank_book['title']);?></a>
+                    <div class="sh-wap-rank-book__body">
+                        <h3><a href="<?php echo htmlspecialchars(sh_book_url($sh_wap_rank_book['id']), ENT_QUOTES, 'UTF-8');?>"><?php echo sh_e($sh_wap_rank_book['title']);?></a></h3>
+                        <p class="sh-wap-rank-book__meta"><?php echo sh_e($sh_wap_rank_book['author']);?> <span>·</span> <?php echo sh_e($sh_wap_rank_cat['name']);?></p>
+                        <p class="sh-wap-rank-book__desc"><?php echo sh_e(sh_short($sh_wap_rank_book['description'], 58) ?: '暂无简介');?></p>
+                        <p class="sh-wap-rank-book__foot"><span><?php echo sh_words($sh_wap_rank_book['subscode']);?></span><strong><?php echo sh_num(isset($sh_wap_rank_book[$sh_wap_rank_group['metric']]) ? $sh_wap_rank_book[$sh_wap_rank_group['metric']] : 0);?> <?php echo sh_e($sh_wap_rank_group['unit']);?></strong></p>
+                    </div>
+                </li>
+                <?php } ?>
+                <?php if (!$sh_wap_rank_group['rows']) echo '<li class="sh-wap-empty">暂无上榜作品</li>'; ?>
+            </ol>
+        </section>
+        <?php } ?>
+    </div>
+</main>
 <?php require_once(dirname(__FILE__).'/footer.html');?>
+<script type="text/javascript">fnav(4);</script>

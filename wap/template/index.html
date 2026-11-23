@@ -2,76 +2,46 @@
 <?php
 $sh_wap_sex = isset($_GET['sex']) && in_array($_GET['sex'], array('male', 'female'), true) ? $_GET['sex'] : '';
 $sh_wap_where = sh_sex_where($sh_wap_sex);
-$sh_wap_feature_rows = sh_books($sh_wap_where, 'isrecommend desc,visits desc,id desc', 3);
-$sh_wap_feature = $sh_wap_feature_rows ? $sh_wap_feature_rows[0] : null;
-$sh_wap_new = sh_books($sh_wap_where, 'create_time desc,id desc', 4);
-$sh_wap_editor = sh_books($sh_wap_where.' and isrecommend=1', 'score desc,visits desc,id desc', 4);
+$sh_wap_feature = sh_books($sh_wap_where.' and isrecommend=1', 'sorting asc,score desc,visits desc,id desc', 4);
+if (!$sh_wap_feature) {
+    $sh_wap_feature = sh_books($sh_wap_where, 'visits desc,id desc', 4);
+}
 ?>
 <main class="sh-wap-main sh-wap-home">
-    <section class="sh-wap-hero" aria-label="今日推荐">
-        <div class="sh-wap-hero__copy">
-            <span class="sh-wap-eyebrow">山海书盟 · 今日精选</span>
-            <h1>把下一页，交给一本好书</h1>
-            <p>连载、完结与新作，每一次打开都有新的故事。</p>
-            <div class="sh-wap-hero__actions">
-                <a class="sh-wap-button sh-wap-button--light" href="<?php echo htmlspecialchars(pbcode('shuku'),ENT_QUOTES,'UTF-8');?>">逛书城</a>
-                <a class="sh-wap-hero__link" href="<?php echo htmlspecialchars(pbcode('paihang'),ENT_QUOTES,'UTF-8');?>">查看榜单 <span aria-hidden="true">›</span></a>
-            </div>
+    <section class="sh-wap-banner" aria-label="精选推荐">
+        <div class="sh-wap-banner__track">
+            <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><img src="<?php echo htmlspecialchars($pcbaseall.'template/tpl/image/home-banner-01.jpg', ENT_QUOTES, 'UTF-8');?>" alt="精品阅读推荐" fetchpriority="high"></a>
+            <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><img src="<?php echo htmlspecialchars($pcbaseall.'template/tpl/image/home-banner-02.jpg', ENT_QUOTES, 'UTF-8');?>" alt="新作推荐" loading="lazy"></a>
         </div>
-        <?php if ($sh_wap_feature) { ?>
-        <a class="sh-wap-hero__book" href="<?php echo htmlspecialchars(sh_book_url($sh_wap_feature['id']),ENT_QUOTES,'UTF-8');?>">
-            <?php echo sh_cover_img($sh_wap_feature['ico'], $sh_wap_feature['title']);?>
-            <span><b><?php echo sh_e($sh_wap_feature['title']);?></b><small><?php echo sh_e($sh_wap_feature['author']);?></small></span>
-        </a>
-        <?php } ?>
+        <div class="sh-wap-banner__dots" aria-hidden="true"><i></i><i></i></div>
     </section>
 
-    <?php $sh_wap_ad = axd(24); if (trim($sh_wap_ad)) { ?><div class="sh-wap-ad"><?php echo $sh_wap_ad;?></div><?php } ?>
-
-    <nav class="sh-wap-quick" aria-label="快捷入口">
-        <a href="<?php echo htmlspecialchars(pbcode('shuku'),ENT_QUOTES,'UTF-8');?>"><span class="sh-wap-quick__icon">书</span><b>书城</b><small>全站作品</small></a>
-        <a href="<?php echo htmlspecialchars(pbcode('paihang'),ENT_QUOTES,'UTF-8');?>"><span class="sh-wap-quick__icon">榜</span><b>排行榜</b><small>热门榜单</small></a>
-        <a href="<?php echo htmlspecialchars(pbcode('quanben'),ENT_QUOTES,'UTF-8');?>"><span class="sh-wap-quick__icon">完</span><b>完本库</b><small>放心读完</small></a>
-        <a href="<?php echo htmlspecialchars(pbcode('member','look','','all'),ENT_QUOTES,'UTF-8');?>"><span class="sh-wap-quick__icon">阅</span><b>阅读记录</b><small>接着上次读</small></a>
+    <nav class="sh-wap-quick sh-wap-quick--six" aria-label="快捷入口">
+        <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">分</span><b>分类</b><small>全站作品</small></a>
+        <a href="<?php echo htmlspecialchars(pbcode('paihang'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">榜</span><b>排行榜</b><small>热门榜单</small></a>
+        <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">免</span><b>免费</b><small>畅快阅读</small></a>
+        <a href="<?php echo htmlspecialchars(pbcode('quanben'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">完</span><b>完本</b><small>放心读完</small></a>
+        <a href="<?php echo htmlspecialchars(pbcode('tags'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">单</span><b>书单</b><small>编辑精选</small></a>
+        <a href="<?php echo htmlspecialchars(pbcode('member','look','','all'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">阅</span><b>阅读记录</b><small>接着上次读</small></a>
     </nav>
 
-    <section class="sh-wap-section sh-wap-section--genres" aria-labelledby="wapGenresTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">EXPLORE</span><h2 id="wapGenresTitle">热门分类</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'),ENT_QUOTES,'UTF-8');?>">全部分类 <i>›</i></a></header>
-        <div class="sh-wap-genres">
-            <?php foreach (sh_cat_map() as $sh_wap_cat) { ?>
-            <a href="<?php echo htmlspecialchars(sh_cat_url($sh_wap_cat['scode']),ENT_QUOTES,'UTF-8');?>"><span><?php echo sh_e(function_exists('mb_substr') ? mb_substr($sh_wap_cat['name'],0,1,'UTF-8') : $sh_wap_cat['name']);?></span><?php echo sh_e($sh_wap_cat['name']);?></a>
-            <?php } ?>
-        </div>
-    </section>
-
-    <section class="sh-wap-section" aria-labelledby="wapLatestTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">JUST UPDATED</span><h2 id="wapLatestTitle">最近更新</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'),ENT_QUOTES,'UTF-8');?>?sort=update">更多 <i>›</i></a></header>
-        <?php echo sh_home_updates(6, $sh_wap_sex);?>
-    </section>
-
-    <section class="sh-wap-section" aria-labelledby="wapHotTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">READING NOW</span><h2 id="wapHotTitle">人气热榜</h2></div><a href="<?php echo htmlspecialchars(pbcode('paihang'),ENT_QUOTES,'UTF-8');?>">完整榜单 <i>›</i></a></header>
-        <?php echo sh_home_top(6, $sh_wap_sex);?>
-    </section>
-
-    <section class="sh-wap-section" aria-labelledby="wapEditorTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">EDITOR'S PICKS</span><h2 id="wapEditorTitle">主编力荐</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'),ENT_QUOTES,'UTF-8');?>">更多 <i>›</i></a></header>
-        <div class="sh-wap-book-list">
-            <?php foreach ($sh_wap_editor as $sh_wap_book) echo sh_book_card($sh_wap_book); ?>
-            <?php if (!$sh_wap_editor) echo '<p class="sh-wap-empty">本频道暂无推荐作品</p>'; ?>
-        </div>
-    </section>
-
-    <section class="sh-wap-section" aria-labelledby="wapNewTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">FRESH STORIES</span><h2 id="wapNewTitle">新书速递</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'),ENT_QUOTES,'UTF-8');?>?sort=new">全部新书 <i>›</i></a></header>
-        <div class="sh-wap-new-grid">
-            <?php foreach ($sh_wap_new as $sh_wap_book) { ?>
-            <a class="sh-wap-new-book" href="<?php echo htmlspecialchars(sh_book_url($sh_wap_book['id']),ENT_QUOTES,'UTF-8');?>">
-                <span class="sh-wap-new-book__cover"><?php echo sh_cover_img($sh_wap_book['ico'], $sh_wap_book['title']);?></span>
-                <strong><?php echo sh_e($sh_wap_book['title']);?></strong><small><?php echo sh_e($sh_wap_book['author']);?></small>
+    <section class="sh-wap-section sh-wap-cover-shelf" aria-labelledby="wapFeatureTitle">
+        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">EDITOR'S PICKS</span><h2 id="wapFeatureTitle">新人必读</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>">换一批 <i>↻</i></a></header>
+        <div class="sh-wap-cover-shelf__grid">
+            <?php foreach ($sh_wap_feature as $sh_wap_book) { ?>
+            <a class="sh-wap-cover-book" href="<?php echo htmlspecialchars(sh_book_url($sh_wap_book['id']), ENT_QUOTES, 'UTF-8');?>">
+                <span class="sh-wap-cover-book__cover"><?php echo sh_cover_img($sh_wap_book['ico'], $sh_wap_book['title']);?></span>
+                <strong><?php echo sh_e($sh_wap_book['title']);?></strong>
+                <small><?php echo sh_e($sh_wap_book['author']);?></small>
             </a>
             <?php } ?>
+            <?php if (!$sh_wap_feature) echo '<p class="sh-wap-empty">暂无推荐作品</p>'; ?>
         </div>
+    </section>
+
+    <section class="sh-wap-section sh-wap-home-blocks" aria-labelledby="wapRankGroupsTitle">
+        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">READING PICKS</span><h2 id="wapRankGroupsTitle">畅销精选</h2></div><a href="<?php echo htmlspecialchars(pbcode('paihang'), ENT_QUOTES, 'UTF-8');?>">完整榜单 <i>›</i></a></header>
+        <div class="sh-wap-block-list"><?php echo sh_home_blocks($sh_wap_sex, array('serial'));?></div>
     </section>
 </main>
 <?php require_once(dirname(__FILE__).'/footer.html');?>

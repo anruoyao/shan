@@ -258,7 +258,7 @@ function sh_book_row($b, $rank = 0, $metric = '')
 
 /* ---------------- 首页模块 ---------------- */
 
-function sh_home_blocks($sex = '')
+function sh_home_blocks($sex = '', $exclude = array())
 {
     $where = sh_sex_where($sex);
     $blocks = array(
@@ -272,6 +272,9 @@ function sh_home_blocks($sex = '')
     $html = '';
     $idx = 0;
     foreach ($blocks as $block) {
+        if (in_array($block['key'], (array) $exclude, true)) {
+            continue;
+        }
         $rows = sh_books($where . $block['where'], $block['order'], 4);
         $html .= '<section class="sh-block" style="--sh-block-i:' . $idx . '">';
         $html .= '<header class="sh-block__head"><div><h3>' . $block['title'] . '</h3><p>' . $block['sub'] . '</p></div>';
