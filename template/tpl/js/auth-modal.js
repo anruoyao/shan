@@ -189,9 +189,10 @@
         if (message.type === 'sh-auth-close') {
             closeAuthModal();
         } else if (message.type === 'sh-auth-height' && !modal.hidden && Number.isFinite(message.height)) {
-            var modalPadding = window.matchMedia('(max-width: 600px)').matches ? 24 : 48;
-            var maxHeight = Math.max(280, window.innerHeight - modalPadding);
-            frame.style.height = Math.min(Math.max(message.height, 320), maxHeight) + 'px';
+            var isMobile = window.matchMedia('(max-width: 600px)').matches;
+            var viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+            var maxHeight = isMobile ? Math.max(180, Math.min(440, viewportHeight - 120)) : Math.max(280, viewportHeight - 48);
+            frame.style.height = Math.min(Math.max(message.height, Math.min(320, maxHeight)), maxHeight) + 'px';
         } else if (message.type === 'sh-auth-switch' && (message.mode === 'login' || message.mode === 'register')) {
             setFrame(message.mode, message.url, message.message);
         } else if (message.type === 'sh-auth-login') {

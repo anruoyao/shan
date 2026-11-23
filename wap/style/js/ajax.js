@@ -67,7 +67,6 @@ function x_get(URL, OBJ, XID, ELSE, OTHER) {
                 }
                 if (XID == 'f') {
                     if (cDATA == 'login') {
-                        alert('登录才可收藏哦！');
                         var url = PC_URL + '?member/login/';
                         if (typeof openAuthModal === 'function') openAuthModal('login');
                         else location.href = url;
@@ -148,7 +147,10 @@ function x_get(URL, OBJ, XID, ELSE, OTHER) {
                         x = x.split('#');
                         url = x[0];
                     }
-                    if (cDATA == 'ok' || cDATA == 'dis' || cDATA == 'login') {
+                    if (cDATA == 'login') {
+                        if (typeof openAuthModal === 'function') openAuthModal('login', url);
+                        else location.href = url;
+                    } else if (cDATA == 'ok' || cDATA == 'dis') {
                         location.href = url;
                     }
                 }

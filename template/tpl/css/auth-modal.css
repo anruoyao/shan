@@ -157,19 +157,20 @@ body.auth-popup .auth-content .logreg {
 
 @media (max-width: 600px) {
     .sh-auth-modal {
-        padding: 12px;
+        padding: 40px 16px;
+        padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
     }
 
     .sh-auth-modal__dialog {
-        width: min(432px, 100%);
-        max-height: calc(100vh - 24px);
-        max-height: calc(100dvh - 24px);
+        width: min(400px, 100%);
+        max-height: calc(100vh - 120px);
+        max-height: min(440px, calc(100dvh - 120px));
         border-radius: 8px;
     }
 
     .sh-auth-modal__frame {
-        height: min(620px, calc(100vh - 24px));
-        height: min(620px, calc(100dvh - 24px));
+        height: min(420px, calc(100vh - 120px));
+        height: min(420px, calc(100dvh - 120px));
     }
 
     body.auth-popup .auth-content {
