@@ -543,6 +543,13 @@ html, body { background: var(--sh-paper); }
 .sh-wap-rank-periods a[aria-current="page"] { background: #fff0f0; color: var(--sh-coral); font-weight: 650; }
 .sh-wap-rank-page > .sh-wap-rank-group { margin: 0 0 .65rem; }
 
+.sh-wap-header .LoginBox { display: flex; width: 2.4rem; height: 2.4rem; align-items: center; justify-content: center; }
+.sh-wap-header .LoginBox a { display: flex; width: 2.4rem; height: 2.4rem; box-sizing: border-box; align-items: center; justify-content: center; padding: 0; overflow: hidden; font-size: 0; line-height: 0; }
+.sh-wap-header .LoginBox a.mbl { background: none; }
+.sh-wap-header .LoginBox .mbl img { display: block; width: 1.9rem; height: 1.9rem; margin: 0; border-radius: 50%; object-fit: cover; }
+.sh-wap-header .LoginBox .ex { display: none; }
+.sh-wap-header .icon-more { display: none; }
+
 @media (max-width: 360px) {
     .sh-wap-header .LoginBox a { padding-right: .3rem; padding-left: 1.45rem; font-size: .68rem; }
     .sh-wap-header .icon-more { width: 2rem; }

@@ -1,6 +1,6 @@
 <?php require_once(dirname(__FILE__).'/header_index.html');?>
 <?php
-$sh_wap_sex = isset($_GET['sex']) && in_array($_GET['sex'], array('male', 'female'), true) ? $_GET['sex'] : '';
+$sh_wap_sex = isset($_GET['sex']) && in_array($_GET['sex'], array('male', 'female'), true) ? $_GET['sex'] : 'male';
 $sh_wap_where = sh_sex_where($sh_wap_sex);
 $sh_wap_feature_where = $sh_wap_where.' and isrecommend=1';
 $sh_wap_feature_count = sh_book_count($sh_wap_feature_where);

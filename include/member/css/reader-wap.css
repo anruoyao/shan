@@ -1,0 +1,443 @@
+body.reader-history-page {
+    min-height: 100vh;
+    background: #f4f5f6;
+    color: #292d31;
+}
+
+body.reader-history-page > .header {
+    display: none;
+}
+
+body.reader-history-page .main.reader-history {
+    float: none;
+    width: auto;
+    min-height: 100vh;
+    padding: 0 16px 28px;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+.reader-history .center {
+    float: none;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+}
+
+.reader-history__topbar {
+    display: flex;
+    min-height: 70px;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #e2e5e7;
+}
+
+.reader-history__back {
+    display: grid;
+    width: 36px;
+    height: 40px;
+    flex: 0 0 36px;
+    place-items: center;
+    color: #3c444a;
+    font: 32px/1 Georgia, serif;
+}
+
+.reader-history__heading {
+    min-width: 0;
+    flex: 1;
+}
+
+.reader-history__heading span {
+    display: block;
+    color: #aa554c;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.reader-history__heading h1 {
+    margin: 2px 0 0;
+    color: #292d31;
+    font-size: 19px;
+    font-weight: 650;
+    line-height: 1.35;
+}
+
+.reader-history__store {
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    padding: 0 12px;
+    border: 1px solid #d7dcdf;
+    border-radius: 3px;
+    background: #fff;
+    color: #50595f;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.reader-history__tabs {
+    display: flex;
+    gap: 22px;
+    margin: 0 -16px;
+    padding: 0 20px;
+    border-bottom: 1px solid #e2e5e7;
+    background: #fff;
+}
+
+.reader-history__tabs a {
+    position: relative;
+    display: flex;
+    min-height: 46px;
+    align-items: center;
+    color: #858c91;
+    font-size: 13px;
+}
+
+.reader-history__tabs a[aria-current="page"] {
+    color: #a53d35;
+    font-weight: 650;
+}
+
+.reader-history__tabs a[aria-current="page"]::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: #b74137;
+    content: '';
+}
+
+.reader-history__section {
+    margin-top: 16px;
+    padding: 0 14px;
+    border: 1px solid #e2e5e7;
+    border-radius: 3px;
+    background: #fff;
+}
+
+.reader-history__section::after {
+    display: table;
+    clear: both;
+    content: '';
+}
+
+.reader-history__section-head {
+    display: flex;
+    min-height: 49px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid #eceeef;
+}
+
+.reader-history__section-head h2 {
+    margin: 0;
+    color: #30363b;
+    font-size: 15px;
+    font-weight: 650;
+}
+
+.reader-history__section-head span {
+    color: #92999e;
+    font-size: 11px;
+}
+
+.reader-history__list {
+    float: none;
+    width: auto;
+    margin: 0;
+    overflow: visible;
+}
+
+.reader-history .biglist {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+}
+
+.reader-history .biglist > li {
+    position: relative;
+    float: none;
+    display: block;
+    min-height: 122px;
+    margin: 0;
+    padding: 14px 0 14px 82px;
+    border-bottom: 1px solid #eceeef;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.reader-history .biglist > li:last-child {
+    border-bottom: 0;
+}
+
+.reader-history .biglist .d1 {
+    display: flex;
+    width: 100%;
+    height: auto;
+    min-height: 24px;
+    align-items: center;
+    gap: 8px;
+    float: none;
+    overflow: visible;
+}
+
+.reader-history .biglist .d1 a:first-child {
+    float: none;
+    width: auto;
+    min-width: 0;
+    flex: 1;
+    padding: 0;
+    background: none;
+    color: #2f3438;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.45;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.reader-history .biglist .d1 a:last-child {
+    display: block !important;
+    float: none;
+    width: auto;
+    height: auto;
+    padding: 3px 0 3px 6px;
+    background: none;
+    color: #969da2;
+    font-size: 10px;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.reader-history .biglist .d2 {
+    display: flex;
+    float: none;
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 4px 11px;
+    margin-top: 5px;
+    color: #8b9297;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.reader-history .biglist .d2 a {
+    margin: 0;
+    padding: 0;
+    background: none;
+    color: #8b9297;
+    font-size: inherit;
+}
+
+.reader-history .biglist .d3 {
+    position: static;
+    float: none;
+    width: 100%;
+    max-height: 36px;
+    margin-top: 6px;
+    color: #737b81;
+    font-size: 11px;
+    line-height: 18px;
+    overflow: hidden;
+}
+
+.reader-history .biglist .d3 > a:first-child {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    display: block;
+    width: 66px;
+    height: 90px;
+    overflow: hidden;
+}
+
+.reader-history .biglist .d3 > a:first-child img {
+    display: block;
+    float: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+.reader-history .biglist .d3 a.n {
+    color: #a7433b;
+}
+
+.reader-history .aw-empty {
+    display: flex;
+    min-height: 190px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: #8a9196;
+    font-size: 13px;
+}
+
+.reader-history .aw-empty svg {
+    width: 30px;
+    height: 30px;
+    color: #b7bdc1;
+}
+
+.reader-history .nolist {
+    float: none;
+    width: auto;
+    padding: 62px 8px;
+    color: #8a9196;
+    font-size: 12px;
+    text-align: center;
+}
+
+.reader-history .nolist img {
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    vertical-align: -2px;
+}
+
+.reader-history .nologbox {
+    position: static;
+    display: grid;
+    float: none;
+    width: auto;
+    gap: 10px;
+    padding: 14px 0 16px;
+    border-bottom: 1px solid #eceeef;
+}
+
+.reader-history .nologbox .mtip {
+    float: none;
+    width: auto;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 2px;
+    background: #f5f6f7;
+    color: #747c82;
+    font-size: 11px;
+    line-height: 1.75;
+}
+
+.reader-history .nologbox .mtip a {
+    color: #a53d35;
+    text-decoration: none;
+}
+
+.reader-history .nologbox .mlog {
+    display: flex;
+    float: none;
+    width: auto;
+    gap: 8px;
+    padding: 0;
+}
+
+.reader-history .nologbox .mlog a {
+    display: flex;
+    height: 38px;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    border: 1px solid #d9dddf;
+    border-radius: 3px;
+    background: #fff;
+    color: #5e676d;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.reader-history .nologbox .mlog a:first-child {
+    border-color: #ad4037;
+    background: #ad4037;
+    color: #fff;
+}
+
+.reader-history .pagelink {
+    display: flex;
+    width: auto;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 0;
+    padding: 10px 0;
+    border-top: 1px solid #eceeef;
+    color: #8b9297;
+    font-size: 11px;
+    box-sizing: border-box;
+}
+
+.reader-history .pagelink a,
+.reader-history .pagelink strong,
+.reader-history .pagelink em {
+    padding: 4px 6px;
+    color: #646d73;
+    font-weight: 400;
+}
+
+.reader-history .pagelink strong {
+    color: #a53d35;
+    font-weight: 650;
+}
+
+.reader-history .pagelink .delbox {
+    display: inline-block;
+    width: auto;
+    margin: 0 0 0 6px;
+    color: #a53d35;
+}
+
+.reader-history__list:not(:has(.biglist > li)) > .pagelink {
+    display: none;
+}
+
+body.reader-history-page > .footer {
+    float: none;
+    width: auto;
+    margin: 0 16px;
+    border-top: 1px solid #e2e5e7;
+    background: transparent;
+}
+
+body.reader-history-page > .footer .center {
+    float: none;
+    width: 100%;
+    max-width: 680px;
+    margin: 12px auto 0;
+    padding-bottom: 14px;
+    background: transparent;
+}
+
+@media (max-width: 360px) {
+    body.reader-history-page .main.reader-history {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .reader-history__tabs {
+        margin-right: -12px;
+        margin-left: -12px;
+    }
+
+    .reader-history .biglist > li {
+        padding-left: 74px;
+    }
+
+    .reader-history .biglist .d3 > a:first-child {
+        width: 58px;
+        height: 80px;
+    }
+}
