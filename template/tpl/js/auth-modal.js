@@ -78,6 +78,20 @@
     var frame = document.getElementById('shAuthModalFrame');
     var closeButtons = modal.querySelectorAll('[data-auth-modal-close]');
     var previousFocus = null;
+    function isMobileModal() {
+        return window.matchMedia('(max-width: 600px)').matches;
+    }
+
+    function mobileFrameHeight() {
+        var viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        return Math.max(180, Math.min(440, viewportHeight - 120));
+    }
+
+    function fitFrameToViewport() {
+        if (modal.hidden) return;
+        frame.style.height = isMobileModal() ? mobileFrameHeight() + 'px' : '';
+    }
+
     var allowedAuthOrigins = [modal.getAttribute('data-login-url'), modal.getAttribute('data-register-url')].map(function (url) {
         try {
             return new URL(url, window.location.href).origin;
@@ -125,6 +139,7 @@
         if (!isAllowedAuthUrl(url || fallback)) url = fallback;
         frame.title = mode === 'register' ? '注册账号' : '账号登录';
         frame.style.height = '';
+        fitFrameToViewport();
         frame.src = popupUrl(url || fallback, message || '');
     }
 
@@ -160,6 +175,11 @@
         button.addEventListener('click', closeAuthModal);
     });
 
+    window.addEventListener('resize', fitFrameToViewport);
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', fitFrameToViewport);
+    }
+
     document.addEventListener('click', function (event) {
         var link = event.target.closest('a[href]');
         if (!link || modal.contains(link)) return;
@@ -189,10 +209,12 @@
         if (message.type === 'sh-auth-close') {
             closeAuthModal();
         } else if (message.type === 'sh-auth-height' && !modal.hidden && Number.isFinite(message.height)) {
-            var isMobile = window.matchMedia('(max-width: 600px)').matches;
-            var viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-            var maxHeight = isMobile ? Math.max(180, Math.min(440, viewportHeight - 120)) : Math.max(280, viewportHeight - 48);
-            frame.style.height = Math.min(Math.max(message.height, Math.min(320, maxHeight)), maxHeight) + 'px';
+            if (isMobileModal()) {
+                fitFrameToViewport();
+            } else {
+                var maxHeight = Math.max(280, window.innerHeight - 48);
+                frame.style.height = Math.min(Math.max(message.height, 320), maxHeight) + 'px';
+            }
         } else if (message.type === 'sh-auth-switch' && (message.mode === 'login' || message.mode === 'register')) {
             setFrame(message.mode, message.url, message.message);
         } else if (message.type === 'sh-auth-login') {
