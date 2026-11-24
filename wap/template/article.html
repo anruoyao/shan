@@ -299,9 +299,9 @@ url2disknext(id, xid);
 <script type="text/javascript">
 function cgSubmit(){
     if(uid == 0 || !uid){
+        alert("抱歉，登录会员才能评论哦！");
         var href="<?php echo pbcode('member','login');?>";
-        if (typeof openAuthModal === 'function') openAuthModal('login');
-        else location.href=href;
+        location.href=href;
         return false;
     }
     if(!$id("comment").value){

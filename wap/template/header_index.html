@@ -14,13 +14,16 @@
     <base href="<?php echo wapbase();?>" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="style/css/common.css" />
-    <link rel="stylesheet" type="text/css" href="style/css/shbook-wap.css?v=20261123h" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $pcbaseall;?>template/tpl/css/auth-modal.css?v=20261123d" />
+    <?php if (isset($template) && $template === 'index.html') { ?>
+    <link rel="stylesheet" type="text/css" href="style/css/home-banner.css?v=20261124a" />
+    <link rel="stylesheet" type="text/css" href="style/css/home-ui.css?v=20261124a" />
+    <script type="text/javascript" src="style/js/home-banner.js?v=20261124a" defer></script>
+    <?php } ?>
     <script type="text/javascript">
     var hash = window.location.hash;
     var PC_URL = "<?php echo $pcbaseall;?>";
     </script>
-    <script type="text/javascript" src="style/js/common.js"></script>
+    <script type="text/javascript" src="style/js/common.js?v=20261124b"></script>
     <script type="text/javascript">
     if (typeof $id != "function") {
         document.location.href = PC_URL + '?wap';
@@ -28,7 +31,6 @@
     </script>
     <script type="text/javascript" src="style/js/ajax.js"></script>
     <script type="text/javascript" src="style/js/big5.js"></script>
-    <script type="text/javascript" src="<?php echo $pcbaseall;?>template/tpl/js/auth-modal.js?v=20261123e" defer></script>
 </head>
 
 <body id="Body">
@@ -37,23 +39,21 @@
             <?php echo axd(21);?>
         </center>
     </div>
-    <div class="header h-ind sh-wap-header">
+    <div class="header h-ind">
         <a href="./" class="logo-a">
             <img src="style/image/<?php echo replogo('wap');?>" alt="<?php echo $HOSTNAME;?>">
-            <span class="sh-wap-brand">山海书盟</span>
         </a>
-        <?php
-        $sh_wap_header_sex = isset($_GET['sex']) && in_array($_GET['sex'], array('male', 'female'), true) ? $_GET['sex'] : 'male';
-        ?>
-        <nav class="sh-wap-sex-switch" aria-label="阅读频道">
-            <a href="./?sex=male"<?php if ($sh_wap_header_sex === 'male') echo ' aria-current="page"';?>>男频</a>
-            <a href="./?sex=female"<?php if ($sh_wap_header_sex === 'female') echo ' aria-current="page"';?>>女频</a>
-        </nav>
         <div class="header-operate">
             <div class="LoginBox mb<?php echo $login_status.$register_status;?>" id="LoginBox">
                 <a href="<?php echo pbcode('member','ucenter','','all');?>" class="icon icon-person" title="用户登录">用户登录</a>
             </div>
+            <a id="toggle-nav" href="javascript:shownav();" class="icon icon-more"></a>
         </div>
+    </div>
+    <div class="nav" id="nav-switch">
+        <ul>
+            <?php echo www_SByou_NeT_category();?>
+        </ul>
     </div>
     <div class="search-container">
         <div class="search-guide">

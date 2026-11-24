@@ -1,60 +1,198 @@
 <?php require_once(dirname(__FILE__).'/header_inner.html');?>
-<?php
-$sh_wap_book_id = intval($id);
-$sh_wap_chapter_total = sh_chapter_count($sh_wap_book_id);
-$sh_wap_intro = trim(strip_tags((string)$description));
-$sh_wap_intro = $sh_wap_intro !== '' ? $sh_wap_intro : '暂无作品简介。';
-$sh_wap_first_url = $firstid ? sh_article_url($firstid) : sh_book_url($sh_wap_book_id);
-$sh_wap_last_url = $lastid ? sh_article_url($lastid) : sh_book_url($sh_wap_book_id);
-$sh_wap_download = isset($GLOBALS['downTXT']) ? $GLOBALS['downTXT'] : '';
-?>
-<main class="sh-wap-main sh-wap-detail">
-    <section class="sh-wap-book-hero">
-        <div class="sh-wap-book-hero__blur" style="background-image:url('<?php echo htmlspecialchars($ico,ENT_QUOTES,'UTF-8');?>')"></div>
-        <div class="sh-wap-book-hero__content">
-            <div class="sh-wap-book-hero__cover"><?php echo sh_cover_img($ico, $title);?></div>
-            <div class="sh-wap-book-hero__copy">
-                <span class="sh-wap-eyebrow"><?php echo sh_e($over);?> · <?php echo sh_e($vipxxx);?></span>
-                <h1><?php echo sh_e($title);?></h1>
-                <p class="sh-wap-book-hero__author"><a href="<?php echo htmlspecialchars(sh_author_url($author),ENT_QUOTES,'UTF-8');?>"><?php echo sh_e($author);?></a><span>·</span><a href="<?php echo htmlspecialchars(sh_cat_url($scode),ENT_QUOTES,'UTF-8');?>"><?php echo sh_e($name);?></a></p>
-                <div class="sh-wap-book-hero__stats"><span><b><?php echo sh_e($subscode);?></b>万字</span><span><b><?php echo sh_e($visits);?></b>万阅读</span><?php if ($score) { ?><span><b><?php echo sh_e($score);?></b>收藏</span><?php } ?></div>
+<style type="text/css">
+.header.h-inn {
+    background: none
+}
+
+.fnav {
+    display: none
+}
+</style>
+<div class="content page-book-detail">
+    <div class="novel novel-merge book-detail-x">
+        <img src="<?php echo $ico;?>" onerror="this.src=&#39;style/image/empty.jpg&#39;" alt="<?php echo $title;?>" class="book-cover-blur">
+        <div class="book-detail-info">
+            <div class="money">
+                <center>
+                    <?php echo axd(30);?>
+                </center>
+            </div>
+            <div class="book-layout">
+                <img src="<?php echo $ico;?>" onerror="this.src=&#39;style/image/empty.jpg&#39;" alt="<?php echo $title;?>" class="book-cover" />
+                <div class="book-cell">
+                    <h1 class="book-title">
+                        <?php echo $title;?>
+                        <?php echo $qyxxx;?>
+                    </h1>
+                    <p class="book-meta a">
+                        <a href="<?php echo pbcode('category',$scode);?>">
+                            <?php echo $name;?></a>
+                        <a href="<?php echo pbcode('author',$author);?>">
+                            <?php echo $author;?></a>
+                    </p>
+                    <p class="book-meta">
+                        <?php echo $subscode;?>万字 |
+                        <?php echo $visits;?>万点击
+                        <?php echo $score?' | '.$score.'收藏':'';?>
+                    </p>
+                    <p class="book-meta">
+                        <?php echo $vipxxx;?> |
+                        <?php echo $over;?> | 更新:
+                        <?php echo date('m-d',strtotime($update_time));?>
+                    </p>
+                </div>
+                <div class="contentxx" style="float:left;width:100%;padding:0px;background:none;margin:10px 0px 0px 0px">
+                    <?php
+					$x=contenttags($id);
+					$x=str_replace(' target="_blank"','',$x);
+					$x=str_replace('、','',$x);
+					echo $x;
+					?>
+                </div>
+            </div>
+            <div class="book-detail-btn">
+                <div class="btnbox">
+                    <ul class="btn-group">
+                        <?php
+                    	if($tip_){
+                    		$dis2='';
+                    	}else{
+                    		$dis2='display:none';
+                    	}
+                    	if($qyxxx){
+                    		$dis4='';
+                    	}else{
+                    		$dis4='display:none';
+                    	}
+	                    ?>
+                        <li>
+                            <a href="javascript:vlof('f', '<?php echo $id;?>');">
+                                <svg t="1769860233321" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="55185" width="30" height="30">
+                                    <path d="M947.701961 623.435294l-694.713725 0q-11.043137 0-23.090196 6.023529t-22.588235 18.070588-17.066667 28.611765-6.52549 37.647059 5.521569 39.152941 14.556863 32.12549 22.086275 22.086275 28.109804 8.031373l693.709804 0q-12.047059-12.047059-21.082353-27.105882-8.031373-13.05098-14.556863-31.121569t-6.52549-41.160784q0-26.101961 6.52549-43.168627t14.556863-28.109804q9.035294-12.047059 21.082353-21.082353zM947.701961 897.505882q0 17.066667-22.086275 17.066667l-733.866667 0q-34.133333 0-57.223529-14.054902t-37.647059-38.65098-20.580392-58.729412-6.023529-73.286275l0-582.27451q0-77.301961 41.160784-111.937255t117.458824-34.635294l34.133333 0 68.266667 0 93.364706 0q51.2 0 104.909804-0.501961t104.909804-0.501961l94.368627 0 70.27451 0 35.137255 0q28.109804 0 49.192157 11.545098t35.137255 32.12549 21.584314 48.690196 7.529412 60.235294l0 406.588235q-191.74902 0-345.34902-1.003922l-128.501961 0q-64.25098 0-114.94902-0.501961t-83.827451-0.501961l-37.145098 0q-21.082353 0-41.160784 12.54902t-36.141176 34.133333-26.101961 50.196078-10.039216 59.733333q0 38.14902 10.541176 68.768627t27.607843 51.701961 37.647059 32.627451 40.658824 11.545098l685.678431 0q8.031373 0 14.556863 4.517647t6.52549 14.556863zM515.011765 0l0 388.517647 77.301961-108.423529 76.298039 108.423529 0-388.517647-153.6 0z" p-id="55186"></path>
+                                </svg>
+                                收藏
+                            </a>
+                        </li>
+                        <li style="<?php echo $dis2;?>">
+                            <a href="<?php echo pbcode('member','pay','content_'.$id,'all');?>">
+                                <svg t="1769859702940" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="21876" width="30" height="30">
+                                    <path d="M228.9 960.4c-24.9 0-49.7-7.4-70.8-21.9-34.1-23.4-54.5-62.1-54.5-103.5V191.4C103.6 122.3 159.8 66 229 66h566.7c69.1 0 125.4 56.2 125.4 125.4V835c0 41.4-20.4 80.1-54.5 103.4-34.1 23.4-77.6 28.4-116.2 13.4l-225-87.4c-8.4-3.3-17.6-3.3-26 0l-225 87.4c-14.8 5.8-30.2 8.6-45.5 8.6z m553.7-91.9c11.2 4.4 23.4 3 33.3-3.8 9.9-6.8 15.6-17.6 15.6-29.6V191.4c0-19.8-16.1-35.9-35.9-35.9H228.9c-19.8 0-35.9 16.1-35.9 35.9V835c0 12 5.7 22.9 15.6 29.6 10 6.8 22.1 8.2 33.3 3.9l225-87.4c29.2-11.4 61.5-11.4 90.7 0l225 87.4z" fill="#333333" p-id="21877"></path>
+                                    <path d="M658.6 498.7H374.5c-24.7 0-44.7-20-44.7-44.7 0-24.7 20-44.7 44.7-44.7h284.1c24.7 0 44.7 20 44.7 44.7 0 24.7-20 44.7-44.7 44.7z" fill="#333333" p-id="21878"></path>
+                                    <path d="M516.5 640.8c-24.7 0-44.7-20-44.7-44.7V311.9c0-24.7 20-44.7 44.7-44.7 24.7 0 44.7 20 44.7 44.7V596c0 24.7-20 44.8-44.7 44.8z" fill="#333333" p-id="21879"></path>
+                                </svg>
+                                订阅
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo pbcode('chapter',$id);?>">
+                                <svg t="1769859748583" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="24746" width="30" height="30">
+                                    <path d="M1002.10169 744.7l-33.6 10.4c1 7.3 2.1 14.3 2.1 21.8 0 7.3-1.2 14.4-2.4 21.6l33.8 10.6c7.9 2.2 14.5 7.6 18.3 14.8 3.8 7.3 4.7 15.8 2 23.6-5.4 16-23.2 24.7-39.9 19.7l-34.2-10.6c-7.1 12.8-15.8 24.7-26.2 35.2l20.8 27.5c5.1 6.4 7.2 14.7 5.8 22.8-1.4 8-6 15.1-12.7 19.6-14.2 10-33.8 7-44.4-6.8l-20.8-27.6c-13.7 6.6-28.2 11.2-43 13.9v33.6c0 16.7-14.1 30.4-31.6 30.4-17.6 0-31.9-13.7-31.9-30.4V941c-14.9-2.7-29.3-7.3-42.9-13.9l-20.9 27.6c-10.7 13.8-30.1 16.6-44.3 6.8-6.7-4.5-11.3-11.6-12.7-19.6-1.4-8.1 0.7-16.3 5.7-22.8l20.9-27.8c-10.5-10.3-19.6-22-27-34.7L609.60169 867c-16.8 5.2-34.6-3.6-39.9-19.6-5.3-15.6 3.1-32.5 18.7-37.8 0.5-0.2 1-0.3 1.5-0.5l33.5-10.4c-0.8-7.3-2-14.3-2-21.8 0-7.4 1.2-14.5 2.3-21.6l-33.8-10.4c-16.7-5.4-25.6-22.5-20.2-38.4 5.4-16 23.1-24.7 39.9-19.7l34 10.8c7.3-12.7 15.8-24.8 26.3-35.3l-20.8-27.6c-9.9-12.9-7.5-31.4 5.4-41.3 0.5-0.4 1-0.8 1.6-1.1 14.2-9.9 33.7-6.9 44.4 6.8l20.8 27.6c13.7-6.4 28.2-11.2 43.1-14V579c0-16.7 14-30.4 31.6-30.4 17.5 0 31.8 13.6 31.8 30.4v33.5c15.1 2.7 29.3 7.8 42.8 14l21-27.6c10.6-13.7 30-16.6 44.2-6.8 13.6 9.1 17.2 27.4 8.1 41-0.3 0.5-0.7 1-1 1.4l-21 27.8c10.4 10.4 19.9 21.9 27 34.8l33.4-10.4c16.8-5.1 34.6 3.7 39.9 19.7 5.7 15.9-3.5 33-20.1 38.3z m-206-74.4c-61.3 0-111.1 47.8-111.1 106.6 0 58.9 49.8 106.5 111.1 106.5s111.1-47.6 111.1-106.5c0-58.8-49.8-106.6-111.1-106.6z" p-id="24747"></path>
+                                    <path d="M802.80169 57.2h-76.4c0-22.1-21-38.2-42.8-38.2H39.40169C17.40169 19.1-0.19831 37 0.00169 58.9v795.6s41.9 120.2 110.8 120.2h562.5c-45.3-20-82.9-54.2-107-97.4H117.60169S77.00169 863.6 77.00169 836.1l470.3-0.3 1.7 3.4c-8.2-23.7-12.5-48.6-12.6-73.6 0-60.6 24-118.6 66.9-161.4 33.6-33.4 76.8-55.6 123.6-63.4l-3.2 0.3 2.1-424.7H764.00169l0.6 421c27 0 52.7 4.8 76.6 13.3V101.5s-6.4-44.3-38.4-44.3zM149.70169 514.4H72.40169V437h77.4v77.4z m0-144.4H72.40169v-77.4h77.4V370z m0-137.2H72.40169v-77.4h77.4c-0.1-0.1-0.1 77.4-0.1 77.4z m501.9 281.6H206.10169V437h445.5v77.4z m0-144.4H206.10169v-77.4h445.5V370z m0-137.2H206.10169v-77.4h445.5v77.4z" p-id="24748"></path>
+                                </svg>
+                                目录
+                            </a>
+                        </li>
+                        <li style="<?php echo $dis4;?>">
+                            <a href="javascript:">
+                                <svg t="1769860151227" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="42188" width="30" height="30">
+                                    <path d="M858.45 0h-692.9c-54.757 0-99.79 44.01-99.79 100.302v823.396c0 54.757 44.01 100.302 100.3 100.302h692.39c54.756 0 100.302-44.01 100.302-100.302V99.278C958.24 44.01 913.207 0 858.45 0zM289.392 217.491h446.241c13.306 0 23.54 10.747 23.54 23.54 0 13.306-10.746 23.54-23.54 23.54h-446.24c-13.306 0-23.54-13.305-23.54-23.54 0-12.793 9.722-23.54 23.54-23.54z m0 164.782h280.436c13.305 0 23.54 10.746 23.54 23.54 0 13.305-10.746 23.54-23.54 23.54H289.391c-13.305 0-23.54-13.305-23.54-23.54 0-12.794 9.723-23.54 23.54-23.54z m138.683 186.786c0 13.306-10.747 23.54-23.54 23.54H289.39c-13.305 0-23.54-10.746-23.54-23.54 0-13.305 10.747-23.54 23.54-23.54h115.143c12.793 0 26.099 9.723 23.54 23.54z m343.38 288.624L661.43 805.485l-110.025 52.198 26.1-104.396-80.856-104.907h110.025l54.756-104.396 54.757 104.396H826.21l-81.367 104.396 26.61 104.907z" fill="#333333" p-id="42189"></path>
+                                </svg>
+                                签约作品
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="btnbg"></div>
+                </div>
+                <p class="lastread" id="lastread"></p>
             </div>
         </div>
-        <div class="sh-wap-book-actions">
-            <a class="sh-wap-button sh-wap-button--primary" href="<?php echo htmlspecialchars($sh_wap_first_url,ENT_QUOTES,'UTF-8');?>">开始阅读</a>
-            <a class="sh-wap-button sh-wap-button--outline" href="javascript:vlof('f','<?php echo $sh_wap_book_id;?>');">收藏</a>
-            <?php if ($tip_) { ?><a class="sh-wap-button sh-wap-button--outline" href="<?php echo htmlspecialchars(pbcode('member','pay','content_'.$sh_wap_book_id,'all'),ENT_QUOTES,'UTF-8');?>">订阅</a><?php } ?>
-            <a class="sh-wap-button sh-wap-button--outline" href="<?php echo htmlspecialchars(pbcode('chapter',$sh_wap_book_id),ENT_QUOTES,'UTF-8');?>">目录</a>
-            <?php if ($sh_wap_download) { ?><a class="sh-wap-button sh-wap-button--outline" href="<?php echo htmlspecialchars(pbcode('txt',$scode,$sh_wap_book_id),ENT_QUOTES,'UTF-8');?>" target="_blank" rel="noopener">下载</a><?php } ?>
+    </div>
+    <div class="novel novel-merge">
+        <div class="book-summary">
+            <?php echo $description;?>
         </div>
-        <?php if ($lastid && $lasttitle) { ?><p class="sh-wap-book-hero__latest">最新章节 <a href="<?php echo htmlspecialchars($sh_wap_last_url,ENT_QUOTES,'UTF-8');?>"><?php echo sh_e($lasttitle);?></a></p><?php } ?>
-    </section>
-
-    <?php $sh_wap_ad = axd(30); if (trim($sh_wap_ad)) { ?><div class="sh-wap-ad sh-wap-ad--detail"><?php echo $sh_wap_ad;?></div><?php } ?>
-
-    <section class="sh-wap-detail-section sh-wap-intro" aria-labelledby="wapIntroTitle">
-        <header class="sh-wap-detail-head"><span class="sh-wap-kicker">ABOUT THIS BOOK</span><h2 id="wapIntroTitle">作品简介</h2></header>
-        <p><?php echo nl2br(sh_e($sh_wap_intro));?></p>
-        <?php $sh_wap_tags = contenttags($sh_wap_book_id); if ($sh_wap_tags) { ?><div class="sh-wap-tags"><?php echo str_replace(array(' target="_blank"','、'),'',$sh_wap_tags);?></div><?php } ?>
-    </section>
-
-    <section class="sh-wap-detail-section sh-wap-catalog" id="catalog" aria-labelledby="wapCatalogTitle">
-        <header class="sh-wap-detail-head"><div><span class="sh-wap-kicker">CHAPTERS</span><h2 id="wapCatalogTitle">目录 <small>共 <?php echo $sh_wap_chapter_total;?> 章</small></h2></div><a href="<?php echo htmlspecialchars(pbcode('chapter',$sh_wap_book_id),ENT_QUOTES,'UTF-8');?>">完整目录 <i>›</i></a></header>
-        <div class="sh-wap-chapter-list"><?php echo sh_chapter_list($sh_wap_book_id, 12);?></div>
-        <?php if ($sh_wap_chapter_total > 10) { ?><a class="sh-wap-catalog-more" href="<?php echo htmlspecialchars(pbcode('chapter',$sh_wap_book_id),ENT_QUOTES,'UTF-8');?>">查看全部章节</a><?php } ?>
-    </section>
-
-    <section class="sh-wap-detail-section" aria-labelledby="wapCommentTitle">
-        <header class="sh-wap-detail-head"><span class="sh-wap-kicker">COMMUNITY</span><h2 id="wapCommentTitle">书评区</h2></header>
-        <div class="CommentBox" id="CommentBox"><?php require_once(ROOT_PATH.'/template/tpl/html/comment.html');?></div>
-    </section>
-
-    <section class="sh-wap-detail-section" aria-labelledby="wapSimilarTitle">
-        <header class="sh-wap-detail-head"><span class="sh-wap-kicker">YOU MAY ALSO LIKE</span><h2 id="wapSimilarTitle">同类推荐</h2></header>
-        <div class="sh-wap-similar"><?php echo sh_same_books($scode, $sh_wap_book_id, 6);?></div>
-    </section>
-</main>
+    </div>
+    <?php
+	if($memberadd=='1'){
+	echo '
+	<div class="money" style="margin-top:0.75rem;">
+		<center>
+			<a href="'.pbcode('member','yc','','all').'" style="float:left;width:100%;">
+				<img src="'.$pcbaseall.'include/member/image/yc_wap.jpg" style="float:left;width:100%;" />
+			</a>
+		</center>
+	</div>';
+	}
+	?>
+    <div class="money">
+        <center>
+            <?php echo axd(31);?>
+        </center>
+    </div>
+    <div class="novel tred">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">最新章节</h3>
+            </div>
+            <div class="novel-header-r">
+                <a href="<?php echo pbcode('chapter',$id);?>">完整目录&gt;&gt;</a>
+            </div>
+        </div>
+        <ol class="novel-text-list" id="newlist">
+            <?php echo pagechapter($id,10);?>
+        </ol>
+        <div class="p2c"><a href="<?php echo pbcode('chapter',$id);?>">更多章节</a></div>
+    </div>
+    <div class="money">
+        <center>
+            <?php echo axd(32);?>
+        </center>
+    </div>
+    <div class="novel">
+        <div class="CommentBox" id="CommentBox">
+            <div class="novel-header">
+                <div class="novel-header-l">
+                    <h3 class="novel-title">发表评论</h3>
+                </div>
+            </div>
+            <?php require_once(ROOT_PATH.'/template/tpl/html/comment.html');?>
+        </div>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">猜你喜欢</h3>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <?php echo SByou_NeT_TJ(8);?>
+            </ol>
+        </div>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">好书推荐</h3>
+            </div>
+        </div>
+        <ol class="book-ol book-ol-normal">
+            <?php echo goodbook4tj(8);?>
+        </ol>
+    </div>
+    <div class="pbot"><a href="<?php echo pbcode('paihang');?>">好书排行榜</a></div>
+</div>
 <?php echo xxxaxd();?>
-<div class="sh-wap-fixed-read"><a href="<?php echo htmlspecialchars($sh_wap_first_url,ENT_QUOTES,'UTF-8');?>">立即阅读</a></div>
+<div class="fbbtn">
+    <a href="<?php echo pbcode('article',$firstid);?>#ting">
+        <img src="style/image/ts.png">
+        听书
+    </a>
+    <a href="<?php echo pbcode('article',$firstid);?>">立即阅读</a>
+</div>
 <?php require_once(dirname(__FILE__).'/footer.html');?>
-<script type="text/javascript">vlof('v','<?php echo $sh_wap_book_id;?>','no');xxxaxd('<?php echo $sh_wap_book_id;?>');lastread('<?php echo $sh_wap_book_id;?>');</script>
+<script type="text/javascript">
+vlof('v', '<?php echo $id;?>', 'no');
+xxxaxd('<?php echo $id;?>');
+lastread('<?php echo $id;?>');
+</script>

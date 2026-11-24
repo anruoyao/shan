@@ -1,40 +1,61 @@
 <?php require_once(dirname(__FILE__).'/header_inner.html');?>
-<?php
-$sh_wap_sort = isset($_GET['sort']) && is_string($_GET['sort']) ? $_GET['sort'] : '';
-if (!$sh_wap_sort && preg_match('/(?:^|[?&])sort=(update|hot|new)(?:&|$)/', $_SERVER['QUERY_STRING'], $sh_wap_sort_match)) {
-    $sh_wap_sort = $sh_wap_sort_match[1];
+<div class="novel">
+	<div class="type-list">
+		<?php echo shukucat();?>
+	</div>
+</div>
+<div class="novel vipbox">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title"><img style="position:relative;top:2px" src="style/image/vip.png"> VIP小说</h3>
+		</div>
+	</div>
+	<div class="novel-slide">
+		<ol class="novel-slide-ol">
+			<?php echo vipbox(8);?>
+		</ol>
+	</div>
+</div>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title">热门推荐</h3>
+		</div>
+	</div>
+	<div class="novel-slide">
+		<ol class="novel-slide-ol">
+			<?php echo SByou_NeT_TJ(8);?>
+		</ol>
+	</div>
+</div>
+<div class="money">
+	<center>
+		<?php echo axd(29);?>
+	</center>
+</div>
+<div class="novel">
+	<div class="novel-header">
+		<div class="novel-header-l">
+			<h3 class="novel-title"><?php echo str_replace('・','',$name);?></h3>
+			<span class="novel-title-desc">共<font id="total">X</font>本</span>
+		</div>
+	</div>
+	<?php echo book4list($scode,$page);?>
+</div>
+<style type="text/css">
+#fnav{
+	display: none
 }
-$sh_wap_sort = $sh_wap_sort ?: 'update';
-$sh_wap_page = intval($page);
-if (!$sh_wap_page && preg_match('/(?:^|[?&])page=(\d+)(?:&|$)/', $_SERVER['QUERY_STRING'], $sh_wap_page_match)) {
-    $sh_wap_page = intval($sh_wap_page_match[1]);
-}
-$sh_wap_category_page = sh_category_page($scode, $sh_wap_sort, $sh_wap_page ?: 1, 12);
-$sh_wap_category_stats = sh_category_stats($scode);
-$sh_wap_category_url = htmlspecialchars(pbcode('category',$scode),ENT_QUOTES,'UTF-8');
-?>
-<main class="sh-wap-main sh-wap-library">
-    <section class="sh-wap-library-hero">
-        <span class="sh-wap-eyebrow">BOOKSHELF · CATEGORY</span>
-        <h1><?php echo sh_e(str_replace('・','',$name));?></h1>
-        <p><?php echo $sh_wap_category_stats['count'];?> 部作品 · <?php echo sh_words($sh_wap_category_stats['words']);?> · 持续更新中</p>
-    </section>
-    <nav class="sh-wap-sort" aria-label="作品排序">
-        <?php foreach (array('update'=>'最近更新','hot'=>'人气最高','new'=>'最新上架') as $sh_sort_key => $sh_sort_label) { ?>
-        <a href="<?php echo $sh_wap_category_url;?>?sort=<?php echo $sh_sort_key;?>"<?php if ($sh_wap_sort === $sh_sort_key) echo ' aria-current="page"';?>><?php echo $sh_sort_label;?></a>
-        <?php } ?>
-    </nav>
-    <section class="sh-wap-section sh-wap-library-list" aria-labelledby="wapCategoryTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">ALL STORIES</span><h2 id="wapCategoryTitle">精选作品</h2></div><span class="sh-wap-count">共 <?php echo $sh_wap_category_page['total'];?> 本</span></header>
-        <div class="sh-wap-book-list">
-            <?php foreach ($sh_wap_category_page['rows'] as $sh_wap_book) echo sh_book_card($sh_wap_book); ?>
-            <?php if (!$sh_wap_category_page['rows']) echo '<p class="sh-wap-empty">这个分类还没有作品。</p>'; ?>
-        </div>
-        <?php
-        $sh_wap_page_url = $sh_wap_category_url . '?sort=' . urlencode($sh_wap_sort) . '&page=%d';
-        echo sh_pagination($sh_wap_page_url, $sh_wap_category_page['page'], $sh_wap_category_page['pages'], $sh_wap_category_page['total']);
-        ?>
-    </section>
-</main>
+</style>
 <?php require_once(dirname(__FILE__).'/footer.html');?>
-<script type="text/javascript">fnav(2);</script>
+<script type="text/javascript">
+fnav(2);
+$id('fnav').style.display='block';
+var as='<?php echo $AUTO_STATIC;?>';
+var t01=parseInt('<?php echo time()+$MAKE_HTML_TIME;?>');
+var t02=new Date().getTime();
+t02=Math.round(t02/1000);
+if(t02>t01 && as!='0'){
+    mk('<?php echo $scode;?>','<?php echo $filename;?>');
+}
+</script>

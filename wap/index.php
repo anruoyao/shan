@@ -7,7 +7,6 @@ if(!isset($dsql)){
 }
 require_once('include/abc.seo.php');
 require_once('include/wap.fun.php');
-require_once('../include/reader.fun.php');
 $cs=$_SERVER["QUERY_STRING"];
 $path=explode('/',$cs);
 $x1=$path[0];

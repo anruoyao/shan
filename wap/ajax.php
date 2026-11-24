@@ -14,30 +14,8 @@ if(strstr($x,'spider') || strstr($x,'robot')){
 }
 $my=gpvar('my');
 if($my=='home_feature'){
-	require_once('../include/reader.fun.php');
-	$sh_wap_sex=gpvar('sex');
-	if($sh_wap_sex!='male' && $sh_wap_sex!='female'){
-		$sh_wap_sex='';
-	}
-	$sh_wap_where=sh_sex_where($sh_wap_sex);
-	$sh_wap_feature_where=$sh_wap_where.' and isrecommend=1';
-	$sh_wap_feature_count=sh_book_count($sh_wap_feature_where);
-	$sh_wap_feature_max=max(0,$sh_wap_feature_count-4);
-	$sh_wap_feature_current=intval(gpvar('offset'));
-	$sh_wap_feature_offset=0;
-	if($sh_wap_feature_max>0){
-		$sh_wap_feature_offset=mt_rand(0,$sh_wap_feature_max);
-		if($sh_wap_feature_offset==$sh_wap_feature_current){
-			$sh_wap_feature_offset=($sh_wap_feature_offset+1)%($sh_wap_feature_max+1);
-		}
-	}
-	$sh_wap_feature=sh_books($sh_wap_feature_where,'sorting asc,score desc,visits desc,id desc',4,$sh_wap_feature_offset);
-	if(!$sh_wap_feature){
-		$sh_wap_feature=sh_books($sh_wap_where,'visits desc,id desc',4);
-	}
-	header('Content-Type: text/html; charset=utf-8');
-	include(dirname(__FILE__).'/template/home-feature.html');
-	exit;
+	http_response_code(410);
+	exit('WAP 首页推荐接口已停用');
 }
 if($my=='mk'){
 	http_response_code(410);

@@ -1369,7 +1369,14 @@ function initZbtjSwiper() {
     );
     const total = slides.length;
     const activeClasses = ['active1', 'active2', 'active3', 'active4', 'active5'];
-    let current = 2;
+    const slotMaps = {
+        1: [0],
+        2: [0, 2],
+        3: [0, 2, 1],
+        4: [0, 2, 4, 1],
+        5: [0, 2, 4, 3, 1]
+    };
+    let current = 0;
     let startX = 0;
     let deltaX = 0;
     let dragging = false;
@@ -1384,13 +1391,19 @@ function initZbtjSwiper() {
             activeClasses.forEach(c => slide.classList.remove(c));
         });
 
+        const slots = slotMaps[total] || slotMaps[5];
         for (let i = 0; i < total; i++) {
-            const pos = fix(i - current + 2); // 映射到 active1~5
-            slides[i].classList.add(activeClasses[pos]);
+            const relative = fix(i - current);
+            const slot = slots[relative];
+            if (slot !== undefined) {
+                slides[i].classList.add(activeClasses[slot]);
+            }
         }
 
         infos.forEach(el => el.classList.remove('cur'));
-        infos[fix(current)].classList.add('cur');
+        if (infos[fix(current)]) {
+            infos[fix(current)].classList.add('cur');
+        }
     }
 
     function next() {

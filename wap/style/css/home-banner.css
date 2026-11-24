@@ -1,0 +1,207 @@
+#gallery {
+    display: none !important;
+}
+
+.wap-home-banner {
+    position: relative;
+    height: clamp(145px, 37vw, 190px);
+    margin: 12px 12px 4px;
+    isolation: isolate;
+}
+
+.wap-home-banner__slides,
+.wap-home-banner__slide {
+    position: absolute;
+    inset: 0;
+}
+
+.wap-home-banner__slide {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease;
+}
+
+.wap-home-banner__slide.is-active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.wap-home-banner__cover {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 4%;
+    display: block;
+    width: 27%;
+    max-width: 112px;
+    height: calc(100% - 14px);
+    overflow: hidden;
+    background: #e9ebee;
+    box-shadow: 0 2px 8px rgba(34, 39, 48, .16);
+}
+
+.wap-home-banner__cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wap-home-banner__meta {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 2%;
+    left: 34%;
+    overflow: hidden;
+}
+
+.wap-home-banner__meta h2 {
+    overflow: hidden;
+    color: #30343a;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.45;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wap-home-banner__meta p {
+    overflow: hidden;
+    margin-top: 3px;
+    color: #73777e;
+    font-size: 16px;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wap-home-banner__summary {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 61%;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 13px 12px 24px 34%;
+    border-radius: 8px;
+    background: #f0f1f2;
+}
+
+.wap-home-banner__summary a {
+    display: block;
+    color: #73777e;
+}
+
+.wap-home-banner__summary p {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.wap-home-banner__dots {
+    position: absolute;
+    z-index: 3;
+    right: 0;
+    bottom: 4px;
+    left: 34%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.wap-home-banner__dots button {
+    display: grid;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.wap-home-banner__dots button::after {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c5c6c8;
+    content: '';
+    transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.wap-home-banner__dots button[aria-selected="true"]::after {
+    background: #41485d;
+    transform: scale(1.08);
+}
+
+.wap-home-banner__dots button:focus-visible {
+    outline: 2px solid #41485d;
+    outline-offset: -2px;
+}
+
+.wap-home-shortcuts {
+    display: flex;
+    justify-content: space-around;
+    margin: 8px 12px 12px;
+    padding: 12px 4px 8px;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.wap-home-shortcuts .guide-nav-a {
+    position: static;
+    display: flex;
+    width: 33.333%;
+    height: 58px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    color: #373a40;
+    font-size: 14px;
+    text-align: center;
+}
+
+.wap-home-shortcuts .guide-nav-a > .icon {
+    position: static;
+    display: block;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto;
+    background-image: url('../image/wap_sprite.png');
+    background-repeat: no-repeat;
+    background-size: 87px 87px;
+}
+
+.wap-home-shortcuts .icon-sort {
+    background-position: -63px -28px;
+}
+
+.wap-home-shortcuts .icon-rank {
+    background-position: 0 0;
+}
+
+.wap-home-shortcuts .icon-free {
+    background-position: 0 -30px;
+}
+
+.wap-home-shortcuts .guide-nav-h {
+    position: static;
+    display: block;
+    line-height: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wap-home-banner__slide,
+    .wap-home-banner__dots button::after {
+        transition: none;
+    }
+}

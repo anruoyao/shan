@@ -1,83 +1,529 @@
 <?php require_once(dirname(__FILE__).'/header_index.html');?>
-<?php
-$sh_wap_sex = isset($_GET['sex']) && in_array($_GET['sex'], array('male', 'female'), true) ? $_GET['sex'] : 'male';
-$sh_wap_where = sh_sex_where($sh_wap_sex);
-$sh_wap_feature_where = $sh_wap_where.' and isrecommend=1';
-$sh_wap_feature_count = sh_book_count($sh_wap_feature_where);
-$sh_wap_feature_offset = $sh_wap_feature_count > 4 ? mt_rand(0, $sh_wap_feature_count - 4) : 0;
-$sh_wap_feature = sh_books($sh_wap_feature_where, 'sorting asc,score desc,visits desc,id desc', 4, $sh_wap_feature_offset);
-if (!$sh_wap_feature) {
-    $sh_wap_feature = sh_books($sh_wap_where, 'visits desc,id desc', 4);
-}
-$sh_wap_new = sh_books($sh_wap_where, 'create_time desc,id desc', 4);
-$sh_wap_home_categories = sh_cat_map();
-$sh_wap_home_scodes = sh_sex_scodes($sh_wap_sex);
-?>
-<main class="sh-wap-main sh-wap-home">
-    <section class="sh-wap-banner" aria-label="精选推荐">
-        <div class="sh-wap-banner__track">
-            <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><img src="<?php echo htmlspecialchars($pcbaseall.'template/tpl/image/home-banner-01.jpg', ENT_QUOTES, 'UTF-8');?>" alt="精品阅读推荐" fetchpriority="high"></a>
-            <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><img src="<?php echo htmlspecialchars($pcbaseall.'template/tpl/image/home-banner-02.jpg', ENT_QUOTES, 'UTF-8');?>" alt="新作推荐" loading="lazy"></a>
-        </div>
-        <div class="sh-wap-banner__dots" aria-label="轮播图分页">
-            <button type="button" aria-label="第1张轮播图" aria-current="true"></button>
-            <button type="button" aria-label="第2张轮播图" aria-current="false"></button>
-        </div>
-    </section>
-
-    <nav class="sh-wap-quick sh-wap-quick--three" aria-label="快捷入口">
-        <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">分</span><b>分类</b></a>
-        <a href="<?php echo htmlspecialchars(pbcode('paihang'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">榜</span><b>排行</b></a>
-        <a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>"><span class="sh-wap-quick__icon">免</span><b>免费试读</b></a>
-    </nav>
-
-    <?php require(dirname(__FILE__).'/home-feature.html');?>
-
-    <section class="sh-wap-section sh-wap-home-blocks" aria-labelledby="wapRankGroupsTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">READING PICKS</span><h2 id="wapRankGroupsTitle">畅销精选</h2></div><a href="<?php echo htmlspecialchars(pbcode('paihang'), ENT_QUOTES, 'UTF-8');?>">完整榜单 <i>›</i></a></header>
-        <div class="sh-wap-block-list"><?php echo sh_home_blocks($sh_wap_sex);?></div>
-    </section>
-
-    <section class="sh-wap-section sh-wap-category-picks" aria-labelledby="wapCategoryPicksTitle">
-        <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">GENRE SPOTLIGHT</span><h2 id="wapCategoryPicksTitle">分类强推</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>">全部分类 <i>›</i></a></header>
-        <?php foreach ($sh_wap_home_categories as $sh_wap_scode => $sh_wap_cat) {
-            if (!in_array(intval($sh_wap_scode), $sh_wap_home_scodes, true)) continue;
-            $sh_wap_cat_books = sh_books(' and scode='.intval($sh_wap_scode), 'update_time desc,id desc', 3);
-            if (!$sh_wap_cat_books) continue;
-        ?>
-        <section class="sh-wap-category-pick">
-            <header><a href="<?php echo htmlspecialchars(sh_cat_url($sh_wap_scode), ENT_QUOTES, 'UTF-8');?>"><?php echo sh_e($sh_wap_cat['name']);?></a><a class="sh-wap-category-pick__more" href="<?php echo htmlspecialchars(sh_cat_url($sh_wap_scode), ENT_QUOTES, 'UTF-8');?>">更多 ›</a></header>
-            <div class="sh-wap-category-pick__books">
-                <?php foreach ($sh_wap_cat_books as $sh_wap_cat_book) { ?>
-                <a href="<?php echo htmlspecialchars(sh_book_url($sh_wap_cat_book['id']), ENT_QUOTES, 'UTF-8');?>">
-                    <span><?php echo sh_cover_img($sh_wap_cat_book['ico'], $sh_wap_cat_book['title']);?></span>
-                    <strong><?php echo sh_e($sh_wap_cat_book['title']);?></strong>
-                    <small><?php echo sh_e($sh_wap_cat_book['author']);?></small>
+<div class="content">
+    <?php
+    $sh_wap_banner_rows = $dsql->all("select id,title,ico,description,author,scode from ay_content force index(idx_isheadline) where status=1 and isheadline=1 order by id desc limit 4",1);
+    if (!$sh_wap_banner_rows) {
+        $sh_wap_banner_rows = $dsql->all("select id,title,ico,description,author,scode from ay_content where status=1 order by visits desc,id desc limit 4",1);
+    }
+    if (!is_array($sh_wap_banner_rows)) $sh_wap_banner_rows = array();
+    ?>
+    <section class="wap-home-banner" data-wap-carousel aria-label="精选作品">
+        <div class="wap-home-banner__slides">
+            <?php foreach ($sh_wap_banner_rows as $sh_wap_banner_index => $sh_wap_banner_book) {
+                $sh_wap_banner_id = intval($sh_wap_banner_book['id']);
+                $sh_wap_banner_title = decode_string($sh_wap_banner_book['title']);
+                $sh_wap_banner_author = decode_string($sh_wap_banner_book['author']);
+                $sh_wap_banner_cover = ico($sh_wap_banner_book['ico'],1);
+                $sh_wap_banner_category = $dsql->one("select name from ay_content_sort where scode=" . intval($sh_wap_banner_book['scode']) . " limit 1",1);
+                $sh_wap_banner_category_name = isset($sh_wap_banner_category['name']) ? $sh_wap_banner_category['name'] : '';
+                $sh_wap_banner_byline = trim($sh_wap_banner_category_name . ' / ' . $sh_wap_banner_author, ' /');
+                $sh_wap_banner_description = preg_replace('/\s+/u',' ',trim(strip_tags((string)$sh_wap_banner_book['description'])));
+                if ($sh_wap_banner_description === null) $sh_wap_banner_description = '';
+                $sh_wap_banner_url = pbcode('book',$sh_wap_banner_id);
+                $sh_wap_banner_active = ($sh_wap_banner_index === 0);
+            ?>
+            <article class="wap-home-banner__slide<?php echo $sh_wap_banner_active ? ' is-active' : '';?>" data-wap-slide aria-roledescription="slide" aria-label="<?php echo ($sh_wap_banner_index + 1) . ' / ' . count($sh_wap_banner_rows);?>" aria-hidden="<?php echo $sh_wap_banner_active ? 'false' : 'true';?>">
+                <a class="wap-home-banner__cover" href="<?php echo htmlspecialchars($sh_wap_banner_url,ENT_QUOTES,'UTF-8');?>" tabindex="<?php echo $sh_wap_banner_active ? '0' : '-1';?>">
+                    <img src="<?php echo htmlspecialchars($sh_wap_banner_cover,ENT_QUOTES,'UTF-8');?>" alt="<?php echo htmlspecialchars($sh_wap_banner_title,ENT_QUOTES,'UTF-8');?>" <?php echo $sh_wap_banner_active ? 'fetchpriority="high"' : 'loading="lazy"';?> decoding="async">
                 </a>
-                <?php } ?>
-            </div>
-        </section>
+                <div class="wap-home-banner__meta">
+                    <a href="<?php echo htmlspecialchars($sh_wap_banner_url,ENT_QUOTES,'UTF-8');?>" tabindex="<?php echo $sh_wap_banner_active ? '0' : '-1';?>">
+                        <h2><?php echo htmlspecialchars($sh_wap_banner_title,ENT_QUOTES,'UTF-8');?></h2>
+                        <p><?php echo htmlspecialchars($sh_wap_banner_byline,ENT_QUOTES,'UTF-8');?></p>
+                    </a>
+                </div>
+                <div class="wap-home-banner__summary">
+                    <a href="<?php echo htmlspecialchars($sh_wap_banner_url,ENT_QUOTES,'UTF-8');?>" tabindex="<?php echo $sh_wap_banner_active ? '0' : '-1';?>">
+                        <p><?php echo htmlspecialchars($sh_wap_banner_description,ENT_QUOTES,'UTF-8');?></p>
+                    </a>
+                </div>
+            </article>
+            <?php } ?>
+        </div>
+        <?php if (count($sh_wap_banner_rows) > 1) { ?>
+        <div class="wap-home-banner__dots" role="tablist" aria-label="精选作品轮播">
+            <?php foreach ($sh_wap_banner_rows as $sh_wap_banner_index => $sh_wap_banner_book) { ?>
+            <button type="button" data-wap-dot="<?php echo intval($sh_wap_banner_index);?>" role="tab" aria-label="第<?php echo intval($sh_wap_banner_index + 1);?>本精选作品" aria-selected="<?php echo $sh_wap_banner_index === 0 ? 'true' : 'false';?>"></button>
+            <?php } ?>
+        </div>
         <?php } ?>
     </section>
-
-    <section class="sh-wap-home-bottom" aria-label="新书与更新">
-        <section class="sh-wap-section sh-wap-bottom-panel" aria-labelledby="wapNewTitle">
-            <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">FRESH STORIES</span><h2 id="wapNewTitle">新书速递</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>">更多 <i>›</i></a></header>
-            <div class="sh-wap-new-list">
-                <?php foreach ($sh_wap_new as $sh_wap_book) { ?>
-                <a class="sh-wap-new-row" href="<?php echo htmlspecialchars(sh_book_url($sh_wap_book['id']), ENT_QUOTES, 'UTF-8');?>">
-                    <span class="sh-wap-new-row__cover"><?php echo sh_cover_img($sh_wap_book['ico'], $sh_wap_book['title']);?></span>
-                    <span class="sh-wap-new-row__body"><strong><?php echo sh_e($sh_wap_book['title']);?></strong><small><?php echo sh_e($sh_wap_book['author']);?> · <?php echo sh_words($sh_wap_book['subscode']);?></small><em><?php echo sh_e(sh_short($sh_wap_book['description'], 42) ?: '暂无简介');?></em></span>
-                </a>
-                <?php } ?>
+    <div id="gallery" class="gallery" w="1200" h="311">
+        <div id="D1pic1" class="fPic">
+            <?php
+			function xxx_Scroll_(){
+				global $dsql;
+				$dd=$dsql->all("select adbody from ay_ad where adstatus='1' and id=103 limit 1",1,usedbname());
+				foreach($dd as $xx)
+				{
+					$xxx=$xx[adbody];
+					$ii++;
+					if($ii==1){
+						preg_match_all('/src=\"(.*?)\"/',$xxx,$arr);
+						$img=$arr[1][0];
+						if($img){
+							if(strstr($img,'http')){
+								$x=explode('//',$img);
+								$x=$x[1];
+								$img=strstr($x,'/');
+								$img=ltrim($img,'/');
+							}else{
+								$img=ltrim($img,'/');
+							}
+							if($img){
+								$img=ROOT_PATH.'/wap/'.$img;
+								if(file_exists($img)){
+								    $info = getimagesize($img);
+								    $width  = $info[0];
+								    $height = $info[1];
+								}
+							}
+						}
+					}
+				}
+				if($xxx){
+					$width=1079;
+					$height=640;
+					$xxx=str_replace('<a','<div class="fcon"><a',$xxx);
+					$xxx=str_replace('</a>','</a></div>',$xxx);
+					$xxx.='
+					<script>
+						document.getElementById("gallery").setAttribute("w","'.$width.'");
+						document.getElementById("gallery").setAttribute("h","'.$height.'");
+					</script>';
+				}else{
+					$xxx='<style>.huan1{display:none}</style>';
+				}
+				return $xxx;
+			}
+        	echo xxx_Scroll_();
+	        ?>
+        </div>
+        <div class="fbg">
+            <div class="D1fBt" id="D1fBt"></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="style/js/koala.min.1.5.js"></script>
+    <script type="text/javascript">
+    var x = document.getElementById("D1pic1").getElementsByTagName('div');
+    var len = x.length;
+    if (len) {
+        var w_ = document.getElementById("gallery").offsetWidth;
+        var w = document.getElementById("gallery").getAttribute('w');
+        var h = document.getElementById("gallery").getAttribute('h');
+        var h_ = w_ * h / w;
+        document.getElementById("gallery").style.height = h_ + 'px';
+        var btn = '';
+        for (i = 1; i <= len; i++) {
+            if (i == 1) {
+                var x = ' class="current"';
+            } else {
+                var x = '';
+            }
+            btn += '<a href="javascript:" hidegallery="true" target="_self"' + x + '><i>' + i + '</i></a>';
+        }
+        document.getElementById("D1fBt").innerHTML = btn;
+        Qfast.add('widgets', { path: "style/js/terminator2.2.min.js", type: "js", requires: ['fx'] });
+        Qfast(false, 'widgets', function() {
+            K.tabs({
+                id: 'gallery', //焦点图包裹id
+                conId: "D1pic1", //** 大图域包裹id
+                tabId: "D1fBt",
+                tabTn: "a",
+                conCn: '.fcon', //** 大图域配置class
+                auto: 1, //自动播放 1或0
+                effect: 'fxspeed', //效果配置
+                eType: 'click', //** 鼠标事件
+                interval: 2000 //** 停顿时间
+            })
+        })
+    }
+    </script>
+    <nav class="home-nav wap-home-shortcuts" aria-label="快捷导航">
+        <a href="<?php echo pbcode('shuku');?>" class="guide-nav-a">
+            <i class="icon icon-sort" aria-hidden="true"></i>
+            <span class="guide-nav-h">分类</span>
+        </a>
+        <a href="<?php echo pbcode('paihang');?>" class="guide-nav-a">
+            <i class="icon icon-rank" aria-hidden="true"></i>
+            <span class="guide-nav-h">排行</span>
+        </a>
+        <a href="<?php echo pbcode('shuku');?>" class="guide-nav-a" aria-label="限免作品，进入书城">
+            <i class="icon icon-free" aria-hidden="true"></i>
+            <span class="guide-nav-h">限免</span>
+        </a>
+    </nav>
+    <div class="money">
+        <center>
+            <?php echo axd(24);?>
+        </center>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">畅销精品</h3>
             </div>
-        </section>
-        <section class="sh-wap-section sh-wap-bottom-panel" aria-labelledby="wapUpdatesTitle">
-            <header class="sh-wap-section__head"><div><span class="sh-wap-kicker">JUST UPDATED</span><h2 id="wapUpdatesTitle">最近更新</h2></div><a href="<?php echo htmlspecialchars(pbcode('shuku'), ENT_QUOTES, 'UTF-8');?>?sort=update">全部 <i>›</i></a></header>
-            <?php echo sh_home_updates(5, $sh_wap_sex);?>
-        </section>
+            <div class="novel-header-r">
+                <a href="<?php echo pbcode('shuku');?>">更多</a>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <?php echo SByou_NeT_TJ(8);?>
+            </ol>
+        </div>
+    </div>
+    <?php
+	if($memberadd=='1'){
+	echo '
+	<div class="money" style="margin-top:0.75rem;">
+		<center>
+			<a href="'.pbcode('member','yc','','all').'" style="float:left;width:100%;">
+				<img src="'.$pcbaseall.'include/member/image/yc_wap.jpg" style="float:left;width:100%;" />
+			</a>
+		</center>
+	</div>';
+	}
+	?>
+    <div class="money">
+        <center>
+            <?php echo axd(25);?>
+        </center>
+    </div>
+    <div class="novel wap-home-legacy-feature">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">人气风向</h3>
+            </div>
+        </div>
+        <?php
+        $list='';
+        $info='';
+        $ii=0;
+		$dd=$dsql->all("select id from ay_content force index(idx_isheadline) where status=1 and isheadline=1 order by id desc limit 5",1);
+		foreach($dd as $xx)
+		{
+			$ii++;
+			$id=$xx[id];
+			$xx=$dsql->one("select title,ico,description,author,scode,uid from ay_content where id=$id limit 1",1);
+			$title=$xx[title];
+			$ico=$xx[ico];
+			$ico=ico($ico,1);
+			$description=$xx[description];
+			$author=$xx[author];
+			$scode=$xx[scode];
+			$uid=$xx[uid];
+			$x=strip_tags($description);
+			$description=str_replace(array("	"," ","　"),"",$x);
+			$url=pbcode('book',$id);
+			$x=$dsql->one("select name from ay_content_sort where scode=$scode limit 1",1);
+			$name=$x[name];
+			if($author){
+				if($uid){
+					$x=$dsql->one("select headpic from ay_member where id=$uid limit 1",1);
+					$headpic=$x[headpic];
+					$headpic=ico($headpic,1);
+				}else{
+					$x=rand(1,100);
+					$headpic=$pcbaseall."uploads/empty/".$x.".gif";
+				}
+				$author='<div><img src="'.$headpic.'">'.$author.'</div>';
+			}
+			$list.='
+            <div class="swiper_item_zbtj active'.$ii.'">
+                <a href="'.$url.'" title="'.$title.'" class="slide-image">
+                    <img src="'.$ico.'">
+                </a>
+            </div>';
+            if($ii==1){
+            	$c=' cur';
+            }else{
+            	$c='';
+            }
+            $info.='
+            <div class="box'.$ii.$c.'">
+            	<div><span>['.$name.']</span><a href="'.$url.'" title="'.$title.'">'.$title.'</a></div>
+            	'.$author.'
+            	<div>'.$description.'</div>
+            </div>';
+		}
+        ?>
+        <div class="uni-swiper-wrapper">
+            <div class="uni-swiper-slides">
+                <div class="uni-swiper-slide-frame">
+                	<?php echo $list;?>
+                </div>
+            </div>
+        </div>
+        <div class="infobox">
+        	<?php echo $info;?>
+        </div>
+        <script>
+        initZbtjSwiper();
+        </script>
+    </div>
+    <div class="novel hrlz qljz bjlj lastlimr10">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">编辑力荐</h3>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <?php
+				function bjlj($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(bjlj) where bjlj=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description,author,scode,subtitle from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$description=$xx[description];
+						$author=$xx[author];
+						$scode=$xx[scode];
+						$subtitle=$xx[subtitle];
+						$x=strip_tags($description);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$x=$dsql->one("select name from ay_content_sort where scode=$scode limit 1",1);
+						$name=$x[name];
+						if(!$subtitle){
+							$subtitle='连载';
+						}else{
+							$subtitle='完结';
+						}
+						$xxx.='
+						<li class="novel-slide-li">
+							<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+								<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+								<div class="box_r">
+									<div class="novel-slide-caption">'.$title.'</div>
+									<p class="novel-slide-author novel-slide-author_"><span class="gray">'.$author.'</span></p>
+									<p class="novel-slide-author novel-slide-author_ op_"><font>'.$name.'</font><font>'.$subtitle.'</font></p>
+								</div>
+								<p class="novel-slide-author des_"><span class="gray">'.$description.'</span></p>
+							</a>
+						</li>';
+					}
+					return $xxx;
+				}
+				echo bjlj(100);
+				?>
+            </ol>
+        </div>
+    </div>
+    <div class="novel hrlz qljz lastlimr10">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">热读精选</h3>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <li class="novel-slide-li">
+                    <?php
+				function rdjx($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(rdjx) where rdjx=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$ii++;
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description,author from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$x=$xx[description];
+						$author=$xx[author];
+						$x=strip_tags($x);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$xxx.='
+						<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+							<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+							<div class="box_r">
+								<div class="novel-slide-caption">'.$title.'</div>
+								<p class="novel-slide-author novel-slide-author_"><span class="gray">'.$author.'</span></p>
+								<p class="novel-slide-author"><span class="gray">'.$description.'</span></p>
+							</div>
+						</a>';
+						if($ii%2==0){
+							$xxx.='</li><li class="novel-slide-li">';
+						}
+					}
+					return $xxx;
+				}
+				echo rdjx(100);
+				?>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="novel hrlz lastlimr10">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">火热连载</h3>
+            </div>
+        </div>
+        <div class="novel-slide" style="margin-bottom: .75rem;">
+            <ol class="novel-slide-ol">
+                <?php
+				function hrlz($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(hrlz) where hrlz=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$x=$xx[description];
+						$x=strip_tags($x);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$xxx.='
+						<li class="novel-slide-li">
+							<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+								<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+								<div class="novel-slide-caption">'.$title.'</div>
+								<p class="novel-slide-author"><span class="gray">'.$description.'</span></p>
+							</a>
+						</li>';
+					}
+					return $xxx;
+				}
+				echo hrlz(100);
+				?>
+            </ol>
+        </div>
+    </div>
+    <div class="novel hrlz qljz">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title">潜力佳作</h3>
+            </div>
+        </div>
+        <div class="novel-slide">
+            <ol class="novel-slide-ol">
+                <li class="novel-slide-li">
+                    <?php
+				function qljz($num=null){
+					global $dsql,$pcbaseall;
+					$dd=$dsql->all("select id from ay_content force index(qljz) where qljz=1 order by id desc limit $num",1);
+					foreach($dd as $xx)
+					{
+						$ii++;
+						$id=$xx[id];
+						$xx=$dsql->one("select title,ico,description,author from ay_content where id=$id limit 1",1);
+						$title=$xx[title];
+						$ico=$xx[ico];
+						$ico=ico($ico,1);
+						$x=$xx[description];
+						$author=$xx[author];
+						$x=strip_tags($x);
+						$description=str_replace(array("	"," ","　"),"",$x);
+						$url=pbcode('book',$id);
+						$xxx.='
+						<a href="'.$url.'" class="novel-slide-a" title="'.$title.'">
+							<img crs="'.$ico.'" src="style/image/blank.gif" onerror="this.src=&#39;'.$pcbaseall.'uploads/empty.jpg&#39;" class="novel-slide-img" alt="'.$title.'" />
+							<div class="box_r">
+								<div class="novel-slide-caption">'.$title.'</div>
+								<p class="novel-slide-author novel-slide-author_"><span class="gray">'.$author.'</span></p>
+								<p class="novel-slide-author"><span class="gray">'.$description.'</span></p>
+							</div>
+						</a>';
+						if($ii%2==0){
+							$xxx.='</li><li class="novel-slide-li">';
+						}
+					}
+					return $xxx;
+				}
+				echo qljz(100);
+				?>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="money">
+        <center>
+            <?php echo axd(26);?>
+        </center>
+    </div>
+    <div class="novel">
+        <div class="novel-header">
+            <div class="novel-header-l">
+                <h3 class="novel-title" id="classic-element">分类强推</h3> <span class="novel-title-desc">热门好书抢先看</span>
+            </div>
+        </div>
+        <?php
+		$arr=array();
+		$xxx='';
+		global $dsql;$dd=$dsql->all("select scode,name from ay_content_sort where status=1 order by sorting asc,id asc",1);
+		foreach($dd as $xx)
+		{
+		$idCur=$xx[scode];
+		$nameCur=$xx[name];
+		$arr[ $idCur ]=$nameCur;
+		}
+		foreach ($arr as $key => $value){
+		$ii++;
+		$xxx.=CatHead($ii,$arr);
+		$xxx.='
+		<div class="novel-slide novel-category" id="tab'.$ii.'">
+			<ol class="novel-slide-ol active">'.SByou_NeT_Cat($key,$value,4).'</ol>
+		</div>';
+		}
+		echo $xxx;
+		?>
+    </div>
+    <div class="money">
+        <center>
+            <?php echo axd(27);?>
+        </center>
+    </div>
+    <?php
+    $sh_wap_new_books = $dsql->all("select id,title,ico,author from ay_content where status=1 order by create_time desc,id desc limit 12",1);
+    $sh_wap_recent_updates = $dsql->all("select id,title,ico,author,update_time from ay_content where status=1 order by update_time desc,id desc limit 12",1);
+    $sh_wap_home_shelves = array(
+        array('title' => '新书速递', 'more' => pbcode('paihang','new','','week'), 'rows' => $sh_wap_new_books, 'meta' => 'author'),
+        array('title' => '最近更新', 'more' => pbcode('paihang','update','','week'), 'rows' => $sh_wap_recent_updates, 'meta' => 'update_time')
+    );
+    foreach ($sh_wap_home_shelves as $sh_wap_shelf) {
+    ?>
+    <section class="wap-home-shelf" aria-label="<?php echo htmlspecialchars($sh_wap_shelf['title'],ENT_QUOTES,'UTF-8');?>">
+        <div class="wap-home-shelf__header">
+            <h3><?php echo htmlspecialchars($sh_wap_shelf['title'],ENT_QUOTES,'UTF-8');?></h3>
+            <a href="<?php echo htmlspecialchars($sh_wap_shelf['more'],ENT_QUOTES,'UTF-8');?>">更多 <span aria-hidden="true">›</span></a>
+        </div>
+        <div class="wap-home-shelf__track">
+            <?php foreach ((array)$sh_wap_shelf['rows'] as $sh_wap_shelf_book) {
+                $sh_wap_shelf_id = intval($sh_wap_shelf_book['id']);
+                $sh_wap_shelf_title = decode_string($sh_wap_shelf_book['title']);
+                $sh_wap_shelf_author = decode_string($sh_wap_shelf_book['author']);
+                $sh_wap_shelf_cover = ico($sh_wap_shelf_book['ico'],1);
+                $sh_wap_shelf_url = pbcode('book',$sh_wap_shelf_id);
+                $sh_wap_shelf_meta = $sh_wap_shelf['meta'] === 'update_time' ? (strtotime($sh_wap_shelf_book['update_time']) ? date('m-d',strtotime($sh_wap_shelf_book['update_time'])) : '') : $sh_wap_shelf_author;
+            ?>
+            <a class="wap-home-shelf__item" href="<?php echo htmlspecialchars($sh_wap_shelf_url,ENT_QUOTES,'UTF-8');?>" title="<?php echo htmlspecialchars($sh_wap_shelf_title,ENT_QUOTES,'UTF-8');?>">
+                <img src="<?php echo htmlspecialchars($sh_wap_shelf_cover,ENT_QUOTES,'UTF-8');?>" alt="<?php echo htmlspecialchars($sh_wap_shelf_title,ENT_QUOTES,'UTF-8');?>" loading="lazy" decoding="async">
+                <span class="wap-home-shelf__title"><?php echo htmlspecialchars($sh_wap_shelf_title,ENT_QUOTES,'UTF-8');?></span>
+                <span class="wap-home-shelf__meta"><?php echo htmlspecialchars($sh_wap_shelf_meta,ENT_QUOTES,'UTF-8');?></span>
+            </a>
+            <?php } ?>
+        </div>
     </section>
-</main>
-<script type="text/javascript" src="style/js/home.js?v=20261123a" defer></script>
+    <?php } ?>
+</div>
 <?php require_once(dirname(__FILE__).'/footer.html');?>
-<script type="text/javascript">sitemap();upbaidu();</script>
+<script type="text/javascript">
+var t01 = parseInt('<?php echo time()+$MAKE_HTML_TIME;?>');
+var t02 = new Date().getTime();
+t02 = Math.round(t02 / 1000);
+if (t02 > t01) {
+    mk(0);
+}
+</script>
