@@ -1,0 +1,44 @@
+{include file='common/head.html'}
+<?php $wap = $this->vars['wap_recommend']; ?>
+<link rel="stylesheet" href="{APP_THEME_DIR}/css/waprecommend.css?v=20261128a">
+<div class="layui-body wap-recommend-admin">
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title"><li><a href="{url./admin/ContentSort/index}">栏目管理</a></li><li class="layui-this">WAP 分类推荐</li></ul>
+        <div class="layui-tab-content">
+            <header class="wap-recommend-heading"><h1><?php echo sh_wap_catalog_e($wap['name']);?></h1><p>每个推荐位最多 20 本，按列表顺序展示。留空保存后，该推荐位不展示书籍。</p></header>
+            <form action="{url./admin/ContentSort/mod/scode/'.[$wap_recommend.scode].'/action/waprecommend}" method="post" class="layui-form">
+                <input type="hidden" name="formcheck" value="{$formcheck}">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分类频道</label>
+                    <div class="layui-input-block">
+                        <?php foreach (array('auto' => '按分类名称自动识别', 'boy' => '男生', 'girl' => '女生') as $key => $label) { ?>
+                        <input type="radio" name="wap_channel" value="<?php echo $key;?>" title="<?php echo $label;?>"<?php echo $wap['channel'] === $key ? ' checked' : '';?>>
+                        <?php } ?>
+                    </div>
+                </div>
+                <div class="wap-recommend-grid">
+                    <?php foreach ($wap['sections'] as $key => $label) { ?>
+                    <section class="wap-recommend-slot" data-slot="<?php echo $key;?>">
+                        <h2><?php echo $label;?></h2>
+                        <p><?php echo $key === 'hot' ? '首页显示前 4 本，双列封面布局。' : '首页显示前 3 本，封面与简介列表。';?><?php echo $key === 'serial' ? '仅可选连载作品。' : '';?></p>
+                        <label for="wap-<?php echo $key;?>">书籍 ID（逗号或换行分隔）</label>
+                        <textarea id="wap-<?php echo $key;?>" name="wap_<?php echo $key;?>" class="layui-textarea" rows="2"><?php echo implode(',', $wap['ids'][ $key ]);?></textarea>
+                        <ol class="wap-recommend-selected" aria-label="<?php echo $label;?>已选书籍"></ol>
+                    </section>
+                    <?php } ?>
+                </div>
+                <div class="wap-recommend-actions"><button class="layui-btn" lay-submit>保存推荐位</button><a class="layui-btn layui-btn-primary" href="{url./admin/ContentSort/index}">返回栏目管理</a><span id="wap-recommend-feedback" role="status" aria-live="polite"></span></div>
+                <section class="wap-recommend-picker">
+                    <h2>从本分类选书</h2>
+                    <input type="search" id="wap-recommend-search" placeholder="搜索书名、作者或书籍 ID" class="layui-input" aria-label="搜索本分类作品">
+                    <p class="wap-recommend-picker__hint">点击加入推荐位，再在上方调整顺序；保存后在 WAP 生效。</p>
+                    <div class="wap-recommend-table"><table class="layui-table"><thead><tr><th>ID</th><th>书名 / 作者</th><th>状态</th><th>加入推荐位</th></tr></thead><tbody id="wap-recommend-results"></tbody></table></div>
+                    <div class="wap-recommend-picker__pages"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm" id="wap-recommend-prev">上一页</button><span id="wap-recommend-page" aria-live="polite"></span><button type="button" class="layui-btn layui-btn-primary layui-btn-sm" id="wap-recommend-next">下一页</button></div>
+                </section>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="application/json" id="wap-recommend-data"><?php echo json_encode(array('books' => $wap['books'], 'sections' => $wap['sections']), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE);?></script>
+<script src="{APP_THEME_DIR}/js/waprecommend.js?v=20261128a"></script>
+{include file='common/foot.html'}

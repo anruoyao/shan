@@ -25,6 +25,11 @@ class ConfigController extends Controller
     // 应用配置列表
     public function index()
     {
+        require_once ROOT_PATH . '/wap/include/search.fun.php';
+        if (get('action') === 'wapsearch' && $_POST) {
+            $this->saveWapSearch();
+            return;
+        }
         if (! ! $action = get('action')) {
             switch ($action) {
                 case 'sendemail':
@@ -42,6 +47,8 @@ class ConfigController extends Controller
         if ($_POST) {
             unset($_POST['upload']); // 去除上传组件
             foreach ($_POST as $key => $value) {
+                // WAP 搜索设置统一经过专用校验入口保存。
+                if (strpos($key, 'wap_search_') === 0) continue;
                 if (! preg_match('/^[\w\-]+$/', $key)) {
                     continue;
                 }
@@ -116,10 +123,36 @@ class ConfigController extends Controller
         $configs['tpl_html_cache']['value'] = $this->config('tpl_html_cache');
         $configs['tpl_html_cache_time']['value'] = $this->config('tpl_html_cache_time');
         $this->assign('configs', $configs);
+        $wapSearch = sh_wap_search_settings();
+        $wapSearch['hotwords'] = sh_wap_search_hotwords(array_merge($wapSearch, array('hot_enabled' => '1')));
+        $this->assign('wap_search', $wapSearch);
+        $this->assign('wap_search_rank_types', sh_wap_search_rank_types());
         
         $this->assign('groups', model('admin.member.MemberGroup')->getSelect());
         
         $this->display('system/config.html');
+    }
+
+    // 使用既有参数配置权限和表单令牌，不改动其他站点设置。
+    private function saveWapSearch()
+    {
+        try {
+            $values = sh_wap_search_config_values($_POST);
+        } catch (\InvalidArgumentException $error) {
+            alert_back($error->getMessage());
+            return;
+        }
+        foreach ($values as $key => $value) {
+            $value = escape_string($value);
+            if ($this->model->checkConfig("name='$key'")) {
+                if ($this->model->modValue($key, $value) === false) error('搜索设置保存失败，请重试。', -1);
+            } else {
+                if (!$this->model->addConfig(array('name' => $key, 'value' => $value, 'type' => 2, 'sorting' => 255, 'description' => 'WAP搜索设置'))) error('搜索设置保存失败，请重试。', -1);
+            }
+        }
+        $this->log('修改 WAP 搜索设置成功！');
+        path_delete(RUN_PATH . '/config');
+        success('搜索设置已保存！', url('/admin/Config/index' . get_tab('t10'), false));
     }
 
     // 修改配置文件

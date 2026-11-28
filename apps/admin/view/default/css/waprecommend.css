@@ -1,0 +1,25 @@
+.wap-recommend-admin { padding-bottom: 32px; }
+.wap-recommend-heading { margin-bottom: 22px; }
+.wap-recommend-heading h1 { margin-bottom: 8px; font-size: 22px; font-weight: 500; }
+.wap-recommend-heading p, .wap-recommend-slot > p, .wap-recommend-picker__hint { color: #858b95; font-size: 12px; line-height: 1.8; }
+.wap-recommend-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.wap-recommend-slot { min-width: 0; padding: 18px; border: 1px solid #e7e9ee; border-radius: 6px; background: #fff; }
+.wap-recommend-slot h2, .wap-recommend-picker h2 { margin-bottom: 5px; font-size: 16px; font-weight: 500; }
+.wap-recommend-slot label { display: block; margin-top: 12px; margin-bottom: 6px; color: #6a7280; font-size: 12px; }
+.wap-recommend-slot .layui-textarea { min-height: 55px; }
+.wap-recommend-selected { margin-top: 10px; padding-left: 0; list-style: none; }
+.wap-recommend-selected li { display: flex; align-items: center; gap: 5px; min-height: 34px; border-bottom: 1px solid #f0f1f4; }
+.wap-recommend-selected li > span { flex: 1; min-width: 0; overflow: hidden; color: #535d6c; text-overflow: ellipsis; white-space: nowrap; }
+.wap-recommend-selected button { padding: 3px 6px; border: 1px solid #e7e9ee; border-radius: 3px; background: #fff; color: #7a8594; cursor: pointer; }
+.wap-recommend-selected button:disabled { opacity: .35; cursor: default; }
+.wap-recommend-selected .is-invalid { color: #db4f51; }
+.wap-recommend-actions { position: sticky; bottom: 0; z-index: 2; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 18px 0; padding: 14px; border: 1px solid #e7e9ee; background: #fff; }
+#wap-recommend-feedback { color: #697586; font-size: 12px; }
+.wap-recommend-picker { padding: 18px; border: 1px solid #e7e9ee; border-radius: 6px; background: #fff; }
+.wap-recommend-picker .layui-input { max-width: 420px; margin: 15px 0 7px; }
+.wap-recommend-table { overflow-x: auto; }
+.wap-recommend-table .layui-table { min-width: 600px; }
+.wap-recommend-table td:nth-child(2) small { display: block; margin-top: 3px; color: #929ba7; }
+.wap-recommend-table .layui-btn { margin: 3px !important; }
+.wap-recommend-picker__pages { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; }
+@media (max-width: 900px) { .wap-recommend-grid { grid-template-columns: minmax(0,1fr); } }

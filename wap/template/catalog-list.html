@@ -1,0 +1,57 @@
+<?php
+$sh_wap_catalog_options['view'] = 'all';
+$sh_wap_catalog_shelf = $sh_wap_catalog_options['shelf'];
+if ($sh_wap_catalog_shelf) {
+    $sh_wap_catalog_rows = sh_wap_catalog_recommendations($scode, $sh_wap_catalog_shelf);
+    $sh_wap_catalog_result = array('rows' => $sh_wap_catalog_rows, 'total' => count($sh_wap_catalog_rows), 'page' => 1, 'pages' => 1);
+    $sh_wap_catalog_labels = sh_wap_catalog_sections();
+    $sh_wap_catalog_heading = $sh_wap_catalog_labels[$sh_wap_catalog_shelf];
+} else {
+    $sh_wap_catalog_result = sh_wap_catalog_list($scode, $sh_wap_catalog_options['sort'], $sh_wap_catalog_options['state'], $sh_wap_catalog_options['pg']);
+    $sh_wap_catalog_heading = '全部作品';
+}
+$sh_wap_catalog_view = 'list';
+$sh_wap_catalog_title = $scode ? sh_wap_catalog_text($name) : '全部作品';
+require dirname(__FILE__) . '/header_inner.html';
+?>
+<main class="catalog-library">
+    <?php if (!$sh_wap_catalog_shelf) { ?>
+    <nav class="catalog-filters" aria-label="作品排序">
+        <?php foreach (array('update' => '最近更新', 'hot' => '人气最高', 'new' => '最新入库', 'words' => '字数最多') as $key => $label) {
+            $options = $sh_wap_catalog_options; $options['sort'] = $key; $options['pg'] = 1;
+        ?>
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, $options));?>"<?php echo $key === $sh_wap_catalog_options['sort'] ? ' aria-current="page"' : '';?>><?php echo $label;?></a>
+        <?php } ?>
+    </nav>
+    <nav class="catalog-states" aria-label="连载状态">
+        <?php foreach (array('all' => '全部', 'serial' => '连载', 'finished' => '完本') as $key => $label) {
+            $options = $sh_wap_catalog_options; $options['state'] = $key; $options['pg'] = 1;
+        ?>
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, $options));?>"<?php echo $key === $sh_wap_catalog_options['state'] ? ' aria-current="page"' : '';?>><?php echo $label;?></a>
+        <?php } ?>
+    </nav>
+    <?php } ?>
+    <section class="catalog-shelf catalog-shelf--library">
+        <header class="catalog-shelf__header"><h2><?php echo sh_wap_catalog_e($sh_wap_catalog_heading);?></h2><span>共<?php echo number_format($sh_wap_catalog_result['total']);?>部</span></header>
+        <?php if ($sh_wap_catalog_result['rows']) { ?>
+        <div class="catalog-book-list">
+            <?php foreach ($sh_wap_catalog_result['rows'] as $sh_wap_book_row) { include dirname(__FILE__) . '/catalog-book.html'; } ?>
+        </div>
+        <?php } else { ?>
+        <p class="catalog-empty">暂无作品，去看看<a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, array('view' => 'all')));?>">全部作品</a></p>
+        <?php } ?>
+    </section>
+    <?php if ($sh_wap_catalog_result['pages'] > 1) { ?>
+    <nav class="catalog-pagination" aria-label="作品分页">
+        <?php $options = $sh_wap_catalog_options;
+        if ($sh_wap_catalog_result['page'] > 1) { $options['pg'] = $sh_wap_catalog_result['page'] - 1; ?>
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, $options));?>">上一页</a>
+        <?php } else { ?><span class="is-disabled">上一页</span><?php } ?>
+        <span><?php echo $sh_wap_catalog_result['page'];?> / <?php echo $sh_wap_catalog_result['pages'];?></span>
+        <?php if ($sh_wap_catalog_result['page'] < $sh_wap_catalog_result['pages']) { $options['pg'] = $sh_wap_catalog_result['page'] + 1; ?>
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, $options));?>">下一页</a>
+        <?php } else { ?><span class="is-disabled">下一页</span><?php } ?>
+    </nav>
+    <?php } ?>
+</main>
+<?php require dirname(__FILE__) . '/footer.html';?>

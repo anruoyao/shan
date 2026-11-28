@@ -1,4 +1,10 @@
 <?php
+require_once dirname(__FILE__) . '/../catalog.fun.php';
+$sh_wap_rank_category = isset($_GET['category']) && is_scalar($_GET['category']) ? intval($_GET['category']) : 0;
+$sh_wap_rank_category_map = sh_wap_catalog_categories();
+if (!isset($sh_wap_rank_category_map[$sh_wap_rank_category])) $sh_wap_rank_category = 0;
+$sh_wap_rank_scope = sh_wap_catalog_scope($sh_wap_rank_category);
+$sh_wap_rank_book_scope = sh_wap_catalog_scope($sh_wap_rank_category, 'b.');
 $sh_wap_rank_types = array(
 	'sale' => '畅销',
 	'month' => '月票',
@@ -38,12 +44,12 @@ if ($my === 'month' || $my === 'urge') {
 		: '';
 	$sh_wap_rank_rows = $dsql->all("select b.id,b.title,b.author,b.description,b.ico,b.update_time,count(distinct s.uid) as rank_metric
 		from ay_member_stow s inner join ay_content b on b.id=s.id
-		where b.status=1 $sh_wap_fav_period
+		where b.status=1 $sh_wap_rank_book_scope $sh_wap_fav_period
 		group by b.id order by rank_metric desc,b.id desc limit 50",1);
 	if (!$sh_wap_rank_rows && $sh_wap_rank_days > 0) {
 		$sh_wap_rank_rows = $dsql->all("select b.id,b.title,b.author,b.description,b.ico,b.update_time,count(distinct s.uid) as rank_metric
 			from ay_member_stow s inner join ay_content b on b.id=s.id
-			where b.status=1
+			where b.status=1 $sh_wap_rank_book_scope
 			group by b.id order by rank_metric desc,b.id desc limit 50",1);
 		$sh_wap_rank_note = '所选周期暂无新增收藏，已显示累计收藏榜';
 	} else {
@@ -63,7 +69,7 @@ if ($my === 'month' || $my === 'urge') {
 		: '';
 	$sh_wap_rank_widened = false;
 	if ($sh_wap_rank_filter_days > 0) {
-		$sh_wap_rank_count = $dsql->one("select count(*) as c from ay_content where status=1 $sh_wap_rank_filter",1);
+		$sh_wap_rank_count = $dsql->one("select count(*) as c from ay_content where status=1 $sh_wap_rank_scope $sh_wap_rank_filter",1);
 		if (intval($sh_wap_rank_count['c']) < 10) {
 			$sh_wap_rank_fallback_days = array('day' => 7, 'week' => 30, 'month' => 90);
 			$sh_wap_rank_filter_days = isset($sh_wap_rank_fallback_days[$page]) ? $sh_wap_rank_fallback_days[$page] : $sh_wap_rank_filter_days;
@@ -72,7 +78,7 @@ if ($my === 'month' || $my === 'urge') {
 		}
 	}
 	$sh_wap_rank_rows = $dsql->all("select id,title,author,description,ico,update_time,create_time,num_dy,likes,subscode
-		from ay_content where status=1 $sh_wap_rank_filter
+		from ay_content where status=1 $sh_wap_rank_scope $sh_wap_rank_filter
 		order by {$sh_wap_rank_order[$my]} limit 50",1);
 	if ($my === 'sale' && $sh_wap_rank_days > 0) {
 		$sh_wap_rank_note = $sh_wap_rank_widened ? '近期作品较少，已扩大时间范围，按累计订阅排序' : '周期内更新作品，按累计订阅排序';

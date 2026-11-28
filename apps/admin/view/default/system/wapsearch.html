@@ -1,0 +1,57 @@
+<?php $wapSearch = $this->vars['wap_search']; ?>
+<form action="{url./admin/Config/index/action/wapsearch}" method="post" class="layui-form" style="max-width:850px">
+    <input type="hidden" name="formcheck" value="{$formcheck}">
+    <blockquote class="layui-elem-quote">配置仅在 WAP 搜索页生效。热门词每行一个，按填写顺序显示；点击后搜索站内书名与作者。历史记录保存在读者自己的浏览器。</blockquote>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="wap-search-placeholder">搜索框提示</label>
+        <div class="layui-input-block"><input id="wap-search-placeholder" type="text" name="wap_search_placeholder" value="<?php echo sh_wap_search_e($wapSearch['placeholder']);?>" maxlength="40" required lay-verify="required" class="layui-input"></div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">热门搜索</label>
+        <div class="layui-input-block">
+            <input type="radio" name="wap_search_hot_enabled" value="1" title="显示"<?php echo $wapSearch['hot_enabled'] === '1' ? ' checked' : '';?>>
+            <input type="radio" name="wap_search_hot_enabled" value="0" title="隐藏"<?php echo $wapSearch['hot_enabled'] === '0' ? ' checked' : '';?>>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="wap-search-hotwords">热门词顺序</label>
+        <div class="layui-input-block">
+            <textarea id="wap-search-hotwords" name="wap_search_hotwords" class="layui-textarea" rows="9" placeholder="每行一个搜索词，最多 20 个"><?php echo sh_wap_search_e(implode("\n", $wapSearch['hotwords']));?></textarea>
+            <div class="layui-form-mid layui-word-aux">每词最多 30 个字，自动去重。首次未设置时展示站内热门作品；留空保存后清空热门词。</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">榜单入口</label>
+        <div class="layui-input-block">
+            <input type="radio" name="wap_search_rank_enabled" value="1" title="显示"<?php echo $wapSearch['rank_enabled'] === '1' ? ' checked' : '';?>>
+            <input type="radio" name="wap_search_rank_enabled" value="0" title="隐藏"<?php echo $wapSearch['rank_enabled'] === '0' ? ' checked' : '';?>>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="wap-search-rank-label">入口文字</label>
+        <div class="layui-input-block"><input id="wap-search-rank-label" type="text" name="wap_search_rank_label" value="<?php echo sh_wap_search_e($wapSearch['rank_label']);?>" maxlength="12" required lay-verify="required" class="layui-input"></div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="wap-search-rank-type">跳转榜单</label>
+        <div class="layui-input-block">
+            <select name="wap_search_rank_type" id="wap-search-rank-type">
+                <?php foreach ($this->vars['wap_search_rank_types'] as $rankType => $rankLabel) { ?>
+                <option value="<?php echo $rankType;?>"<?php echo $wapSearch['rank_type'] === $rankType ? ' selected' : '';?>><?php echo $rankLabel;?>榜</option>
+                <?php } ?>
+            </select>
+            <div class="layui-form-mid layui-word-aux">进入所选榜单的总榜，可继续切换日、周、月榜；榜单使用站内已有统计。</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">历史搜索</label>
+        <div class="layui-input-block">
+            <input type="radio" name="wap_search_history_enabled" value="1" title="显示并记录"<?php echo $wapSearch['history_enabled'] === '1' ? ' checked' : '';?>>
+            <input type="radio" name="wap_search_history_enabled" value="0" title="隐藏并停止记录"<?php echo $wapSearch['history_enabled'] === '0' ? ' checked' : '';?>>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="wap-search-history-limit">历史条数</label>
+        <div class="layui-input-inline"><input id="wap-search-history-limit" type="number" name="wap_search_history_limit" min="1" max="30" value="<?php echo intval($wapSearch['history_limit']);?>" required lay-verify="required|number" class="layui-input"></div><div class="layui-form-mid layui-word-aux">1–30 条，最近搜索排在前面。</div>
+    </div>
+    <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit>保存搜索设置</button><a class="layui-btn layui-btn-primary" href="{SITE_DIR}/wap/?pbcode/so/" target="_blank" rel="noopener">预览 WAP 搜索页</a></div></div>
+</form>

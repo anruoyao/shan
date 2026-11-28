@@ -1,61 +1,47 @@
-<?php require_once(dirname(__FILE__).'/header_inner.html');?>
-<div class="novel">
-	<div class="type-list">
-		<?php echo shukucat();?>
-	</div>
-</div>
-<div class="novel vipbox">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title"><img style="position:relative;top:2px" src="style/image/vip.png"> VIP小说</h3>
-		</div>
-	</div>
-	<div class="novel-slide">
-		<ol class="novel-slide-ol">
-			<?php echo vipbox(8);?>
-		</ol>
-	</div>
-</div>
-<div class="novel">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title">热门推荐</h3>
-		</div>
-	</div>
-	<div class="novel-slide">
-		<ol class="novel-slide-ol">
-			<?php echo SByou_NeT_TJ(8);?>
-		</ol>
-	</div>
-</div>
-<div class="money">
-	<center>
-		<?php echo axd(29);?>
-	</center>
-</div>
-<div class="novel">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title"><?php echo str_replace('・','',$name);?></h3>
-			<span class="novel-title-desc">共<font id="total">X</font>本</span>
-		</div>
-	</div>
-	<?php echo book4list($scode,$page);?>
-</div>
-<style type="text/css">
-#fnav{
-	display: none
-}
-</style>
-<?php require_once(dirname(__FILE__).'/footer.html');?>
-<script type="text/javascript">
-fnav(2);
-$id('fnav').style.display='block';
-var as='<?php echo $AUTO_STATIC;?>';
-var t01=parseInt('<?php echo time()+$MAKE_HTML_TIME;?>');
-var t02=new Date().getTime();
-t02=Math.round(t02/1000);
-if(t02>t01 && as!='0'){
-    mk('<?php echo $scode;?>','<?php echo $filename;?>');
-}
-</script>
+<?php
+$sh_wap_catalog_view = 'store';
+$sh_wap_catalog_title = sh_wap_catalog_text($name);
+$sh_wap_catalog_settings = sh_wap_catalog_settings($scode);
+require dirname(__FILE__) . '/header_inner.html';
+?>
+<main class="catalog-store">
+    <nav class="catalog-shortcuts" aria-label="分类快捷导航">
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, array('view' => 'all')));?>">
+            <span class="catalog-shortcuts__icon catalog-shortcuts__icon--all" aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M5 7h16a2 2 0 0 1 2 2v15H7a2 2 0 0 1-2-2z" opacity=".35"/><path d="M9 3h14a2 2 0 0 1 2 2v16H11a2 2 0 0 1-2-2z"/><path d="M13 8h8M13 12h8M13 16h5" fill="none" stroke="#fff" stroke-width="1.4"/></svg></span><span>全部</span>
+        </a>
+        <a href="<?php echo sh_wap_catalog_e(pbcode('paihang') . '&category=' . intval($scode));?>">
+            <span class="catalog-shortcuts__icon catalog-shortcuts__icon--rank" aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M3 14h6v10H3zm8-8h6v18h-6zm8 5h6v13h-6z"/><path d="m12 3 2-2 2 2-2 2z" opacity=".45"/></svg></span><span>排行</span>
+        </a>
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, array('view' => 'all', 'state' => 'finished')));?>">
+            <span class="catalog-shortcuts__icon catalog-shortcuts__icon--finished" aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M6 3h16a1 1 0 0 1 1 1v22l-9-4-9 4V4a1 1 0 0 1 1-1z"/><path d="M10 8h8m-8 4h8m-8 4h5" fill="none" stroke="#fff" stroke-width="1.4"/></svg></span><span>完本</span>
+        </a>
+        <a href="<?php echo sh_wap_catalog_e(pbcode('ping'));?>">
+            <span class="catalog-shortcuts__icon catalog-shortcuts__icon--discussion" aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M4 4h20v17h-8l-5 5v-5H4z"/><path d="m12 7-2 11m8-11-2 11M8 11h13M7 15h13" fill="none" stroke="#fff" stroke-width="1.3"/></svg></span><span>讨论</span>
+        </a>
+    </nav>
+    <?php foreach (sh_wap_catalog_sections() as $sh_wap_section => $sh_wap_section_label) {
+        $sh_wap_section_rows = sh_wap_catalog_recommendations($scode, $sh_wap_section, $sh_wap_section === 'hot' ? 4 : 3, $sh_wap_catalog_settings);
+    ?>
+    <section class="catalog-shelf" aria-labelledby="catalog-<?php echo $sh_wap_section;?>">
+        <header class="catalog-shelf__header"><h2 id="catalog-<?php echo $sh_wap_section;?>"><?php echo $sh_wap_section_label;?></h2><a class="catalog-shelf__more" href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, array('shelf' => $sh_wap_section)));?>" aria-label="更多<?php echo $sh_wap_section_label;?>">更多</a></header>
+        <?php if (!$sh_wap_section_rows) { ?>
+        <p class="catalog-empty">暂无推荐，先逛逛<a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, array('view' => 'all')));?>">全部作品</a></p>
+        <?php } elseif ($sh_wap_section === 'hot') { ?>
+        <div class="catalog-featured">
+            <?php foreach ($sh_wap_section_rows as $sh_wap_book_row) { $sh_wap_book = sh_wap_catalog_book($sh_wap_book_row); ?>
+            <a class="catalog-featured__book" href="<?php echo sh_wap_catalog_e($sh_wap_book['url']);?>">
+                <img src="<?php echo sh_wap_catalog_e($sh_wap_book['cover']);?>" alt="<?php echo sh_wap_catalog_e($sh_wap_book['title']);?>" loading="lazy" decoding="async">
+                <div class="catalog-featured__text"><h3><?php echo sh_wap_catalog_e($sh_wap_book['title']);?></h3><p><?php echo sh_wap_catalog_e($sh_wap_book['category']);?></p></div>
+            </a>
+            <?php } ?>
+        </div>
+        <?php } else { ?>
+        <div class="catalog-book-list">
+            <?php foreach ($sh_wap_section_rows as $sh_wap_book_row) { include dirname(__FILE__) . '/catalog-book.html'; } ?>
+        </div>
+        <?php } ?>
+    </section>
+    <?php } ?>
+    <a class="catalog-store__all" href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($scode, array('view' => 'all')));?>">查看本分类全部作品 ›</a>
+</main>
+<?php require dirname(__FILE__) . '/footer.html';?>

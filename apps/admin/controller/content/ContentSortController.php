@@ -406,6 +406,12 @@ class ContentSortController extends Controller
             error('传递的参数值错误！', - 1);
         }
         
+        // WAP 推荐使用现有栏目编辑权限与表单令牌，单独保存，不改栏目或书籍属性。
+        if (get('action') === 'waprecommend') {
+            $this->wapRecommendations($scode);
+            return;
+        }
+
         // 单独修改状态
         if (($field = get('field', 'var')) && ! is_null($value = get('value', 'var'))) {
             if ($this->model->modSort($scode, "$field='$value',update_user='" . session('username') . "'")) {
@@ -547,6 +553,86 @@ class ContentSortController extends Controller
             
             $this->display('content/contentsort.html');
         }
+    }
+
+    private function wapRecommendations($scode)
+    {
+        global $dsql;
+        require_once ROOT_PATH . '/wap/include/catalog.fun.php';
+        if (!ctype_digit((string) $scode) || !($sort = $this->model->getSort($scode))) {
+            error('栏目不存在或不在当前管理区域。', -1);
+        }
+        $scode = intval($scode);
+        $sections = sh_wap_catalog_sections();
+        $settings = sh_wap_catalog_settings($scode);
+        $configModel = new \app\admin\model\system\ConfigModel();
+
+        if ($_POST) {
+            $values = array();
+            try {
+                // 全部校验成功后再写入，避免部分推荐位被错误清空。
+                foreach ($sections as $section => $label) {
+                    $input = post('wap_' . $section);
+                    if ($input === null) throw new \InvalidArgumentException('请完整提交四个推荐位。');
+                    $ids = sh_wap_catalog_ids($input);
+                    if ($ids) {
+                        $where = sh_wap_catalog_scope($scode);
+                        if ($section === 'serial') $where .= " and subtitle<>'1'";
+                        $books = $dsql->all('select id from ay_content where status=1' . $where . ' and id in (' . implode(',', $ids) . ')', 1);
+                        if (count((array) $books) !== count($ids)) {
+                            throw new \InvalidArgumentException($label . '中有不可选书籍，请选择本分类的已上架作品。' . ($section === 'serial' ? '连载推荐仅接受连载作品。' : ''));
+                        }
+                    }
+                    $values[$section] = implode(',', $ids);
+                }
+                $channel = post('wap_channel');
+                if (!in_array($channel, array('auto', 'boy', 'girl'), true)) {
+                    throw new \InvalidArgumentException('请选择有效的阅读频道。');
+                }
+                $values['channel'] = $channel;
+            } catch (\InvalidArgumentException $error) {
+                alert_back($error->getMessage());
+                return;
+            }
+            foreach ($values as $section => $value) {
+                $key = sh_wap_catalog_key($scode, $section);
+                if ($configModel->checkConfig("name='$key'")) {
+                    $saved = $configModel->modValue($key, $value);
+                    // 未发生变化时，部分驱动返回 0，也属于正常保存。
+                    if ($saved === false) error('推荐位保存失败，请重试。', -1);
+                } else {
+                    $saved = $configModel->addConfig(array('name' => $key, 'value' => $value, 'type' => 2, 'sorting' => 255, 'description' => 'WAP分类推荐'));
+                    if (!$saved) error('推荐位保存失败，请重试。', -1);
+                }
+            }
+            $this->log('修改 WAP 分类 ' . $scode . ' 推荐位成功！');
+            success('推荐位已保存！', url('/admin/ContentSort/mod/scode/' . $scode . '/action/waprecommend'));
+            return;
+        }
+
+        $ids = array();
+        foreach ($sections as $section => $label) {
+            $ids[$section] = array();
+            foreach (sh_wap_catalog_recommendations($scode, $section, 20, $settings) as $book) {
+                $ids[$section][] = intval($book['id']);
+            }
+        }
+        $books = (array) $dsql->all('select id,title,author,subtitle from ay_content where status=1' . sh_wap_catalog_scope($scode) . ' order by id desc', 1);
+        foreach ($books as &$book) {
+            $book['title'] = sh_wap_catalog_text($book['title']);
+            $book['author'] = sh_wap_catalog_text($book['author']);
+        }
+        unset($book);
+        $channelKey = sh_wap_catalog_key($scode, 'channel');
+        $this->assign('wap_recommend', array(
+            'scode' => $scode,
+            'name' => sh_wap_catalog_text($sort->name),
+            'sections' => $sections,
+            'ids' => $ids,
+            'books' => (array) $books,
+            'channel' => isset($settings[$channelKey]) ? $settings[$channelKey] : 'auto'
+        ));
+        $this->display('content/waprecommend.html');
     }
 
     // 添加栏目时执行单页内容增加

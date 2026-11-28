@@ -1,57 +1,84 @@
-<?php require_once(dirname(__FILE__).'/header_index.html');?>
-<div class="home-nav">
-	<a href="./" class="guide-nav-a">
-		<i class="icon icon-home"></i>
-		<h4 class="guide-nav-h">首 页</h4>
-	</a>
-	<a href="<?php echo pbcode('shuku');?>" class="guide-nav-a">
-		<i class="icon icon-sort"></i>
-		<h4 class="guide-nav-h">分 类</h4>
-	</a>
-	<a href="<?php echo pbcode('paihang');?>" class="guide-nav-a">
-		<i class="icon icon-rank"></i>
-		<h4 class="guide-nav-h">排 行</h4>
-	</a>
-	<a href="<?php echo pbcode('quanben');?>" class="guide-nav-a">
-		<i class="icon icon-end"></i>
-		<h4 class="guide-nav-h">全 本</h4>
-	</a>
-	<a href="<?php echo pbcode('member','look','','all');?>" class="guide-nav-a">
-		<i class="icon icon icon-newbook"></i>
-		<h4 class="guide-nav-h">足 迹</h4>
-	</a>
-</div>
-<div class="money">
-	<center>
-		<?php echo axd(29);?>
-	</center>
-</div>
-<div class="novel">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title">搜索“<?php echo $key;?>”</h3>
-			<span class="novel-title-desc">共<font id="total">X</font>本</span>
-		</div>
-	</div>
-    <?php
-    $x='
-    <div style="float:left;width:100%;padding:30px 0px 20px;text-align:center;color:red;line-height:2em;font-size:14px;">
-    演示站更新少，只作演示，找不到书是正常-.-
-    <br>
-    搭建好之后，要采集更新
-    <br>
-    三套采集功能：关关采集+后台采集+火车头采集，带采集规则
-    <br>
-    win服务器，或者有宝塔的Linux服务器，可自动采集
-    <br>
-    并且，支持手动发布，或者批量导入整本txt文档
-    </div>
-    ';
-    global $cfg_dbpassword;
-    if(strstr($cfg_dbpassword,'3M8A') || strstr($cfg_dbpassword,'xxxxxx')){
-        echo $x;
-    }
-    ?>
-	<?php echo list4so4author();?>
-</div>
-<?php require_once(dirname(__FILE__).'/footer.html');?>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <title><?php echo $key !== '' ? '搜索“' . sh_wap_search_e($key) . '”' : '搜索';?>_<?php echo sh_wap_search_e($sitetitle);?></title>
+    <base href="<?php echo sh_wap_search_e(wapbase());?>">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style/css/search-ui.css?v=20261128a">
+    <script src="style/js/search.js?v=20261128a" defer></script>
+</head>
+<body class="wap-search" data-search-url="<?php echo sh_wap_search_e(sh_wap_search_url());?>" data-search-query="<?php echo sh_wap_search_e($key);?>" data-history-enabled="<?php echo $sh_wap_search_settings['history_enabled'];?>" data-history-limit="<?php echo intval($sh_wap_search_settings['history_limit']);?>">
+    <svg class="search-symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+        <symbol id="search-icon" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></symbol>
+        <symbol id="search-book" viewBox="0 0 24 24"><path d="M6 3h12v18H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 0v14h12M7 20h11M9 6h6"/></symbol>
+        <symbol id="search-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 9v9m4-9v9"/></symbol>
+        <symbol id="search-fire" viewBox="0 0 24 24"><path d="M12 2c2 5-2 7-2 9 0 1 1 2 2 2 2 0 3-2 3-5 4 4 6 7 4 11-1 2-4 3-7 3s-6-1-7-4C2 12 9 8 12 2Z"/></symbol>
+    </defs></svg>
+    <header class="search-topbar">
+        <form class="search-form" id="search-form" action="<?php echo sh_wap_search_e(sh_wap_search_url());?>" method="post" role="search">
+            <button class="search-submit" type="submit" aria-label="搜索"><svg aria-hidden="true"><use href="#search-icon"/></svg></button>
+            <input id="search-input" name="wd" type="search" inputmode="search" enterkeyhint="search" maxlength="60" autocomplete="off" aria-label="搜索书名或作者" placeholder="<?php echo sh_wap_search_e($sh_wap_search_settings['placeholder']);?>" value="<?php echo sh_wap_search_e($key);?>">
+            <button class="search-reset" id="search-reset" type="button" aria-label="清空搜索内容"<?php echo $key === '' ? ' hidden' : '';?>>×</button>
+        </form>
+        <a class="search-cancel" id="search-cancel" href="./">取消</a>
+    </header>
+    <main class="search-content">
+        <?php if ($key !== '') { ?>
+        <section class="search-results" aria-labelledby="search-results-title">
+            <div class="search-section-heading"><h1 id="search-results-title">搜索“<?php echo sh_wap_search_e($key);?>”</h1><span>共 <?php echo $sh_wap_search_results['total'];?> 本</span></div>
+            <?php if (!$sh_wap_search_results['rows']) { ?>
+            <div class="search-empty"><svg aria-hidden="true"><use href="#search-icon"/></svg><p>没有找到相关作品</p><span>试试其他书名或作者</span></div>
+            <?php } ?>
+            <div class="search-book-list">
+                <?php foreach ($sh_wap_search_results['rows'] as $book) {
+                    $title = strip_tags(decode_string($book['title']));
+                    $author = strip_tags(decode_string($book['author']));
+                    $description = strip_tags(decode_string($book['description']));
+                    $words = intval($book['subscode']);
+                ?>
+                <a class="search-book" href="<?php echo sh_wap_search_e(pbcode('book', intval($book['id'])));?>">
+                    <img class="search-book__cover" src="<?php echo sh_wap_search_e(ico($book['ico'], 1));?>" alt="<?php echo sh_wap_search_e($title);?>" loading="lazy">
+                    <div class="search-book__body"><h2><?php echo sh_wap_search_e($title);?></h2><p><?php echo sh_wap_search_e($description);?></p><div class="search-book__meta"><span><?php echo sh_wap_search_e($author);?></span><span><?php echo $words >= 10000 ? round($words / 10000, 1) . '万字' : $words . '字';?></span><span><?php echo (string) $book['subtitle'] === '1' ? '完本' : '连载';?></span></div></div>
+                </a>
+                <?php } ?>
+            </div>
+            <?php if ($sh_wap_search_results['pages'] > 1) { ?>
+            <nav class="search-pagination" aria-label="搜索结果分页">
+                <?php if ($page > 1) { ?><a href="<?php echo sh_wap_search_e(sh_wap_search_url($key, $page - 1));?>" rel="prev">上一页</a><?php } else { ?><span aria-disabled="true">上一页</span><?php } ?>
+                <span><?php echo $page;?> / <?php echo $sh_wap_search_results['pages'];?></span>
+                <?php if ($page < $sh_wap_search_results['pages']) { ?><a href="<?php echo sh_wap_search_e(sh_wap_search_url($key, $page + 1));?>" rel="next">下一页</a><?php } else { ?><span aria-disabled="true">下一页</span><?php } ?>
+            </nav>
+            <?php } ?>
+        </section>
+        <?php } ?>
+        <?php if ($sh_wap_search_settings['hot_enabled'] === '1' || $sh_wap_search_settings['rank_enabled'] === '1') { ?>
+        <section class="search-hot<?php echo $key !== '' ? ' search-hot--after-results' : ''; ?>" aria-label="搜索推荐">
+            <?php if ($sh_wap_search_settings['hot_enabled'] === '1') { ?>
+            <h2>热门搜索</h2>
+            <div class="search-chips">
+                <?php foreach ($sh_wap_search_hotwords as $word) { ?>
+                <a class="search-chip search-hotword" href="<?php echo sh_wap_search_e(sh_wap_search_url($word));?>" data-search-word="<?php echo sh_wap_search_e($word);?>"><svg aria-hidden="true"><use href="#search-book"/></svg><span><?php echo sh_wap_search_e($word);?></span></a>
+                <?php } ?>
+                <?php if (!$sh_wap_search_hotwords) { ?><p class="search-muted">暂无热门搜索</p><?php } ?>
+            </div>
+            <?php } ?>
+            <?php if ($sh_wap_search_settings['rank_enabled'] === '1') { ?>
+            <a class="search-chip search-rank" href="<?php echo sh_wap_search_e(rtrim(pbcode('paihang', $sh_wap_search_settings['rank_type']), '/') . '/all/'); ?>"><svg aria-hidden="true"><use href="#search-fire"/></svg><span><?php echo sh_wap_search_e($sh_wap_search_settings['rank_label']);?></span></a>
+            <?php } ?>
+        </section>
+        <?php } ?>
+        <?php if ($sh_wap_search_settings['history_enabled'] === '1') { ?>
+        <section class="search-history" aria-labelledby="search-history-title">
+            <div class="search-section-heading"><h2 id="search-history-title">历史搜索</h2><button id="search-history-clear" type="button" aria-label="清空历史搜索" hidden><svg aria-hidden="true"><use href="#search-trash"/></svg></button></div>
+            <div class="search-chips" id="search-history-list"></div>
+            <p class="search-muted" id="search-history-empty">暂无搜索历史</p>
+            <noscript><p class="search-muted">开启 JavaScript 后可保存搜索历史</p></noscript>
+        </section>
+        <?php } ?>
+        <p class="search-status" id="search-status" role="status" aria-live="polite"></p>
+    </main>
+</body>
+</html>

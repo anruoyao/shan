@@ -109,6 +109,7 @@
                                     {else}
                                     <a href="?p=/Sort/index/scode/[value->scode]" class="layui-btn layui-btn-xs">内容管理</a>
                                     {/if}
+                                    <a href="?p=/ContentSort/mod/scode/[value->scode]/action/waprecommend" class="layui-btn layui-btn-xs layui-btn-primary">WAP推荐位</a>
                                     {fun=get_btn_del($value->scode,'scode')}
                                     {fun=str_replace('修改','编辑',get_btn_mod($value->scode,'scode'))}
                                 </td>
@@ -431,6 +432,7 @@
                 修改&nbsp;“<a href="?p=/ContentSort/mod/scode/{$sort->scode}{$backurl}">{$sort->name}</a>”
             </div>
             <div class="layui-tab-item layui-show">
+                <p style="margin-bottom:15px"><a href="?p=/ContentSort/mod/scode/{$sort->scode}/action/waprecommend" class="layui-btn layui-btn-primary layui-btn-sm">设置 WAP 分类推荐位</a></p>
                 <form action="{url./admin/ContentSort/mod/scode/'.[$get.scode].'}{$backurl}" method="post" class="layui-form" lay-filter="sort">
                     <input type="hidden" name="formcheck" value="{$formcheck}">
                     <div class="layui-tab">

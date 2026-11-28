@@ -1,17 +1,11 @@
 <?php
-$pbstr='template,page';
-$pbstr=explode(',',$pbstr);
-foreach($pbstr as $v){
-	if(!isset($$v)){
-		global $$v;
-	}
+require_once dirname(__FILE__) . '/../catalog.fun.php';
+$scode = 0;
+$page = isset($path[2]) ? intval($path[2]) : 1;
+$sh_wap_catalog_options = sh_wap_catalog_options($page);
+$template = 'shuku.html';
+if ($sh_wap_catalog_options['view'] === 'all') {
+    require dirname(__FILE__) . '/../../template/catalog-list.html';
+} else {
+    require dirname(__FILE__) . '/../../template/shuku.html';
 }
-$page=$path[2];
-$arr=array('&','=','?');
-foreach($arr as $v){
-	$page=explode($v,$page);
-	$page=$page[0];
-}
-$template='shuku.html';
-require_once(dirname(__FILE__)."/../../template/".$template);
-?>

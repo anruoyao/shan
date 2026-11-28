@@ -1,0 +1,10 @@
+<?php $sh_wap_book = sh_wap_catalog_book($sh_wap_book_row); ?>
+<a class="catalog-book" href="<?php echo sh_wap_catalog_e($sh_wap_book['url']);?>">
+    <img class="catalog-book__cover" src="<?php echo sh_wap_catalog_e($sh_wap_book['cover']);?>" alt="<?php echo sh_wap_catalog_e($sh_wap_book['title']);?>" loading="lazy" decoding="async">
+    <div class="catalog-book__body">
+        <h3><?php echo sh_wap_catalog_e($sh_wap_book['title']);?></h3>
+        <p class="catalog-book__description"><?php echo sh_wap_catalog_e($sh_wap_book['description']);?></p>
+        <div class="catalog-book__meta"><span><?php echo sh_wap_catalog_e($sh_wap_book['author']);?></span><span><?php echo sh_wap_catalog_e($sh_wap_book['words']);?></span></div>
+        <div class="catalog-book__tags"><span><?php echo sh_wap_catalog_e($sh_wap_book['state']);?></span><?php if ($sh_wap_book['tag']) { ?><span><?php echo sh_wap_catalog_e($sh_wap_book['tag']);?></span><?php } ?></div>
+    </div>
+</a>

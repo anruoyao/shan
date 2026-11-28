@@ -1,54 +1,33 @@
-<?php require_once(dirname(__FILE__).'/header_inner.html');?>
-<div class="novel">
-	<div class="type-list">
-		<?php echo shukucat();?>
-	</div>
-</div>
-<div class="novel vipbox">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title"><img style="position:relative;top:2px" src="style/image/vip.png"> VIP小说</h3>
-		</div>
-	</div>
-	<div class="novel-slide">
-		<ol class="novel-slide-ol">
-			<?php echo vipbox(8);?>
-		</ol>
-	</div>
-</div>
-<div class="novel">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title">热门推荐</h3>
-		</div>
-	</div>
-	<div class="novel-slide">
-		<ol class="novel-slide-ol">
-			<?php echo randnew(8);?>
-		</ol>
-	</div>
-</div>
-<div class="money">
-	<center>
-		<?php echo axd(29);?>
-	</center>
-</div>
-<div class="novel">
-	<div class="novel-header">
-		<div class="novel-header-l">
-			<h3 class="novel-title">书库</h3>
-			<span class="novel-title-desc">共<font id="total">X</font>本</span>
-		</div>
-	</div>
-	<?php echo book4list('shuku',$page);?>
-</div>
-<style type="text/css">
-#fnav{
-	display: none
+<?php
+$sh_wap_catalog_view = 'directory';
+$sh_wap_catalog_title = '分类';
+$sh_wap_catalog_items = sh_wap_catalog_directory();
+$sh_wap_catalog_channel = isset($_GET['channel']) && $_GET['channel'] === 'girl' ? 'girl' : 'boy';
+$sh_wap_catalog_total = 0;
+foreach ($sh_wap_catalog_items as $item) {
+    if ($item['channel'] === $sh_wap_catalog_channel) $sh_wap_catalog_total += $item['count'];
 }
-</style>
-<?php require_once(dirname(__FILE__).'/footer.html');?>
-<script type="text/javascript">
-fnav(2);
-$id('fnav').style.display='block';
-</script>
+require dirname(__FILE__) . '/header_inner.html';
+?>
+<main class="catalog-directory">
+    <nav class="catalog-channels" aria-label="阅读频道">
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url(0, array('channel' => 'boy')));?>"<?php echo $sh_wap_catalog_channel === 'boy' ? ' aria-current="page"' : '';?>>男生</a>
+        <a href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url(0, array('channel' => 'girl')));?>"<?php echo $sh_wap_catalog_channel === 'girl' ? ' aria-current="page"' : '';?>>女生</a>
+        <a class="catalog-channels__honor" href="<?php echo sh_wap_catalog_e(pbcode('paihang'));?>">荣誉殿堂</a>
+    </nav>
+    <section class="catalog-directory__main" aria-label="<?php echo $sh_wap_catalog_channel === 'boy' ? '男生' : '女生';?>分类">
+        <p class="catalog-directory__count">共<?php echo number_format($sh_wap_catalog_total);?>部</p>
+        <div class="catalog-grid">
+            <?php foreach ($sh_wap_catalog_items as $item) {
+                if ($item['channel'] !== $sh_wap_catalog_channel) continue;
+            ?>
+            <a class="catalog-tile" href="<?php echo sh_wap_catalog_e(sh_wap_catalog_url($item['scode']));?>">
+                <img src="<?php echo sh_wap_catalog_e(ico($item['ico'], 1));?>" alt="" loading="lazy" decoding="async">
+                <span class="catalog-tile__text"><span class="catalog-tile__name"><?php echo sh_wap_catalog_e($item['name']);?></span><span class="catalog-tile__count"><?php echo number_format($item['count']);?>部</span></span>
+            </a>
+            <?php } ?>
+        </div>
+        <?php if (!$sh_wap_catalog_total) { ?><p class="catalog-directory__empty">这个频道暂无作品</p><?php } ?>
+    </section>
+</main>
+<?php require dirname(__FILE__) . '/footer.html';?>
